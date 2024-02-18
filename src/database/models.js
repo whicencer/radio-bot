@@ -9,7 +9,7 @@ const User = sequelize.define('user', {
 const Resource = sequelize.define('resource', {
 	id: {type: DataTypes.BIGINT, primaryKey: true, unique: true, autoIncrement: true},
 	name: {type: DataTypes.STRING},
-	url: {type: DataTypes.STRING(1000)}
+	url: {type: DataTypes.STRING, unique: true}
 });
 
 User.hasMany(Resource, {as: 'resources', foreignKey: 'userId'});

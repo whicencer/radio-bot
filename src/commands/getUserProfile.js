@@ -1,3 +1,4 @@
+const { PAY } = require('../constants/callbackQueries');
 const { User: UserModel } = require('../database/models');
 
 async function getUserProfile(bot, msg) {
@@ -14,7 +15,7 @@ async function getUserProfile(bot, msg) {
 		bot.sendMessage(chatId, message, {
 			reply_markup: {
 				inline_keyboard: [
-					[{ text: 'Пополнить баланс', callback_data: 'pay' }]
+					[{ text: 'Пополнить баланс', callback_data: PAY }]
 				]
 			}
 		});
