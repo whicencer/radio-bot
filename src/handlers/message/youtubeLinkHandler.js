@@ -7,10 +7,10 @@ async function youtubeLinkHandler(bot, userId, chatId, msgText) {
 	try {
 		await createYoutubeSource(msgText, userId);
 		bot.sendMessage(chatId, 'Ресурс был успешно добавлен!');
-		bot.deleteMessage(chatId, inProcessMsg.message_id);
 	} catch (err) {
 		bot.sendMessage(chatId, err.message);
 	} finally {
+		bot.deleteMessage(chatId, inProcessMsg.message_id);
 		botState.clearState();
 	}
 }

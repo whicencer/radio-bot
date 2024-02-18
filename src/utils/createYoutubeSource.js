@@ -5,9 +5,13 @@ async function createYoutubeSource(url, userId) {
 	try {
 		const sourceTitle = await getSourceTitle(url);
 		
-		ResourceModel.create({ userId, name: sourceTitle, url });
+		try {
+			await ResourceModel.create({ userId, name: sourceTitle, url });
+		} catch (error) {
+			throw new Error();
+		}
 	} catch (error) {
-		throw new Error('❌ Произошла ошибка при добавлении ресурса.\n\nВозможно вы ввели ссылку неверно');
+		throw new Error('❌ Произошла ошибка при добавлении ресурса.\n\nТакой ресурс уже существует или Вы ввели ссылку неверно');
 	}
 }
 
