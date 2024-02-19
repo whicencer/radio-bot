@@ -12,14 +12,18 @@ const Resource = sequelize.define('resource', {
 	url: {type: DataTypes.STRING, unique: true}
 });
 
-User.hasMany(Resource, {as: 'resources', foreignKey: 'userId'});
-Resource.belongsTo(User, {foreignKey: 'userId'});
-
 const Chat = sequelize.define('chat', {
-	id: {type: DataTypes.BIGINT, primaryKey: true, unique: true},
-	name: {type: DataTypes.STRING},
+	id: {type: DataTypes.BIGINT, primaryKey: true, unique: true, autoIncrement: true},
+	name: {type: DataTypes.STRING, unique: true, allowNull: false},
+	streamUrl: {type: DataTypes.STRING, unique: true, allowNull: false},
 	status: {type: DataTypes.STRING, defaultValue: 'off'}
 });
+
+User.hasMany(Resource, {as: 'resources', foreignKey: 'userId'});
+User.hasMany(Chat, {as: 'chats', foreignKey: 'userId'});
+
+Chat.belongsTo(User, {foreignKey: 'userId'});
+Resource.belongsTo(User, {foreignKey: 'userId'});
 
 module.exports = {
 	Chat,

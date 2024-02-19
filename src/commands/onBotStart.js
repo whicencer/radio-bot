@@ -19,7 +19,8 @@ async function onBotStart(bot, msg) {
 		reply_markup: {
 			keyboard: [
 				[{ text: '👤 Профиль' }],
-				[{ text: '📀 Библиотека' }]
+				[{ text: '📀 Библиотека' }],
+				[{ text: '💬 Чаты' }],
 			]
 		}
 	});

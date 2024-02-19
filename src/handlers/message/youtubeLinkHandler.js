@@ -6,7 +6,7 @@ async function youtubeLinkHandler(bot, userId, chatId, msgText) {
 
 	try {
 		await createYoutubeSource(msgText, userId);
-		bot.sendMessage(chatId, 'Ресурс был успешно добавлен!');
+		bot.sendMessage(chatId, '✅ Ресурс был успешно добавлен!');
 	} catch (err) {
 		bot.sendMessage(chatId, err.message);
 	} finally {

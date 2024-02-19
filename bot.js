@@ -10,7 +10,8 @@ const {
 const {
 	getUserProfile,
 	onBotStart,
-	getUserLibrary
+	getUserLibrary,
+	getUserChats
 } = require('./src/commands');
 
 const token = process.env.BOT_TOKEN;
@@ -27,6 +28,8 @@ async function start() {
 	bot.onText(/👤 Профиль/, async (msg) => getUserProfile(bot, msg));
 
 	bot.onText(/📀 Библиотека/, async (msg) => getUserLibrary(bot, msg));
+
+	bot.onText(/💬 Чаты/, async (msg) => getUserChats(bot, msg));
 
 	bot.on('callback_query', async (msg) => callbackQuery(bot, msg));
 
