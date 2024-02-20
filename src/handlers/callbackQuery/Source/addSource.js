@@ -1,4 +1,4 @@
-const { ADD_SOURCE_YOUTUBE, DELETE_CURRENT_MESSAGE } = require('../../constants/callbackQueries');
+const { ADD_SOURCE_YOUTUBE, DELETE_CURRENT_MESSAGE } = require('../../../constants/callbackQueries');
 
 async function addSource(bot, chatId) {
 	bot.sendMessage(chatId, 'Выберите источник добавления ресурса', {

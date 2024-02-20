@@ -1,4 +1,4 @@
-const { Resource: ResourceModel } = require('../../database/models');
+const { Resource: ResourceModel } = require('../../../database/models');
 
 async function removeSource(bot, chatId, url) {
 	try {

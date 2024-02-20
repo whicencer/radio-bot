@@ -4,18 +4,28 @@ const {
 	ADD_SOURCE_YOUTUBE,
 	GET_CURRENT_SOURCE,
 	DELETE_CURRENT_MESSAGE,
-	ADD_CHAT
+	ADD_CHAT,
+	GET_CURRENT_CHAT,
+	REMOVE_CHAT
 } = require('../constants/callbackQueries');
-const { addSource } = require('./callbackQuery/addSource');
-const { addSourceYoutube } = require('./callbackQuery/addSourceYoutube');
-const { removeSource } = require('./callbackQuery/removeSource');
-const { getCurrentSource } = require('./callbackQuery/getCurrentSource');
-const { addChat } = require('./callbackQuery/addChat');
+
+const {
+	addSource,
+	addSourceYoutube,
+	getCurrentSource,
+	removeSource
+} = require('./callbackQuery/Source');
+
+const {
+	addChat,
+	getCurrentChat,
+	removeChat
+} = require('./callbackQuery/Chat');
 
 const botState = require('../utils/state');
 
 async function callbackQuery(bot, msg) {
-	const data = msg.data.split(' ');
+	const data = msg.data.split('-');
 	const chatId = msg.message.chat.id;
 
 	switch (data[0]) {
@@ -40,6 +50,14 @@ async function callbackQuery(bot, msg) {
 			break;
 		case ADD_CHAT:
 			addChat(bot, chatId);
+			break;
+		case GET_CURRENT_CHAT:
+			const chatNameGet = data[1];
+			getCurrentChat(bot, chatId, chatNameGet);
+			break;
+		case REMOVE_CHAT:
+			const chatNameRemove = data[1];
+			removeChat(bot, chatId, chatNameRemove);
 			break;
 		default:
 			return;

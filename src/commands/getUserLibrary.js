@@ -5,7 +5,7 @@ async function getUserLibrary(bot, msg) {
 	const chatId = msg.chat.id;
 	const userId = msg.from.id;
 	const user = await UserModel.findOne({ where: {id: userId}, include: 'resources' });
-	const resourcesBtns = user.resources.map(resource => ([{ text: `🎧 ${resource.name}`, callback_data: `${GET_CURRENT_SOURCE} ${resource.url}` }]));
+	const resourcesBtns = user.resources.map(resource => ([{ text: `🎧 ${resource.name}`, callback_data: `${GET_CURRENT_SOURCE}-${resource.url}` }]));
 
 	bot.sendMessage(chatId, '📀 Ваша библиотека', {
 		reply_markup: {

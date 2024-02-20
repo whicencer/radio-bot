@@ -22,7 +22,7 @@ async function start() {
 	console.log('Start');
 
 	await botConfigDb();
-
+	
 	bot.onText(/\/start/, async (msg) => onBotStart(bot, msg));
 
 	bot.onText(/👤 Профиль/, async (msg) => getUserProfile(bot, msg));
