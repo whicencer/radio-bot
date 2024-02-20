@@ -43,26 +43,26 @@ start();
 // bot.onText(/Протестировать стрим YouTube/, async (msg) => {
 	// 	const chatId = msg.chat.id;
 	
-	// 	const source_url = await getSource('https://www.youtube.com/watch?v=PH-k_fqpcco');
+		// const source_url = await getSource('https://www.youtube.com/watch?v=PH-k_fqpcco');
 	
-	// 	const proccess = ffmpeg(source_url)
-	// 		.inputOptions(['-re'])
-	// 		.videoCodec('copy')
-	// 		.audioCodec('copy')
-	// 		.format('flv')
-	// 		.output(rtmpUrl);
+		// const proccess = ffmpeg(source_url)
+		// 	.inputOptions(['-re'])
+		// 	.videoCodec('copy')
+		// 	.audioCodec('copy')
+		// 	.format('flv')
+		// 	.output(rtmpUrl);
 	
-	// 	proccess.on('start', () => {
-	// 		bot.sendMessage(chatId, 'Трансляция ресурса началась');
-	// 	});
+		// proccess.on('start', () => {
+		// 	bot.sendMessage(chatId, 'Трансляция ресурса началась');
+		// });
 	
-	// 	proccess.on('end', () => {
-	// 		bot.sendMessage(chatId, 'Трансляция ресурса завершена');
-	// 	});
+		// proccess.on('end', () => {
+		// 	bot.sendMessage(chatId, 'Трансляция ресурса завершена');
+		// });
 	
-	// 	proccess.on('error', (err) => {
-	// 		bot.sendMessage(chatId, JSON.parse(err));
-	// 	});
+		// proccess.on('error', (err) => {
+		// 	bot.sendMessage(chatId, JSON.parse(err));
+		// });
 	
-	// 	proccess.run();
+		// proccess.run();
 	// });

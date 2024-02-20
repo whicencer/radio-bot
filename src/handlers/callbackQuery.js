@@ -6,7 +6,9 @@ const {
 	DELETE_CURRENT_MESSAGE,
 	ADD_CHAT,
 	GET_CURRENT_CHAT,
-	REMOVE_CHAT
+	REMOVE_CHAT,
+	CHAT_SOURCES,
+	REMOVE_CHAT_SOURCE
 } = require('../constants/callbackQueries');
 
 const {
@@ -19,10 +21,12 @@ const {
 const {
 	addChat,
 	getCurrentChat,
-	removeChat
+	removeChat,
+	getChatSources
 } = require('./callbackQuery/Chat');
 
 const botState = require('../utils/state');
+const { Resource: ResourceModel, Chat: ChatModel } = require('../database/models');
 
 async function callbackQuery(bot, msg) {
 	const data = msg.data.split('-');
@@ -58,6 +62,17 @@ async function callbackQuery(bot, msg) {
 		case REMOVE_CHAT:
 			const chatNameRemove = data[1];
 			removeChat(bot, chatId, chatNameRemove);
+			break;
+		case CHAT_SOURCES:
+			getChatSources(bot, chatId, data[1]);
+			break;
+		case REMOVE_CHAT_SOURCE:
+			const chatSourceNameToDelete = data[1];
+			const currentChatId = data[2];
+			const currentChat = await ChatModel.findOne({where: {id: currentChatId}});
+			const chatResourceToDelete = await ResourceModel.findOne({where: { name: chatSourceNameToDelete }});
+
+			currentChat.removeResource(chatResourceToDelete);
 			break;
 		default:
 			return;

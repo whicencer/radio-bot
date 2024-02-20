@@ -7,6 +7,8 @@ const GET_CURRENT_SOURCE = 'get_current_source';
 const DELETE_CURRENT_MESSAGE = 'delete_current_message';
 const GET_CURRENT_CHAT = 'get_current_chat';
 const REMOVE_CHAT = 'remove_chat';
+const CHAT_SOURCES = 'chat_sources';
+const REMOVE_CHAT_SOURCE = 'remove_chat_source';
 
 module.exports = {
 	PAY,
@@ -17,5 +19,7 @@ module.exports = {
 	DELETE_CURRENT_MESSAGE,
 	ADD_CHAT,
 	GET_CURRENT_CHAT,
-	REMOVE_CHAT
+	REMOVE_CHAT,
+	CHAT_SOURCES,
+	REMOVE_CHAT_SOURCE
 };
