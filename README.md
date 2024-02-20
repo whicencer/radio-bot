@@ -2,6 +2,6 @@
 
 
 todo:
-	- youtube link validator
-	- chat settings (add sources for chat)
-	- start/stop translation
+	- youtube link validator  
+	- chat settings (add sources for chat)  
+	- start/stop translation  
