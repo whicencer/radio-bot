@@ -31,11 +31,11 @@ const {
 } = require('./callbackQuery/Chat');
 
 const botState = require('../utils/state');
-const { Resource: ResourceModel, Chat } = require('../database/models');
 const { deleteMessage } = require('../utils/messages/deleteMessage');
 
 async function callbackQuery(bot, msg) {
 	const [command, ...args] = msg.data.split('-');
+	const userId = msg.from.id;
 	const tgChatId = msg.message.chat.id;
 	const messageId = msg.message.message_id;
 
@@ -48,8 +48,8 @@ async function callbackQuery(bot, msg) {
 			break;
 		case GET_CURRENT_SOURCE:
 			(async () => {
-				const sourceLink = args[0];
-				getCurrentSource(bot, tgChatId, sourceLink);
+				const sourceId = args[0];
+				getCurrentSource(bot, tgChatId, sourceId);
 			})();
 			break;
 		case REMOVE_SOURCE:
@@ -94,7 +94,8 @@ async function callbackQuery(bot, msg) {
 			(async () => {
 				const sourceChatId = args[0];
 				deleteMessage(bot, tgChatId, messageId);
-				addChatSource(bot, tgChatId, sourceChatId);
+
+				addChatSource(bot, tgChatId, userId, sourceChatId);
 			})();
 			break;
 		case ADD_SELECTED_SOURCE:

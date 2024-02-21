@@ -1,9 +1,9 @@
 const { Resource: ResourceModel } = require('../../../database/models');
 
-async function removeSource(bot, chatId, url) {
+async function removeSource(bot, chatId, sourceId) {
 	try {
 		await ResourceModel.destroy({
-			where: { url }
+			where: { id: sourceId }
 		});
 		bot.sendMessage(chatId, '✅ Ресурс был успешно удалён!');
 	} catch (error) {
