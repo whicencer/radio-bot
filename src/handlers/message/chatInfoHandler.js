@@ -1,6 +1,6 @@
 const botState = require('../../utils/state');
 const { Chat: ChatModel } = require('../../database/models');
-const { rtmpKeyValidate } = require('../../utils/rtmpKeyValidate');
+const { rtmpKeyValidate } = require('../../utils/validators/rtmpKeyValidate');
 
 async function chatInfoHandler(bot, userId, chatId, msgText) {
 	const [chatName, streamKey, chatLink] = msgText.split('\n');

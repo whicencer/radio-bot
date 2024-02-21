@@ -1,7 +1,7 @@
-function rtmpKeyValidate(url) {
+function rtmpKeyValidate(key) {
 	const pattern = /^\d+:[\w-]+$/;
 
-	if (!pattern.test(url)) {
+	if (!pattern.test(key)) {
 		throw new Error('Некорректный ключ сервера');
 	}
 
