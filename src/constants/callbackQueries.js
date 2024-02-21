@@ -9,6 +9,10 @@ const GET_CURRENT_CHAT = 'get_current_chat';
 const REMOVE_CHAT = 'remove_chat';
 const CHAT_SOURCES = 'chat_sources';
 const REMOVE_CHAT_SOURCE = 'remove_chat_source';
+const START_STREAM = 'start_stream';
+const STOP_STREAM = 'stop_stream';
+const ADD_CHAT_SOURCE = 'add_chat_source';
+const ADD_SELECTED_SOURCE = 'add_selected_source';
 
 module.exports = {
 	PAY,
@@ -21,5 +25,9 @@ module.exports = {
 	GET_CURRENT_CHAT,
 	REMOVE_CHAT,
 	CHAT_SOURCES,
-	REMOVE_CHAT_SOURCE
+	REMOVE_CHAT_SOURCE,
+	START_STREAM,
+	STOP_STREAM,
+	ADD_CHAT_SOURCE,
+	ADD_SELECTED_SOURCE
 };

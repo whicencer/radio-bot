@@ -6,7 +6,7 @@ async function getCurrentChat(bot, chatId, chatName) {
 		const chat = await ChatModel.findOne({ where: { name: chatName } });
 		
 		const changeStatusButton = chat.status === 'off'
-			? { text: '🔥 Запустить', callback_data: `test` }
+			? { text: '🔥 Запустить', callback_data: `start_stream` }
 			: { text: '🚫 Остановить', callback_data: `test` };
 
 		bot.sendMessage(chatId, `<b>Чат: <code>${chatName}</code></b>\n<b>Ссылка на чат: ${chat.chatLink}</b>`, {
