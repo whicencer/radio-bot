@@ -18,10 +18,10 @@ async function onBotStart(bot, msg) {
 	await bot.sendMessage(chatId, message, {
 		reply_markup: {
 			keyboard: [
-				[{ text: '👤 Профиль' }],
+				[{ text: '👤 Профиль' }, { text: '💬 Чаты' }],
 				[{ text: '📀 Библиотека' }],
-				[{ text: '💬 Чаты' }],
-			]
+			],
+			resize_keyboard: true
 		}
 	});
 }

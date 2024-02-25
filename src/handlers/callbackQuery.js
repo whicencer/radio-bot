@@ -10,7 +10,9 @@ const {
 	CHAT_SOURCES,
 	REMOVE_CHAT_SOURCE,
 	ADD_CHAT_SOURCE,
-	ADD_SELECTED_SOURCE
+	ADD_SELECTED_SOURCE,
+	ADD_SOURCE_RADIO,
+	ADD_RADIO
 } = require('../constants/callbackQueries');
 
 const {
@@ -32,6 +34,9 @@ const {
 
 const botState = require('../utils/state');
 const { deleteMessage } = require('../utils/messages/deleteMessage');
+const { radios } = require('../constants/radios');
+const { generateInlineKeyboard } = require('../utils/generateInlineKeyboard');
+const { addRadioSource } = require('./callbackQuery/Source/radio/addRadioSource');
 
 async function callbackQuery(bot, msg) {
 	const [command, ...args] = msg.data.split('-');
@@ -105,12 +110,24 @@ async function callbackQuery(bot, msg) {
 				addSelectedSource(bot, tgChatId, currentSourceId, currentChatId);
 			})();
 			break;
-		// case START_STREAM:
-		// 	editReplyButtons(bot, msg, START_STREAM, { text: '🚫 Остановить', callback_data: STOP_STREAM });
-		// 	break;
-		// case STOP_STREAM:
-		// 	editReplyButtons(bot, msg, STOP_STREAM, { text: '🔥 Запустить', callback_data: START_STREAM });
-		// 	break;
+		case ADD_SOURCE_RADIO:
+			bot.sendMessage(tgChatId, 'Выберите радио которое хотите добавить:', {
+				disable_web_page_preview: true,
+				reply_markup: {
+					inline_keyboard: [
+						...generateInlineKeyboard(radios, 2),
+						[{ text: '🚫 Отменить', callback_data: DELETE_CURRENT_MESSAGE }]
+					]
+				}
+			});
+			break;
+		case ADD_RADIO:
+			(async () => {
+				const radioUrl = args[0];
+				const radioName = args[1];
+
+				addRadioSource(bot, tgChatId, radioName, radioUrl, userId);
+			})();
 		default:
 			return;
 	}

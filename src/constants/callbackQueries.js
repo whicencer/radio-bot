@@ -3,6 +3,7 @@ const ADD_CHAT = 'add_chat';
 const ADD_SOURCE = 'add_resource';
 const REMOVE_SOURCE = 'remove_source';
 const ADD_SOURCE_YOUTUBE = 'youtube';
+const ADD_SOURCE_RADIO = 'radio';
 const GET_CURRENT_SOURCE = 'get_current_source';
 const DELETE_CURRENT_MESSAGE = 'delete_current_message';
 const GET_CURRENT_CHAT = 'get_current_chat';
@@ -13,6 +14,7 @@ const START_STREAM = 'start_stream';
 const STOP_STREAM = 'stop_stream';
 const ADD_CHAT_SOURCE = 'add_chat_source';
 const ADD_SELECTED_SOURCE = 'add_selected_source';
+const ADD_RADIO = 'add_radio';
 
 module.exports = {
 	PAY,
@@ -29,5 +31,7 @@ module.exports = {
 	START_STREAM,
 	STOP_STREAM,
 	ADD_CHAT_SOURCE,
-	ADD_SELECTED_SOURCE
+	ADD_SELECTED_SOURCE,
+	ADD_SOURCE_RADIO,
+	ADD_RADIO
 };
