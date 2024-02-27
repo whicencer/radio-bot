@@ -1,11 +1,7 @@
 function youtubeUrlValidate(url) {
-	const pattern = /https?:\/\/(?:www\.)?youtu(?:be\.com\/(?:watch\?v=|embed\/|v\/)|\.be\/)([\w-]+)(?:\S+)?/;
-	
-	if (!pattern.test(url)) {
-		throw new Error('Некорректная ссылка на Youtube');
-	}
+	const pattern = /^https?:\/\/(?:www\.)?youtu(?:be\.com\/(?:watch\?v=|embed\/|v\/)|\.be\/)([\w-]+)(?:\?[^&\s]*)?$/
 
-	return true;
+	return pattern.test(url);
 };
 
 module.exports = { youtubeUrlValidate };

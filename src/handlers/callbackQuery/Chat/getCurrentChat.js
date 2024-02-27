@@ -1,4 +1,4 @@
-const { REMOVE_CHAT, DELETE_CURRENT_MESSAGE, CHAT_SOURCES } = require('../../../constants/callbackQueries');
+const { REMOVE_CHAT, DELETE_CURRENT_MESSAGE, CHAT_SOURCES, START_STREAM } = require('../../../constants/callbackQueries');
 const { Chat: ChatModel } = require('../../../database/models');
 
 async function getCurrentChat(bot, chatId, chatName) {
@@ -6,7 +6,7 @@ async function getCurrentChat(bot, chatId, chatName) {
 		const chat = await ChatModel.findOne({ where: { name: chatName } });
 		
 		const changeStatusButton = chat.status === 'off'
-			? { text: '🔥 Запустить', callback_data: `start_stream` }
+			? { text: '🔥 Запустить', callback_data: `${START_STREAM}-${chat.id}` }
 			: { text: '🚫 Остановить', callback_data: `test` };
 
 		bot.sendMessage(chatId, `<b>Чат: <code>${chatName}</code></b>\n<b>Ссылка на чат: ${chat.chatLink}</b>`, {

@@ -1,21 +1,21 @@
-const { PAY } = require('../constants/callbackQueries');
 const { User: UserModel } = require('../database/models');
 
-async function getUserProfile(bot, msg) {
-	const chatId = msg.chat.id;
-	const userId = msg.from.id;
+async function getUserProfile(ctx) {
+	const userId = ctx.message.from.id;
 
 	try {
 		const user = await UserModel.findOne({ where: { id: userId } });
 		const message = `
 		📌 Ваш id: ${userId}\n
-	💰 Баланс: ${user.balance}$
+	💰 Баланс: ${user.balance}$\n
+	👥 Количество рефералов: 12
 		`;
 
-		bot.sendMessage(chatId, message, {
+		await ctx.reply(message, {
 			reply_markup: {
 				inline_keyboard: [
-					[{ text: 'Пополнить баланс', callback_data: PAY }]
+					[{ text: 'Пополнить баланс', callback_data: 'test' }],
+					[{ text: 'Реферальная ссылка', callback_data: 'test' }]
 				]
 			}
 		});

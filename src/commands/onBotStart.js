@@ -1,27 +1,23 @@
-const { User: UserModel } = require('../database/models');
+const { User } = require('../database/models');
 
-async function onBotStart(bot, msg) {
-	const chatId = msg.chat.id;
-	const firstName = msg.from.first_name;
-	const userId = msg.from.id;
-	const message = `Приветствую тебя, ${firstName}`;
-
+async function onBotStart(ctx) {
+	const userId = ctx.message.from.id;
+	
 	try {
-		const user = await UserModel.findOne({ where: { id: userId } });
+		const user = await User.findOne({ where: { id: userId } });
 		if (!user) {
-			await UserModel.create({ id: userId });
+			await User.create({ id: userId });
 		}
 	} catch (error) {
 		console.error('Ошибка при поиске или создании пользователя:', error);
-	}		
+	}
 
-	await bot.sendMessage(chatId, message, {
+	ctx.reply('Советую подписаться на канал, дабы быть в курсе событий по боту', {
 		reply_markup: {
-			keyboard: [
-				[{ text: '👤 Профиль' }, { text: '💬 Чаты' }],
-				[{ text: '📀 Библиотека' }],
-			],
-			resize_keyboard: true
+			inline_keyboard: [
+				[{ text: 'Да братан, с кайфом', url: 'https://t.me/aaaatestaaaa5' }],
+				[{ text: 'Продолжить', callback_data: 'goMain' }]
+			]
 		}
 	});
 }

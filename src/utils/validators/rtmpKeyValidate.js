@@ -1,11 +1,7 @@
 function rtmpKeyValidate(key) {
 	const pattern = /^\d+:[\w-]+$/;
 
-	if (!pattern.test(key)) {
-		throw new Error('Некорректный ключ сервера');
-	}
-
-	return true;
+	return pattern.test(key);
 }
 
 module.exports = { rtmpKeyValidate };

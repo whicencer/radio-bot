@@ -3,7 +3,7 @@ const { DataTypes } = require('sequelize');
 
 const User = sequelize.define('user', {
 	id: {type: DataTypes.BIGINT, primaryKey: true, unique: true},
-	balance: {type: DataTypes.BIGINT, defaultValue: 0},
+	balance: {type: DataTypes.BIGINT, defaultValue: 0}
 });
 
 const Resource = sequelize.define('resource', {

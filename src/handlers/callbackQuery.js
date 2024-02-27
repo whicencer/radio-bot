@@ -12,7 +12,9 @@ const {
 	ADD_CHAT_SOURCE,
 	ADD_SELECTED_SOURCE,
 	ADD_SOURCE_RADIO,
-	ADD_RADIO
+	ADD_RADIO,
+	START_STREAM,
+	STOP_STREAM
 } = require('../constants/callbackQueries');
 
 const {
@@ -34,9 +36,13 @@ const {
 
 const botState = require('../utils/state');
 const { deleteMessage } = require('../utils/messages/deleteMessage');
-const { radios } = require('../constants/radios');
-const { generateInlineKeyboard } = require('../utils/generateInlineKeyboard');
 const { addRadioSource } = require('./callbackQuery/Source/radio/addRadioSource');
+const { addSourceRadio } = require('./callbackQuery/Source/addSourceRadio');
+const { Chat: ChatModel } = require('../database/models');
+const { startStream } = require('../utils/stream/startStream');
+const { editReplyButtons } = require('../utils/buttons/editReplyButtons');
+const { stopStream } = require('../utils/stream/stopStream');
+const { allProccesses } = require('../utils/proccesses');
 
 async function callbackQuery(bot, msg) {
 	const [command, ...args] = msg.data.split('-');
@@ -111,15 +117,7 @@ async function callbackQuery(bot, msg) {
 			})();
 			break;
 		case ADD_SOURCE_RADIO:
-			bot.sendMessage(tgChatId, 'Выберите радио которое хотите добавить:', {
-				disable_web_page_preview: true,
-				reply_markup: {
-					inline_keyboard: [
-						...generateInlineKeyboard(radios, 2),
-						[{ text: '🚫 Отменить', callback_data: DELETE_CURRENT_MESSAGE }]
-					]
-				}
-			});
+			addSourceRadio(bot, tgChatId)
 			break;
 		case ADD_RADIO:
 			(async () => {
@@ -128,6 +126,26 @@ async function callbackQuery(bot, msg) {
 
 				addRadioSource(bot, tgChatId, radioName, radioUrl, userId);
 			})();
+			break;
+		case START_STREAM:
+			(async () => {
+				const chatId = args[0];
+				const { resources } = await ChatModel.findOne({ where: { id: chatId }, include: 'resources' });
+
+				const proccess = await startStream(resources, chatId);
+				allProccesses.addProccess(chatId, proccess);
+
+				editReplyButtons(bot, msg, `${START_STREAM}-${chatId}`, { text: '🚫 Остановить', callback_data: `${STOP_STREAM}-${chatId}` })
+			})();
+			break;
+		case STOP_STREAM:
+			(async () => {
+				const chatId = args[0];
+				const proccess = allProccesses.getProccessByChatId(chatId);
+
+				await stopStream(proccess);
+			})();
+			break;
 		default:
 			return;
 	}
