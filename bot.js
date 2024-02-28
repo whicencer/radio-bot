@@ -2,7 +2,7 @@ require('dotenv').config();
 
 const { Telegraf, Scenes, session } = require('telegraf');
 const { MAIN_SCENE, BROADCAST_SCENE } = require('./src/constants/scenes');
-const { getUserProfile, onBotStart, getUserLibrary, getUserChats } = require('./src/commands');
+const { getUserProfile, onBotStart } = require('./src/commands');
 const { allChats } = require('./src/scenes/chat/allChats');
 const { chatDetailed } = require('./src/scenes/chat/chatDetailed');
 const { createChat } = require('./src/scenes/chat/createChat');
@@ -41,7 +41,7 @@ bot.use(stage.middleware());
 bot.start(onBotStart);
 
 bot.hears('👤 Профиль', getUserProfile);
-bot.hears('📖 Инструкция', ctx => {
+bot.hears('📖 Информация', ctx => {
 	ctx.reply('Тут будут все инструкции, связь с менеджером и тп');
 });
 bot.hears('📡 Транслировать', ctx => {

@@ -12,10 +12,10 @@ async function onBotStart(ctx) {
 		console.error('Ошибка при поиске или создании пользователя:', error);
 	}
 
-	ctx.reply('Советую подписаться на канал, дабы быть в курсе событий по боту', {
+	ctx.reply('Советую подписаться на канал, чтобы быть в курсе всех событий', {
 		reply_markup: {
 			inline_keyboard: [
-				[{ text: 'Да братан, с кайфом', url: 'https://t.me/aaaatestaaaa5' }],
+				[{ text: 'Подписаться на канал', url: 'https://t.me/aaaatestaaaa5' }],
 				[{ text: 'Продолжить', callback_data: 'goMain' }]
 			]
 		}
