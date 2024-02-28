@@ -1,6 +1,6 @@
 const { Scenes } = require('telegraf');
 const { Chat } = require('../../database/models');
-const { ALL_CHATS_SCENE, CHAT_DETAILED_SCENE } = require('../../constants/scenes');
+const { ALL_CHATS_SCENE, CHAT_DETAILED_SCENE, CHAT_LIBRARY_SCENE } = require('../../constants/scenes');
 const { deleteLastMessage } = require('../../utils/deleteLastMessage');
 
 const chatDetailed = new Scenes.BaseScene(CHAT_DETAILED_SCENE);
@@ -13,7 +13,7 @@ chatDetailed.enter(async (ctx) => {
 		reply_markup: {
 			inline_keyboard: [
 				// [changeStatusButton],
-				[{ text: '🎥 Библиотека эфира', callback_data: `test` }],
+				[{ text: '🎥 Библиотека эфира', callback_data: `chat_library` }],
 				[{ text: '❌ Удалить чат', callback_data: 'delete_chat' }],
 				[{ text: '⬅️ Назад', callback_data: 'back' }]
 			]
@@ -22,10 +22,15 @@ chatDetailed.enter(async (ctx) => {
 	})
 });
 
-chatDetailed.action('back', (ctx) => {
+chatDetailed.action('back', ctx => {
 	ctx.scene.state = {};
 	deleteLastMessage(ctx);
 	ctx.scene.enter(ALL_CHATS_SCENE);
+});
+
+chatDetailed.action('chat_library', ctx => {
+	deleteLastMessage(ctx);
+	ctx.scene.enter(CHAT_LIBRARY_SCENE, { chatId: ctx.scene.state.chatId });
 });
 
 chatDetailed.action('delete_chat', async (ctx) => {

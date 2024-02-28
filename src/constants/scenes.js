@@ -8,6 +8,8 @@ const LIBRARY_SOURCE_SCENE = 'librarySource';
 const ADD_SOURCE_SCENE = 'addSource';
 const ADD_YOUTUBE_SCENE = 'addYoutube';
 const ADD_RADIO_SCENE = 'addRadio';
+const CHAT_LIBRARY_SCENE = 'chatLibrary';
+const ADD_CHAT_LIBRARY_SOURCE_SCENE = 'addChatLibrarySource';
 
 module.exports = {
 	ALL_CHATS_SCENE,
@@ -19,5 +21,7 @@ module.exports = {
 	LIBRARY_SOURCE_SCENE,
 	ADD_SOURCE_SCENE,
 	ADD_YOUTUBE_SCENE,
-	ADD_RADIO_SCENE
+	ADD_RADIO_SCENE,
+	CHAT_LIBRARY_SCENE,
+	ADD_CHAT_LIBRARY_SOURCE_SCENE
 };

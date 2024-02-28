@@ -13,6 +13,8 @@ const { librarySource } = require('./src/scenes/library/librarySource');
 const { addSource } = require('./src/scenes/addSource/addSource');
 const { addYoutube } = require('./src/scenes/addSource/addYoutube');
 const { addRadio } = require('./src/scenes/addSource/addRadio');
+const { chatLibrary } = require('./src/scenes/chat/chatLibrary');
+const { addChatLibrarySource } = require('./src/scenes/chat/addChatLibrarySource');
 
 const token = process.env.BOT_TOKEN;
 
@@ -28,7 +30,9 @@ const stage = new Scenes.Stage([
 	librarySource,
 	addSource,
 	addYoutube,
-	addRadio
+	addRadio,
+	chatLibrary,
+	addChatLibrarySource
 ]);
 
 bot.use(session());
