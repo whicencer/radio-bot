@@ -54,28 +54,6 @@ bot.action('goMain', ctx => {
 
 bot.launch();
 
-// async function start() {
-// 	console.log('Start');
-
-// 	await botConfigDb();
-	
-// 	bot.onText(/\/start/, async (msg) => onBotStart(bot, msg));
-
-// 	bot.onText(/👤 Профиль/, async (msg) => getUserProfile(bot, msg));
-
-// 	bot.onText(/📀 Библиотека/, async (msg) => getUserLibrary(bot, msg));
-
-// 	bot.onText(/💬 Чаты/, async (msg) => getUserChats(bot, msg));
-
-// 	bot.on('callback_query', async (msg) => callbackQuery(bot, msg));
-
-// 	bot.on('message', async (msg) => message(bot, msg));
-// }
-
-// start();
-
-
-
 // bot.onText(/Протестировать стрим YouTube/, async (msg) => {
 	// 	const chatId = msg.chat.id;
 	
