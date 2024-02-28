@@ -1,5 +1,5 @@
 const { Scenes } = require('telegraf');
-const { LIBRARY_SOURCE_SCENE, LIBRARY_SCENE, BROADCAST_SCENE } = require('../../constants/scenes');
+const { LIBRARY_SOURCE_SCENE, LIBRARY_SCENE } = require('../../constants/scenes');
 const { Resource } = require('../../database/models');
 const { deleteLastMessage } = require('../../utils/deleteLastMessage');
 
@@ -36,14 +36,13 @@ librarySource.action('delete_source', async (ctx) => {
 		const msg = await ctx.reply('✅ Ресурс был успешно удалён!');
 		
 		setTimeout(() => {
-			ctx.deleteMessage(msg.message_id)
-				.then(() => {
-					deleteLastMessage(ctx)
-						.then(() => ctx.scene.enter(BROADCAST_SCENE));
-				});
+			ctx.deleteMessage(msg.message_id);
 		}, 3000);
 	} catch (error) {
 		ctx.reply('❌ Возникла ошибка при удалении ресурса');
+	} finally {
+		deleteLastMessage(ctx);
+		ctx.scene.enter(LIBRARY_SCENE);
 	}
 });
 
