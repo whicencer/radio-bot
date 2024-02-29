@@ -1,7 +1,7 @@
 require('dotenv').config();
 
 const { Telegraf, Scenes, session } = require('telegraf');
-const { MAIN_SCENE, BROADCAST_SCENE } = require('./src/constants/scenes');
+const { MAIN_SCENE, BROADCAST_SCENE, INFORMATION_SCENE } = require('./src/constants/scenes');
 const { getUserProfile, onBotStart } = require('./src/commands');
 const { allChats } = require('./src/scenes/chat/allChats');
 const { chatDetailed } = require('./src/scenes/chat/chatDetailed');
@@ -15,6 +15,7 @@ const { addYoutube } = require('./src/scenes/addSource/addYoutube');
 const { addRadio } = require('./src/scenes/addSource/addRadio');
 const { chatLibrary } = require('./src/scenes/chat/chatLibrary');
 const { addChatLibrarySource } = require('./src/scenes/chat/addChatLibrarySource');
+const { information } = require('./src/scenes/information');
 
 const token = process.env.BOT_TOKEN;
 
@@ -32,7 +33,8 @@ const stage = new Scenes.Stage([
 	addYoutube,
 	addRadio,
 	chatLibrary,
-	addChatLibrarySource
+	addChatLibrarySource,
+	information
 ]);
 
 bot.use(session());
@@ -42,7 +44,7 @@ bot.start(onBotStart);
 
 bot.hears('👤 Профиль', getUserProfile);
 bot.hears('📖 Информация', ctx => {
-	ctx.reply('Тут будут все инструкции, связь с менеджером и тп');
+	ctx.scene.enter(INFORMATION_SCENE);
 });
 bot.hears('📡 Транслировать', ctx => {
 	ctx.scene.enter(BROADCAST_SCENE);

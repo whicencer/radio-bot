@@ -10,6 +10,7 @@ const ADD_YOUTUBE_SCENE = 'addYoutube';
 const ADD_RADIO_SCENE = 'addRadio';
 const CHAT_LIBRARY_SCENE = 'chatLibrary';
 const ADD_CHAT_LIBRARY_SOURCE_SCENE = 'addChatLibrarySource';
+const INFORMATION_SCENE = 'information';
 
 module.exports = {
 	ALL_CHATS_SCENE,
@@ -23,5 +24,6 @@ module.exports = {
 	ADD_YOUTUBE_SCENE,
 	ADD_RADIO_SCENE,
 	CHAT_LIBRARY_SCENE,
-	ADD_CHAT_LIBRARY_SOURCE_SCENE
+	ADD_CHAT_LIBRARY_SOURCE_SCENE,
+	INFORMATION_SCENE
 };

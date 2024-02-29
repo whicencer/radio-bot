@@ -6,9 +6,10 @@ async function getUserProfile(ctx) {
 	try {
 		const user = await UserModel.findOne({ where: { id: userId } });
 		const message = `
-		📌 Ваш id: ${userId}\n
-	💰 Баланс: ${user.balance}$\n
-	👥 Количество рефералов: 12
+		📌 Ваш id: ${userId}
+💰 Баланс: ${user.balance}$
+👥 Количество рефералов: 12\n
+📱 Текущий тариф: Basic
 		`;
 
 		await ctx.reply(message, {

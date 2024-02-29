@@ -12,7 +12,7 @@ chatDetailed.enter(async (ctx) => {
 	ctx.reply(`<b>Чат: <code>${chat.name}</code></b>\n<b>Ссылка на чат: ${chat.chatLink}</b>`, {
 		reply_markup: {
 			inline_keyboard: [
-				// [changeStatusButton],
+				[{ text: '🔥 Запустить', callback_data: 'test' }],
 				[{ text: '🎥 Библиотека эфира', callback_data: `chat_library` }],
 				[{ text: '❌ Удалить чат', callback_data: 'delete_chat' }],
 				[{ text: '⬅️ Назад', callback_data: 'back' }]
