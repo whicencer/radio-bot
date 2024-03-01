@@ -16,6 +16,7 @@ const { addRadio } = require('./src/scenes/addSource/addRadio');
 const { chatLibrary } = require('./src/scenes/chat/chatLibrary');
 const { addChatLibrarySource } = require('./src/scenes/chat/addChatLibrarySource');
 const { information } = require('./src/scenes/information');
+const { botConfigDb } = require('./src/database/botConfigDb');
 
 const token = process.env.BOT_TOKEN;
 
@@ -54,7 +55,10 @@ bot.action('goMain', ctx => {
 	ctx.scene.enter(MAIN_SCENE);
 });
 
-bot.launch();
+bot.launch(async () => {
+	console.log('Бот запущен');
+	await botConfigDb();
+});
 
 // bot.onText(/Протестировать стрим YouTube/, async (msg) => {
 	// 	const chatId = msg.chat.id;

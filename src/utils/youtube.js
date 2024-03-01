@@ -7,8 +7,8 @@ function getSourceUrl(youtube_url) {
   });
 }
 
-function getSourceTitle(youtube_url) {
-  return youtubedl(youtube_url, {
+async function getSourceTitle(youtube_url) {
+  return await youtubedl(youtube_url, {
     'get-title': true,
     f: 'best',
   });

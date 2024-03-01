@@ -2,6 +2,7 @@ const { Scenes } = require('telegraf');
 const { CHAT_LIBRARY_SCENE, CHAT_DETAILED_SCENE, ADD_CHAT_LIBRARY_SOURCE_SCENE } = require('../../constants/scenes');
 const { Chat, Resource } = require('../../database/models');
 const { deleteLastMessage } = require('../../utils/deleteLastMessage');
+const { deleteMessageWithDelay } = require('../../utils/deleteMessageWithDelay');
 
 const chatLibrary = new Scenes.BaseScene(CHAT_LIBRARY_SCENE);
 
@@ -48,9 +49,7 @@ chatLibrary.on('callback_query', async (ctx) => {
 			currentChat.removeResource(chatResourceToDelete);
 
 			const msg = await ctx.reply('✅ Ресурс был успешно удалён из чата!');
-			setTimeout(() => {
-				ctx.deleteMessage(msg.message_id);
-			}, 3000);
+			deleteMessageWithDelay(ctx, msg.message_id, 3000);
 		} catch (error) {
 			console.log(error);
 			ctx.reply('❌ Возникла ошибка во время удаления ресурса');

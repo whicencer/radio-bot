@@ -4,6 +4,7 @@ const { deleteLastMessage } = require('../../utils/deleteLastMessage');
 const { youtubeUrlValidate } = require('../../utils/validators/youtubeUrlValidate');
 const { Resource } = require('../../database/models');
 const { getSourceTitle } = require('../../utils/youtube');
+const { deleteMessageWithDelay } = require('../../utils/deleteMessageWithDelay');
 
 const addYoutube = new Scenes.BaseScene(ADD_YOUTUBE_SCENE);
 const msg = `Отправьте ссылку на видео на YouTube\n
@@ -39,10 +40,8 @@ addYoutube.on('message', async (ctx) => {
 			await Resource.create({ userId, name: sourceTitle, url });
 	
 			const msg = await ctx.reply('✅ Ресурс был успешно добавлен!');
-	
-			setTimeout(() => {
-				ctx.deleteMessage(msg.message_id);
-			}, 3000);
+
+			deleteMessageWithDelay(ctx, msg.message_id, 3000);
 		} catch (err) {
 			ctx.reply('❌ Произошла ошибка при добавлении ресурса: Возможно вы ввели ссылку не верно');
 		} finally {

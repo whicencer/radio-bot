@@ -3,6 +3,7 @@ const { ALL_CHATS_SCENE, CREATE_CHAT_SCENE } = require('../../constants/scenes')
 const { deleteLastMessage } = require('../../utils/deleteLastMessage');
 const { rtmpKeyValidate } = require('../../utils/validators/rtmpKeyValidate');
 const { Chat } = require('../../database/models');
+const { deleteMessageWithDelay } = require('../../utils/deleteMessageWithDelay');
 
 const createChat = new Scenes.BaseScene(CREATE_CHAT_SCENE);
 const exampleMsg = `Введите название чата, его ссылку, и ключ сервера трансляции\n
@@ -43,9 +44,7 @@ createChat.on('message', async (ctx) => {
 			await Chat.create({ userId, name: chatName, streamKey, chatLink});
 	
 			const msg = await ctx.reply('✅ Чат был успешно добавлен!');
-			setTimeout(() => {
-				ctx.deleteMessage(msg.message_id);
-			}, 3000);
+			deleteMessageWithDelay(ctx, msg.message_id, 3000);
 		} catch (error) {
 			ctx.reply(`❌ Возникла ошибка при добавлении чата: ${error.message}`);
 		} finally {

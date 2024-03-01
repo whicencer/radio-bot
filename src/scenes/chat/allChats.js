@@ -1,5 +1,5 @@
 const { Scenes } = require('telegraf');
-const { User } = require('../../database/models');
+const { User, Chat } = require('../../database/models');
 const { CHAT_DETAILED_SCENE, CREATE_CHAT_SCENE, ALL_CHATS_SCENE, BROADCAST_SCENE } = require('../../constants/scenes');
 const { deleteLastMessage } = require('../../utils/deleteLastMessage');
 
@@ -8,8 +8,9 @@ const allChats = new Scenes.BaseScene(ALL_CHATS_SCENE);
 allChats.enter(async (ctx) => {
 	const userId = ctx.from.id;
 
-	const user = await User.findOne({ where: {id: userId}, include: 'chats' });
-	const chatsBtns = user.chats.map(chat => ([{ text: chat.name, callback_data: 'get_chat' + chat.id }]));
+	const user = await User.findOne({ where: {id: userId}, include: 'chats'});
+	const userChats = user.chats.sort((chat1, chat2) => chat1.createdAt - chat2.createdAt);
+	const chatsBtns = userChats.map(chat => ([{ text: chat.name, callback_data: 'get_chat' + chat.id }]));
 
 	await ctx.reply('💬 Ваши чаты', {
 		reply_markup: {

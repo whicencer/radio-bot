@@ -2,6 +2,7 @@ const { Scenes } = require('telegraf');
 const { ADD_CHAT_LIBRARY_SOURCE_SCENE, CHAT_LIBRARY_SCENE } = require('../../constants/scenes');
 const { deleteLastMessage } = require('../../utils/deleteLastMessage');
 const { Resource, Chat } = require('../../database/models');
+const { deleteMessageWithDelay } = require('../../utils/deleteMessageWithDelay');
 
 const addChatLibrarySource = new Scenes.BaseScene(ADD_CHAT_LIBRARY_SOURCE_SCENE);
 
@@ -41,9 +42,7 @@ addChatLibrarySource.on('callback_query', async (ctx) => {
 
 			
 			const msg = await ctx.reply('✅ Ресурс был успешно добавлен в чат!');
-			setTimeout(() => {
-				ctx.deleteMessage(msg.message_id);
-			}, 3000);
+			deleteMessageWithDelay(ctx, msg.message_id, 3000);
 		} catch (error) {
 			console.log(error);
 			ctx.reply('❌ Возникла ошибка во время добавления ресурса');

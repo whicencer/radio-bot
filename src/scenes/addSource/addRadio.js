@@ -4,6 +4,7 @@ const { deleteLastMessage } = require('../../utils/deleteLastMessage');
 const { generateInlineKeyboard } = require('../../utils/generateInlineKeyboard');
 const { radios } = require('../../constants/radios');
 const { Resource } = require('../../database/models');
+const { deleteMessageWithDelay } = require('../../utils/deleteMessageWithDelay');
 
 const addRadio = new Scenes.BaseScene(ADD_RADIO_SCENE);
 
@@ -35,9 +36,7 @@ addRadio.on('callback_query', async (ctx) => {
 
 			const msg = await ctx.reply('✅ Радио было успешно добавлено!');
 
-			setTimeout(() => {
-				ctx.deleteMessage(msg.message_id);
-			}, 3000);
+			deleteMessageWithDelay(ctx, msg.message_id, 3000);
 		} catch (error) {
 			console.log(error);
 			ctx.reply('❌ Произошла ошибка при добавлении радио');
