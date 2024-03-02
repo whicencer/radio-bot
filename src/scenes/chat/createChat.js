@@ -1,9 +1,10 @@
 const { Scenes } = require('telegraf');
-const { ALL_CHATS_SCENE, CREATE_CHAT_SCENE } = require('../../constants/scenes');
+const { ALL_CHATS_SCENE, CREATE_CHAT_SCENE, BROADCAST_SCENE } = require('../../constants/scenes');
 const { deleteLastMessage } = require('../../utils/deleteLastMessage');
 const { rtmpKeyValidate } = require('../../utils/validators/rtmpKeyValidate');
 const { Chat } = require('../../database/models');
 const { deleteMessageWithDelay } = require('../../utils/deleteMessageWithDelay');
+const { createChatMiddleware } = require('../../middleware/createChatMiddleware');
 
 const createChat = new Scenes.BaseScene(CREATE_CHAT_SCENE);
 const exampleMsg = `Введите название чата, его ссылку, и ключ сервера трансляции\n
@@ -13,15 +14,23 @@ const exampleMsg = `Введите название чата, его ссылк�
 <code>https://t.me/arat34t</code>
 `;
 
-createChat.enter(ctx => {
-	ctx.reply(exampleMsg, {
-		reply_markup: {
-			inline_keyboard: [
-				[{ text: '🚫 Отменить', callback_data: 'cancel' }]
-			]
-		},
-		parse_mode: 'HTML'
-	});
+createChat.enter(async (ctx) => {
+	const userId = ctx.from.id;
+	try {
+		await createChatMiddleware(userId);
+		ctx.reply(exampleMsg, {
+			reply_markup: {
+				inline_keyboard: [
+					[{ text: '🚫 Отменить', callback_data: 'cancel' }]
+				]
+			},
+			parse_mode: 'HTML'
+		});
+	} catch (error) {
+		const msg = await ctx.reply(error.message);
+		deleteMessageWithDelay(ctx, msg.message_id, 3000);
+		ctx.scene.enter(BROADCAST_SCENE);
+	}
 });
 
 createChat.action('cancel', ctx => {

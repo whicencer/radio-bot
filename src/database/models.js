@@ -3,7 +3,10 @@ const { DataTypes } = require('sequelize');
 
 const User = sequelize.define('user', {
 	id: {type: DataTypes.BIGINT, primaryKey: true, unique: true},
-	balance: {type: DataTypes.BIGINT, defaultValue: 0}
+	balance: {type: DataTypes.BIGINT, defaultValue: 0},
+	invitedBy: {type: DataTypes.BIGINT, defaultValue: null, allowNull: true},
+	referrals: {type: DataTypes.ARRAY(DataTypes.BIGINT), defaultValue: []},
+	tariff: {type: DataTypes.STRING, defaultValue: 'none'}
 });
 
 const Resource = sequelize.define('resource', {

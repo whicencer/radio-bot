@@ -1,17 +1,31 @@
 const { Scenes } = require('telegraf');
 const { ADD_SOURCE_SCENE, LIBRARY_SCENE, ADD_YOUTUBE_SCENE, ADD_RADIO_SCENE } = require('../../constants/scenes');
 const { deleteLastMessage } = require('../../utils/deleteLastMessage');
+const { User } = require('../../database/models');
+const { BASIC, ADVANCED, PREMIUM } = require('../../constants/subscriptions');
 
 const addSource = new Scenes.BaseScene(ADD_SOURCE_SCENE);
 
-addSource.enter(ctx => {
+addSource.enter(async (ctx) => {
+	const userId = ctx.from.id;
+	const { tariff } = await User.findByPk(userId);
+
+	const getSourceButtonsByTariff = (tariff) => {
+    switch (tariff) {
+			case BASIC.id:
+				return BASIC.add_source_btns;
+			case ADVANCED.id:
+				return ADVANCED.add_source_btns;
+			case PREMIUM.id:
+				return PREMIUM.add_source_btns;
+			default:
+				return [];
+    }
+	};
+
 	ctx.reply('Выберите источник добавления ресурса', {
 		reply_markup: {
-			inline_keyboard: [
-				[{ text: '🎦🎶 Youtube', callback_data: 'add_youtube' }],
-				[{ text: '🎶 Radio', callback_data: 'choose_radio' }],
-				[{ text: '🚫 Отменить', callback_data: 'cancel' }]
-			]
+			inline_keyboard: getSourceButtonsByTariff(tariff)
 		}
 	});
 });

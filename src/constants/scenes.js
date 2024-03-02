@@ -11,6 +11,8 @@ const ADD_RADIO_SCENE = 'addRadio';
 const CHAT_LIBRARY_SCENE = 'chatLibrary';
 const ADD_CHAT_LIBRARY_SOURCE_SCENE = 'addChatLibrarySource';
 const INFORMATION_SCENE = 'information';
+const USER_PROFILE_SCENE = 'userProfile';
+const SUBSCRIPTION_SCENE = 'subscription';
 
 module.exports = {
 	ALL_CHATS_SCENE,
@@ -25,5 +27,7 @@ module.exports = {
 	ADD_RADIO_SCENE,
 	CHAT_LIBRARY_SCENE,
 	ADD_CHAT_LIBRARY_SOURCE_SCENE,
-	INFORMATION_SCENE
+	INFORMATION_SCENE,
+	USER_PROFILE_SCENE,
+	SUBSCRIPTION_SCENE
 };
