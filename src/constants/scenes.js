@@ -15,8 +15,10 @@ const USER_PROFILE_SCENE = 'userProfile';
 const SUBSCRIPTION_SCENE = 'subscription';
 const ADMIN_PANEL_SCENE = 'adminPanel';
 const ADD_ADMIN_SCENE = 'addAdmin';
+const ADD_MODER_SCENE = 'addModer';
 const ADMIN_TOPUP_USER_BALANCE_SCENE = 'adminTopupUserBalance';
 const ADMIN_SET_USER_SUBSCRIPTION = 'adminSetUserSubscription';
+const ADMIN_MANAGE_USERS_SCENE = 'adminManageUsers';
 
 module.exports = {
 	ALL_CHATS_SCENE,
@@ -37,5 +39,7 @@ module.exports = {
 	ADMIN_PANEL_SCENE,
 	ADD_ADMIN_SCENE,
 	ADMIN_TOPUP_USER_BALANCE_SCENE,
-	ADMIN_SET_USER_SUBSCRIPTION
+	ADMIN_SET_USER_SUBSCRIPTION,
+	ADD_MODER_SCENE,
+	ADMIN_MANAGE_USERS_SCENE
 };

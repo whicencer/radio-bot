@@ -1,3 +1,4 @@
+const { userRoles } = require('../constants/userRoles');
 const { User } = require('../database/models');
 const { deleteMessageWithDelay } = require('../utils/deleteMessageWithDelay');
 
@@ -20,6 +21,7 @@ async function deleteAdmin(ctx) {
 				await User.update({ role: 'user' }, { where: { id: idAdminToRemove } });
 			}
 
+			ctx.telegram.sendMessage(idAdminToRemove, 'С вас были сняты права Администратора/Модератора');
 			const msg = await ctx.reply('Администратор был успешно удален!');
 			deleteMessageWithDelay(ctx, msg.message_id, 3000);
 		} catch (error) {
