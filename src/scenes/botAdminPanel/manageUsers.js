@@ -1,5 +1,5 @@
 const { Scenes } = require('telegraf');
-const { ADMIN_MANAGE_USERS_SCENE, ADMIN_TOPUP_USER_BALANCE_SCENE, ADMIN_PANEL_SCENE } = require('../../constants/scenes');
+const { ADMIN_MANAGE_USERS_SCENE, ADMIN_TOPUP_USER_BALANCE_SCENE, ADMIN_PANEL_SCENE, ADMIN_SET_USER_SUBSCRIPTION } = require('../../constants/scenes');
 const { deleteLastMessage } = require('../../utils/deleteLastMessage');
 
 const manageUsers = new Scenes.BaseScene(ADMIN_MANAGE_USERS_SCENE);
@@ -19,6 +19,11 @@ manageUsers.enter(ctx => {
 manageUsers.action('back', ctx => {
 	deleteLastMessage(ctx);
 	ctx.scene.enter(ADMIN_PANEL_SCENE);
+});
+
+manageUsers.action('setSubscription', ctx => {
+	deleteLastMessage(ctx);
+	ctx.scene.enter(ADMIN_SET_USER_SUBSCRIPTION);
 });
 
 manageUsers.action('topUpBalance', ctx => {

@@ -25,6 +25,7 @@ const { deleteAdmin } = require('./src/commands/deleteAdmin');
 const { addModer } = require('./src/scenes/botAdminPanel/addModer');
 const { manageUsers } = require('./src/scenes/botAdminPanel/manageUsers');
 const { topupBalance } = require('./src/scenes/botAdminPanel/topupBalance');
+const { setSubscription } = require('./src/scenes/botAdminPanel/setSubscription');
 
 const token = process.env.BOT_TOKEN;
 
@@ -50,7 +51,8 @@ const stage = new Scenes.Stage([
 	addAdmin,
 	addModer,
 	manageUsers,
-	topupBalance
+	topupBalance,
+	setSubscription
 ]);
 
 bot.use(session());
