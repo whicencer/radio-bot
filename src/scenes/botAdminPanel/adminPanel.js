@@ -55,8 +55,8 @@ adminPanel.action('admin_list', async (ctx) => {
 	}});
 	const admins = allAdmins.map(admin => {
 		return admin.id == currentUserId
-			? `@${admin.username} (${admin.id}) (Вы, <b>${userRoles[admin.role]}</b>)`
-			: `@${admin.username} (${admin.id}) (<b>${userRoles[admin.role]}</b>)`;
+			? `@${admin.username || admin.id} (${admin.id}) (Вы, <b>${userRoles[admin.role]}</b>)`
+			: `@${admin.username || admin.id} (${admin.id}) (<b>${userRoles[admin.role]}</b>)`;
 	});
 
 	ctx.reply(`Все администраторы бота:\n${admins.join('\n')}\n
