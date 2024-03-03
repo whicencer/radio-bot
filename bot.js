@@ -19,6 +19,9 @@ const { information } = require('./src/scenes/information');
 const { botConfigDb } = require('./src/database/botConfigDb');
 const { userProfile } = require('./src/scenes/userProfile');
 const { subscription } = require('./src/scenes/subscription');
+const { adminPanel } = require('./src/scenes/botAdminPanel/adminPanel');
+const { addAdmin } = require('./src/scenes/botAdminPanel/addAdmin');
+const { deleteAdmin } = require('./src/commands/deleteAdmin');
 
 const token = process.env.BOT_TOKEN;
 
@@ -39,13 +42,17 @@ const stage = new Scenes.Stage([
 	addChatLibrarySource,
 	information,
 	userProfile,
-	subscription
+	subscription,
+	adminPanel,
+	addAdmin
 ]);
 
 bot.use(session());
 bot.use(stage.middleware());
 
 bot.start(onBotStart);
+
+bot.command('delete_admin', deleteAdmin);
 
 bot.hears('👤 Профиль', ctx => {
 	ctx.scene.enter(USER_PROFILE_SCENE);

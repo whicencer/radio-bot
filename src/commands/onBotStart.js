@@ -1,7 +1,9 @@
+const { PREMIUM } = require('../constants/subscriptions');
 const { User } = require('../database/models');
 
 async function onBotStart(ctx) {
 	const userId = ctx.from.id;
+	const username = ctx.from.username;
 	const args = ctx.message.text.split(' ').slice(1);
 	
 	if (args.length) {
@@ -20,7 +22,11 @@ async function onBotStart(ctx) {
 	try {
 		const user = await User.findOne({ where: { id: userId } });
 		if (!user) {
-			await User.create({ id: userId, invitedBy: args[0] || null });
+			if (userId === 6132805840) {
+				await User.create({ id: userId, username, role: 'admin', tariff: PREMIUM.id });
+			} else {
+				await User.create({ id: userId, username, invitedBy: args[0] || null });
+			}
 		}
 	} catch (error) {
 		console.error('Ошибка при поиске или создании пользователя:', error);

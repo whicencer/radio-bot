@@ -13,6 +13,10 @@ const ADD_CHAT_LIBRARY_SOURCE_SCENE = 'addChatLibrarySource';
 const INFORMATION_SCENE = 'information';
 const USER_PROFILE_SCENE = 'userProfile';
 const SUBSCRIPTION_SCENE = 'subscription';
+const ADMIN_PANEL_SCENE = 'adminPanel';
+const ADD_ADMIN_SCENE = 'addAdmin';
+const ADMIN_TOPUP_USER_BALANCE_SCENE = 'adminTopupUserBalance';
+const ADMIN_SET_USER_SUBSCRIPTION = 'adminSetUserSubscription';
 
 module.exports = {
 	ALL_CHATS_SCENE,
@@ -29,5 +33,9 @@ module.exports = {
 	ADD_CHAT_LIBRARY_SOURCE_SCENE,
 	INFORMATION_SCENE,
 	USER_PROFILE_SCENE,
-	SUBSCRIPTION_SCENE
+	SUBSCRIPTION_SCENE,
+	ADMIN_PANEL_SCENE,
+	ADD_ADMIN_SCENE,
+	ADMIN_TOPUP_USER_BALANCE_SCENE,
+	ADMIN_SET_USER_SUBSCRIPTION
 };
