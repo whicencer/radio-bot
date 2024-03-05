@@ -1,6 +1,7 @@
 const NONE = 'none';
 const BASIC = {
 	id: 'basic',
+	price: 10,
 	max_chats: 2,
 	add_source_btns: [
 		[{ text: '🎶 Radio', callback_data: 'choose_radio' }],
@@ -9,6 +10,7 @@ const BASIC = {
 };
 const ADVANCED = {
 	id: 'advanced',
+	price: 40,
 	max_chats: 5,
 	add_source_btns: [
 		[{ text: '🎦🎶 Youtube', callback_data: 'add_youtube' }],
@@ -18,6 +20,7 @@ const ADVANCED = {
 };
 const PREMIUM = {
 	id: 'premium',
+	price: 70,
 	max_chats: 15,
 	add_source_btns: [
 		[{ text: '🎦🎶 Youtube', callback_data: 'add_youtube' }],

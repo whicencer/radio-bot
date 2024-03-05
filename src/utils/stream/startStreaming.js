@@ -2,8 +2,8 @@ const ffmpeg = require('fluent-ffmpeg');
 const { processes } = require('./processes');
 const { Chat } = require('../../database/models');
 
-function startStreaming(resources, rtmpKey) {
-	let currentIndex = 0;
+function startStreaming(resources, rtmpKey, initIndex = 0) {
+	let currentIndex = initIndex;
 
 	function streamNext() {
 		const resource = resources[currentIndex];
@@ -16,7 +16,7 @@ function startStreaming(resources, rtmpKey) {
 				.inputOptions('-re')
 				.outputOptions(['-c:v copy', '-c:a aac'])
 				.format('flv')
-				.output(`rtmps://dc4-1.rtmp.t.me/s/${rtmpKey}`)
+				.output(rtmpKey)
 				.on('error', async (err) => {
 					if (err.message.indexOf('SIGKILL') === -1) {
 						console.error('Ошибка трансляции:', err);

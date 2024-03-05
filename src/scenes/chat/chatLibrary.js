@@ -3,6 +3,7 @@ const { CHAT_LIBRARY_SCENE, CHAT_DETAILED_SCENE, ADD_CHAT_LIBRARY_SOURCE_SCENE }
 const { Chat, Resource } = require('../../database/models');
 const { deleteLastMessage } = require('../../utils/deleteLastMessage');
 const { deleteMessageWithDelay } = require('../../utils/deleteMessageWithDelay');
+const { checkForStatus } = require('./middleware/checkForStatus');
 
 const chatLibrary = new Scenes.BaseScene(CHAT_LIBRARY_SCENE);
 
@@ -35,7 +36,7 @@ chatLibrary.action('add_source', async (ctx) => {
 	ctx.scene.enter(ADD_CHAT_LIBRARY_SOURCE_SCENE, { chatId });
 });
 
-chatLibrary.on('callback_query', async (ctx) => {
+chatLibrary.on('callback_query', checkForStatus, async (ctx) => {
 	const callbackData = ctx.callbackQuery.data;
 	const chatId = ctx.scene.state.chatId;
 

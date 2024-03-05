@@ -3,8 +3,8 @@ class Processes {
 		this.processes = {};
 	}
 
-	addProcess(id, process, sourceTitle) {
-		this.processes[id] = { sourceTitle, process };
+	addProcess(id, process, sourceTitle, currentIndex) {
+		this.processes[id] = { sourceTitle, process, currentIndex };
 	}
 
 	stopProcess(id) {
@@ -14,6 +14,10 @@ class Processes {
 
 	getSourceTitle(id) {
 		return this.processes[id]?.sourceTitle || 'Пусто';
+	}
+
+	getProcessById(id) {
+		return this.processes[id];
 	}
 }
 

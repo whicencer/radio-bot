@@ -12,7 +12,7 @@ addRadio.enter(ctx => {
 	ctx.reply('Выберите радио которое хотите добавить:', {
 		reply_markup: {
 			inline_keyboard: [
-				...generateInlineKeyboard(radios, 2, 'add_radio'),
+				...generateInlineKeyboard(radios, 2, 'add'),
 				[{ text: '🚫 Отменить', callback_data: 'cancel' }]
 			]
 		}
@@ -28,11 +28,11 @@ addRadio.on('callback_query', async (ctx) => {
 	const callbackData = ctx.callbackQuery.data;
 	const userId = ctx.from.id;
 
-	if (callbackData.startsWith('add_radio')) {
-		const [radioName, radioUrl] = callbackData.replace('add_radio', '').split('-');
+	if (callbackData.startsWith('add')) {
+		const [radioName, radioUrl] = callbackData.replace('add', '').split('-');
 		
 		try {
-			Resource.create({ userId, name: radioName, url: radioUrl });
+			Resource.create({ userId, name: radioName, url: `https://${radioUrl}` });
 
 			const msg = await ctx.reply('✅ Радио было успешно добавлено!');
 
