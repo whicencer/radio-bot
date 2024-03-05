@@ -56,7 +56,7 @@ chatLibrary.on('callback_query', checkForStatus, async (ctx) => {
 			ctx.reply('❌ Возникла ошибка во время удаления ресурса');
 		} finally {
 			deleteLastMessage(ctx);
-			ctx.scene.enter(CHAT_DETAILED_SCENE, { chatId });
+			ctx.scene.enter(ADD_CHAT_LIBRARY_SOURCE_SCENE, { chatId });
 		}
 	}
 });
