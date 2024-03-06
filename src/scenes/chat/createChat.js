@@ -5,6 +5,7 @@ const { rtmpKeyValidate } = require('../../utils/validators/rtmpKeyValidate');
 const { Chat } = require('../../database/models');
 const { deleteMessageWithDelay } = require('../../utils/deleteMessageWithDelay');
 const { checkForChatLimit } = require('./middleware/checkForChatLimit');
+const { checkForSub } = require('../../middleware/checkForSub');
 
 const createChat = new Scenes.BaseScene(CREATE_CHAT_SCENE);
 const exampleMsg = `Введите название чата, ключ трансляции и его ссылку\n
@@ -14,7 +15,7 @@ const exampleMsg = `Введите название чата, ключ тран�
 <code>https://t.me/arat34t</code>
 `;
 
-createChat.enter(checkForChatLimit, async (ctx) => {
+createChat.enter(checkForSub, checkForChatLimit, async (ctx) => {
 	try {
 		ctx.reply(exampleMsg, {
 			reply_markup: {

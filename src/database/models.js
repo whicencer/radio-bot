@@ -8,7 +8,8 @@ const User = sequelize.define('user', {
 	invitedBy: {type: DataTypes.BIGINT, defaultValue: null, allowNull: true},
 	referrals: {type: DataTypes.ARRAY(DataTypes.BIGINT), defaultValue: []},
 	tariff: {type: DataTypes.STRING, defaultValue: 'none'},
-	role: {type: DataTypes.STRING, defaultValue: 'user', allowNull: false}
+	role: {type: DataTypes.STRING, defaultValue: 'user', allowNull: false},
+	subExpiresAt: {type: DataTypes.DATE, defaultValue: null, allowNull: true}
 });
 
 const Resource = sequelize.define('resource', {

@@ -11,6 +11,7 @@ const { createActionButton } = require('./helpers/createActionButton');
 const { debounce } = require('../../utils/debounce');
 const { checkForStatus } = require('./middleware/checkForStatus');
 const { checkForSources } = require('./middleware/checkForSources');
+const { checkForSub } = require('../../middleware/checkForSub');
 
 const chatDetailed = new Scenes.BaseScene(CHAT_DETAILED_SCENE);
 
@@ -64,7 +65,7 @@ chatDetailed.action('stop_stream', debounce(async (ctx) => {
 	}
 }, 1000));
 
-chatDetailed.action('start_stream', checkForStatus, checkForSources, debounce(async (ctx) => {
+chatDetailed.action('start_stream', checkForStatus, checkForSources, checkForSub, debounce(async (ctx) => {
 	const resources = ctx.scene.session.chatSources;
 	const { streamKey } = ctx.scene.session.chat;
 
@@ -90,12 +91,12 @@ chatDetailed.action('back', ctx => {
 	ctx.scene.enter(ALL_CHATS_SCENE);
 });
 
-chatDetailed.action('chat_library', ctx => {
+chatDetailed.action('chat_library', checkForSub, ctx => {
 	deleteLastMessage(ctx);
 	ctx.scene.enter(CHAT_LIBRARY_SCENE, { chatId: ctx.scene.state.chatId });
 });
 
-chatDetailed.action('delete_chat', checkForStatus, async (ctx) => {
+chatDetailed.action('delete_chat', checkForStatus, checkForSub, async (ctx) => {
 	const id = ctx.scene.session.chatId;
 
 	try {

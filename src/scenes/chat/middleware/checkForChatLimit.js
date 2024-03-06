@@ -4,6 +4,7 @@ const { User } = require('../../../database/models');
 const { deleteMessageWithDelay } = require('../../../utils/deleteMessageWithDelay');
 
 const maxChannelsByTariff = {
+	['none']: 0,
 	[BASIC.id]: BASIC.max_chats,
 	[ADVANCED.id]: ADVANCED.max_chats,
 	[PREMIUM.id]: PREMIUM.max_chats

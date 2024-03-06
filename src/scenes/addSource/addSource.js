@@ -3,10 +3,11 @@ const { ADD_SOURCE_SCENE, LIBRARY_SCENE, ADD_YOUTUBE_SCENE, ADD_RADIO_SCENE } = 
 const { deleteLastMessage } = require('../../utils/deleteLastMessage');
 const { User } = require('../../database/models');
 const { BASIC, ADVANCED, PREMIUM } = require('../../constants/subscriptions');
+const { checkForSub } = require('../../middleware/checkForSub');
 
 const addSource = new Scenes.BaseScene(ADD_SOURCE_SCENE);
 
-addSource.enter(async (ctx) => {
+addSource.enter(checkForSub, async (ctx) => {
 	const userId = ctx.from.id;
 	const { tariff } = await User.findByPk(userId);
 

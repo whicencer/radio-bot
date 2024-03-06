@@ -29,7 +29,7 @@ addRadio.on('callback_query', async (ctx) => {
 	const userId = ctx.from.id;
 
 	if (callbackData.startsWith('add')) {
-		const [radioName, radioUrl] = callbackData.replace('add', '').split('-');
+		const [radioName, radioUrl] = callbackData.replace('add', '').split('_pz_');
 		
 		try {
 			Resource.create({ userId, name: radioName, url: `https://${radioUrl}` });

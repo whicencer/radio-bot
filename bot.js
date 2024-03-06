@@ -1,7 +1,7 @@
 require('dotenv').config();
 
 const { Telegraf, Scenes, session } = require('telegraf');
-const { MAIN_SCENE, BROADCAST_SCENE, INFORMATION_SCENE, USER_PROFILE_SCENE } = require('./src/constants/scenes');
+const { MAIN_SCENE, BROADCAST_SCENE, INFORMATION_SCENE, USER_PROFILE_SCENE, SUBSCRIPTION_SCENE } = require('./src/constants/scenes');
 const { onBotStart } = require('./src/commands/onBotStart');
 const { allChats } = require('./src/scenes/chat/allChats');
 const { chatDetailed } = require('./src/scenes/chat/chatDetailed');
@@ -26,6 +26,7 @@ const { addModer } = require('./src/scenes/botAdminPanel/addModer');
 const { manageUsers } = require('./src/scenes/botAdminPanel/manageUsers');
 const { topupBalance } = require('./src/scenes/botAdminPanel/topupBalance');
 const { setSubscription } = require('./src/scenes/botAdminPanel/setSubscription');
+const { subscriptionStatusUpdater } = require('./src/middleware/subscriptionStatusUpdater');
 
 const token = process.env.BOT_TOKEN;
 
@@ -56,11 +57,13 @@ const stage = new Scenes.Stage([
 ]);
 
 bot.use(session());
+bot.use(subscriptionStatusUpdater);
 bot.use(stage.middleware());
 
 bot.start(onBotStart);
 
 bot.command('delete_admin', deleteAdmin);
+bot.command('sub', (ctx) => ctx.scene.enter(SUBSCRIPTION_SCENE));
 
 bot.hears('👤 Профиль', ctx => {
 	ctx.scene.enter(USER_PROFILE_SCENE);
