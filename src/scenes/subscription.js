@@ -28,7 +28,7 @@ subscription.action(BASIC.id, async (ctx) => {
 		ctx.reply('У вас недостаточно денег на балансе');
 	} else {
 		const date = new Date();
-		date.setMinutes(date.getMinutes() + 1);
+		date.setMonth(date.setMonth() + 1);
 		user.update({ tariff: BASIC.id, subExpiresAt: date });
 		user.decrement('balance', { by: 10, where: { id: userId } });
 		ctx.reply('Вы подключили тариф Basic на месяц!');
