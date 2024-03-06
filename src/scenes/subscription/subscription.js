@@ -1,7 +1,8 @@
 const { Scenes } = require('telegraf');
-const { SUBSCRIPTION_SCENE, USER_PROFILE_SCENE } = require('../constants/scenes');
-const { BASIC, ADVANCED, PREMIUM } = require('../constants/subscriptions');
-const { User } = require('../database/models');
+const { SUBSCRIPTION_SCENE, USER_PROFILE_SCENE } = require('../../constants/scenes');
+const { BASIC, ADVANCED, PREMIUM } = require('../../constants/subscriptions');
+const { User } = require('../../database/models');
+const { handleSubcription } = require('./handleSubcription');
 
 const subscription = new Scenes.BaseScene(SUBSCRIPTION_SCENE);
 
@@ -21,20 +22,15 @@ subscription.enter(ctx => {
 });
 
 subscription.action(BASIC.id, async (ctx) => {
-	const userId = ctx.from.id;
-	const user = await User.findByPk(userId);
+	await handleSubcription(ctx, BASIC.id, BASIC.price);
+});
 
-	if (user.balance < BASIC.price) {
-		ctx.reply('У вас недостаточно денег на балансе');
-	} else {
-		const date = new Date();
-		date.setMonth(date.getMonth() + 1);
-		user.update({ tariff: BASIC.id, subExpiresAt: date });
-		user.decrement('balance', { by: 10, where: { id: userId } });
-		await ctx.reply('Вы подключили тариф Basic на месяц!');
+subscription.action(ADVANCED.id, async (ctx) => {
+	await handleSubcription(ctx, ADVANCED.id, ADVANCED.price);
+});
 
-		ctx.scene.enter(USER_PROFILE_SCENE);
-	}
+subscription.action(PREMIUM.id, async (ctx) => {
+	await handleSubcription(ctx, PREMIUM.id, PREMIUM.price);
 });
 
 module.exports = { subscription };

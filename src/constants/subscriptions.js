@@ -25,7 +25,6 @@ const PREMIUM = {
 	add_source_btns: [
 		[{ text: '🎦🎶 Youtube', callback_data: 'add_youtube' }],
 		[{ text: '🎶 Radio', callback_data: 'choose_radio' }],
-		[{ text: '🎦🎶 Twitch', callback_data: 'test' }],
 		[{ text: '🚫 Отменить', callback_data: 'cancel' }]
 	]
 };
