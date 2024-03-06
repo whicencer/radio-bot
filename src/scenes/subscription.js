@@ -1,5 +1,5 @@
 const { Scenes } = require('telegraf');
-const { SUBSCRIPTION_SCENE } = require('../constants/scenes');
+const { SUBSCRIPTION_SCENE, USER_PROFILE_SCENE } = require('../constants/scenes');
 const { BASIC, ADVANCED, PREMIUM } = require('../constants/subscriptions');
 const { User } = require('../database/models');
 
@@ -31,7 +31,9 @@ subscription.action(BASIC.id, async (ctx) => {
 		date.setMonth(date.getMonth() + 1);
 		user.update({ tariff: BASIC.id, subExpiresAt: date });
 		user.decrement('balance', { by: 10, where: { id: userId } });
-		ctx.reply('Вы подключили тариф Basic на месяц!');
+		await ctx.reply('Вы подключили тариф Basic на месяц!');
+
+		ctx.scene.enter(USER_PROFILE_SCENE);
 	}
 });
 
