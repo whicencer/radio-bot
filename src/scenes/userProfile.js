@@ -4,6 +4,7 @@ const { User } = require('../database/models');
 const { capitalizeFirstLetter } = require('../utils/capitalizeFirstLetter');
 const { userRoles } = require('../constants/userRoles');
 const { deleteLastMessage } = require('../utils/deleteLastMessage');
+const { formatDateDifference } = require('../utils/formatDateDifference');
 
 const userProfile = new Scenes.BaseScene(USER_PROFILE_SCENE);
 
@@ -19,7 +20,7 @@ userProfile.enter(async (ctx) => {
 		📌 Ваш id: ${userId} (Вы <b>${userRoles[role]}</b>)
 💰 Баланс: ${Number(user.balance).toLocaleString('en-US')}$
 👥 Количество рефералов: ${user.referrals.length}\n
-📱 Текущий тариф: ${capitalizeFirstLetter(user.tariff)}
+📱 Текущий тариф: ${capitalizeFirstLetter(user.tariff)} (истекает через ${formatDateDifference(user.subExpiresAt)})
 		`;
 
 		await ctx.reply(message, {
