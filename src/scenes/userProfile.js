@@ -12,15 +12,18 @@ userProfile.enter(async (ctx) => {
 	const userId = ctx.from.id;
 	const { role } = await User.findByPk(userId);
 	const isUserAdmin = role === 'admin' || role === 'moderator';
-
+	
 	try {
 		const user = await User.findOne({ where: { id: userId } });
+		const currentTariff = user.tariff === 'none'
+			? 'Не подключено'
+			: `${capitalizeFirstLetter(user.tariff)} (истекает через ${formatDateDifference(user.subExpiresAt)})`;
 
 		const message = `
 		📌 Ваш id: ${userId} (Вы <b>${userRoles[role]}</b>)
 💰 Баланс: ${Number(user.balance).toLocaleString('en-US')}$
 👥 Количество рефералов: ${user.referrals.length}\n
-📱 Текущий тариф: ${capitalizeFirstLetter(user.tariff)} (истекает через ${formatDateDifference(user.subExpiresAt)})
+📱 Текущий тариф: ${currentTariff}
 		`;
 
 		await ctx.reply(message, {

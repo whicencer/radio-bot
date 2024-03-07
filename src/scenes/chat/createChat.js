@@ -1,14 +1,14 @@
 const { Scenes } = require('telegraf');
 const { ALL_CHATS_SCENE, CREATE_CHAT_SCENE, BROADCAST_SCENE } = require('../../constants/scenes');
 const { deleteLastMessage } = require('../../utils/deleteLastMessage');
-const { rtmpKeyValidate } = require('../../utils/validators/rtmpKeyValidate');
+const { rtmpUrlValidate } = require('../../utils/validators/rtmpUrlValidate');
 const { Chat } = require('../../database/models');
 const { deleteMessageWithDelay } = require('../../utils/deleteMessageWithDelay');
 const { checkForChatLimit } = require('./middleware/checkForChatLimit');
 const { checkForSub } = require('../../middleware/checkForSub');
 
 const createChat = new Scenes.BaseScene(CREATE_CHAT_SCENE);
-const exampleMsg = `Введите название чата, ключ трансляции и его ссылку\n
+const exampleMsg = `Введите название канала, ссылку на сервер трансляции и ссылку на канал\n
 Пример:
 <code>Rock Radio</code>
 <code>rtmps://dc4-1.rtmp.t.me/s/1694371569:_TcfFzvleD-sHZIQYVr25h</code>
@@ -43,18 +43,18 @@ createChat.on('message', async (ctx) => {
 	const chatInfo = ctx.message.text.split('\n');
 	const [chatName, streamKey, chatLink] = chatInfo;
 	
-	if (chatInfo.length < 3) {
-		ctx.reply('Вы ввели не все поля!');
-	} else if (!rtmpKeyValidate(streamKey)) {
-		ctx.reply('Неверный формат ключа трансляции');
+	if (chatInfo.length < 3 || chatInfo.length > 3) {
+		ctx.reply('Поля введены неверно!');
+	} else if (!rtmpUrlValidate(streamKey)) {
+		ctx.reply('Неверный формат ссылки на сервер трансляции');
 	} else {
 		try {
 			await Chat.create({ userId, name: chatName, streamKey, chatLink});
 	
-			const msg = await ctx.reply('✅ Чат был успешно добавлен!');
+			const msg = await ctx.reply('✅ Канал был успешно добавлен!');
 			deleteMessageWithDelay(ctx, msg.message_id, 3000);
 		} catch (error) {
-			ctx.reply(`❌ Возникла ошибка при добавлении чата: ${error.message}`);
+			ctx.reply(`❌ Возникла ошибка при добавлении канала: ${error.message}`);
 		} finally {
 			ctx.scene.enter(ALL_CHATS_SCENE);
 		}

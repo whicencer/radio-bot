@@ -29,7 +29,7 @@ topupBalance.on('message', async (ctx) => {
 		await User.increment('balance', { by: sum, where: { id: userIdTopup } });
 
 		const msg = await ctx.reply(`Счёт пользователя ${userIdTopup} был успешно пополнен на ${sum.trim()} долларов!`);
-		ctx.telegram.sendMessage(userIdTopup, `Ваш счёт был пополнен на ${sum} долларов!`);
+		ctx.telegram.sendMessage(userIdTopup, `Ваш счёт был пополнен на ${sum.trim()} долларов!`);
 		deleteMessageWithDelay(ctx, msg.message_id, 3000);
 	} catch (error) {
 		ctx.reply('Произошла ошибка при пополнении!');

@@ -12,7 +12,7 @@ chatLibrary.enter(async (ctx) => {
 	const chat = await Chat.findOne({ where: {id: chatId}, include: 'resources' });
 	const chatResources = chat.resources.map(resource => [{text: `🎧 ${resource.name}`, callback_data: `delete_source ${resource.id}`}]);
 
-	ctx.reply(`Библиотека чата: <b>${chat.name}</b>`, {
+	ctx.reply(`Библиотека канала: <b>${chat.name}</b>`, {
 		reply_markup: {
 			inline_keyboard: [
 				...chatResources,
@@ -49,7 +49,7 @@ chatLibrary.on('callback_query', checkForStatus, async (ctx) => {
 
 			currentChat.removeResource(chatResourceToDelete);
 
-			const msg = await ctx.reply('✅ Ресурс был успешно удалён из чата!');
+			const msg = await ctx.reply('✅ Ресурс был успешно удалён из канала!');
 			deleteMessageWithDelay(ctx, msg.message_id, 3000);
 		} catch (error) {
 			console.log(error);

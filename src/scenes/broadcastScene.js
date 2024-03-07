@@ -8,7 +8,7 @@ broadcastScene.enter(async (ctx) => {
 	ctx.reply('Здесь вы сможете настроить свою трансляцию', {
 		reply_markup: {
 			inline_keyboard: [
-				[{ text: '💬 Чаты', callback_data: 'chats' }],
+				[{ text: '💬 Каналы', callback_data: 'chats' }],
 				[{ text: '📀 Библиотека', callback_data: 'library' }]
 			]
 		}

@@ -41,7 +41,7 @@ addChatLibrarySource.on('callback_query', async (ctx) => {
 			chat.addResource(currentResource);
 
 			
-			const msg = await ctx.reply('✅ Ресурс был успешно добавлен в чат!');
+			const msg = await ctx.reply('✅ Ресурс был успешно добавлен в канал!');
 			deleteMessageWithDelay(ctx, msg.message_id, 3000);
 		} catch (error) {
 			console.log(error);

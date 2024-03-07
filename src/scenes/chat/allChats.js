@@ -12,11 +12,11 @@ allChats.enter(async (ctx) => {
 	const userChats = user.chats.sort((chat1, chat2) => chat1.createdAt - chat2.createdAt);
 	const chatsBtns = userChats.map(chat => ([{ text: chat.name, callback_data: 'get_chat' + chat.id }]));
 
-	await ctx.reply('💬 Ваши чаты', {
+	await ctx.reply('💬 Ваши каналы', {
 		reply_markup: {
 			inline_keyboard: [
 				...chatsBtns,
-				[{ text: '➕ Добавить чат', callback_data: 'add_chat' }],
+				[{ text: '➕ Добавить канал', callback_data: 'add_chat' }],
 				[{ text: '⬅️ Назад', callback_data: 'back' }]
 			]
 		}

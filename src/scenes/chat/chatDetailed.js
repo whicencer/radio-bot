@@ -28,12 +28,12 @@ chatDetailed.enter(async (ctx) => {
 	const currentSourceTitle = processes.getSourceTitle(chat.streamKey);
 	const actionButton = createActionButton(chat.status);
 	
-	ctx.reply(`<b>Чат: <code>${chat.name}</code></b>\n<b>Ссылка на чат: ${chat.chatLink}</b>\n<b>Сейчас играет</b>: ${currentSourceTitle}`, {
+	ctx.reply(`<b>Канал: <code>${chat.name}</code></b>\n<b>Ссылка на канал: ${chat.chatLink}</b>\n<b>Сейчас играет</b>: ${currentSourceTitle}`, {
 		reply_markup: {
 			inline_keyboard: [
 				[actionButton],
 				[{ text: '🎥 Библиотека эфира', callback_data: 'chat_library' }],
-				[{ text: '❌ Удалить чат', callback_data: 'delete_chat' }],
+				[{ text: '❌ Удалить канал', callback_data: 'delete_chat' }],
 				[{ text: '⬅️ Назад', callback_data: 'back' }]
 			]
 		},
@@ -55,7 +55,7 @@ chatDetailed.action('stop_stream', debounce(async (ctx) => {
 			inline_keyboard: [
 				[{ text: '🔥 Запустить', callback_data: 'start_stream' }],
 				[{ text: '🎥 Библиотека эфира', callback_data: 'chat_library' }],
-				[{ text: '❌ Удалить чат', callback_data: 'delete_chat' }],
+				[{ text: '❌ Удалить канал', callback_data: 'delete_chat' }],
 				[{ text: '⬅️ Назад', callback_data: 'back' }]
 			]
 		});
@@ -75,7 +75,7 @@ chatDetailed.action('start_stream', checkForStatus, checkForSources, checkForSub
 			inline_keyboard: [
 				[{ text: '🚫 Остановить', callback_data: 'stop_stream' }],
 				[{ text: '🎥 Библиотека эфира', callback_data: 'chat_library' }],
-				[{ text: '❌ Удалить чат', callback_data: 'delete_chat' }],
+				[{ text: '❌ Удалить канал', callback_data: 'delete_chat' }],
 				[{ text: '⬅️ Назад', callback_data: 'back' }]
 			]
 		});
