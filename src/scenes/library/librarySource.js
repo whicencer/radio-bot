@@ -3,6 +3,7 @@ const { LIBRARY_SOURCE_SCENE, LIBRARY_SCENE } = require('../../constants/scenes'
 const { Resource } = require('../../database/models');
 const { deleteLastMessage } = require('../../utils/deleteLastMessage');
 const { deleteMessageWithDelay } = require('../../utils/deleteMessageWithDelay');
+const { checkForStatus } = require('../../middleware/checkForStatus');
 
 const librarySource = new Scenes.BaseScene(LIBRARY_SOURCE_SCENE);
 
@@ -11,6 +12,7 @@ librarySource.enter(async (ctx) => {
 
 	try {
 		const source = await Resource.findOne({ where: { id: sourceId } });
+		ctx.scene.state.chatId = source.chatId;
 		
 		ctx.reply(`Источник: ${source.url}`, {
 			reply_markup: {
@@ -26,7 +28,7 @@ librarySource.enter(async (ctx) => {
 	}
 });
 
-librarySource.action('delete_source', async (ctx) => {
+librarySource.action('delete_source', checkForStatus, async (ctx) => {
 	const sourceId = ctx.scene.state.sourceId;
 
 	try {

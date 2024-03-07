@@ -9,9 +9,9 @@ const { sourcesWithUrl } = require('./helpers/sourcesWithUrl');
 const { startStream } = require('./helpers/startStream');
 const { createActionButton } = require('./helpers/createActionButton');
 const { debounce } = require('../../utils/debounce');
-const { checkForStatus } = require('./middleware/checkForStatus');
 const { checkForSources } = require('./middleware/checkForSources');
 const { checkForSub } = require('../../middleware/checkForSub');
+const { checkForStatus } = require('../../middleware/checkForStatus');
 
 const chatDetailed = new Scenes.BaseScene(CHAT_DETAILED_SCENE);
 

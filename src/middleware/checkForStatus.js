@@ -1,5 +1,5 @@
-const { Chat } = require('../../../database/models');
-const { processes } = require('../../../utils/stream/processes');
+const { Chat } = require('../database/models');
+const { processes } = require('../utils/stream/processes');
 
 const checkForStatus = async (ctx, next) => {
 	const chatId = ctx.scene.state.chatId;
