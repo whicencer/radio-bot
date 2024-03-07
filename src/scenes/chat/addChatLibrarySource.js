@@ -1,5 +1,5 @@
 const { Scenes } = require('telegraf');
-const { ADD_CHAT_LIBRARY_SOURCE_SCENE, CHAT_LIBRARY_SCENE } = require('../../constants/scenes');
+const { ADD_CHAT_LIBRARY_SOURCE_SCENE, CHAT_LIBRARY_SCENE, CHAT_DETAILED_SCENE } = require('../../constants/scenes');
 const { deleteLastMessage } = require('../../utils/deleteLastMessage');
 const { Resource, Chat } = require('../../database/models');
 const { deleteMessageWithDelay } = require('../../utils/deleteMessageWithDelay');
@@ -39,7 +39,6 @@ addChatLibrarySource.on('callback_query', async (ctx) => {
 			const chat = await Chat.findOne({where: {id: chatId}});
 			const currentResource = await Resource.findOne({where: {id: resourceId}});
 			chat.addResource(currentResource);
-
 			
 			const msg = await ctx.reply('✅ Ресурс был успешно добавлен в канал!');
 			deleteMessageWithDelay(ctx, msg.message_id, 3000);
@@ -48,7 +47,7 @@ addChatLibrarySource.on('callback_query', async (ctx) => {
 			ctx.reply('❌ Возникла ошибка во время добавления ресурса');
 		} finally {
 			deleteLastMessage(ctx);
-			ctx.scene.enter(CHAT_LIBRARY_SCENE, { chatId });
+			ctx.scene.enter(CHAT_DETAILED_SCENE, { chatId });
 		}
 	}
 });
