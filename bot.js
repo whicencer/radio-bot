@@ -63,7 +63,6 @@ bot.use(stage.middleware());
 bot.start(onBotStart);
 
 bot.command('delete_admin', deleteAdmin);
-bot.command('sub', (ctx) => ctx.scene.enter(SUBSCRIPTION_SCENE));
 
 bot.hears('👤 Профиль', ctx => {
 	ctx.scene.enter(USER_PROFILE_SCENE);

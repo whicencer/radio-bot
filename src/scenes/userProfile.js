@@ -1,5 +1,5 @@
 const { Scenes } = require('telegraf');
-const { USER_PROFILE_SCENE, ADMIN_PANEL_SCENE } = require('../constants/scenes');
+const { USER_PROFILE_SCENE, ADMIN_PANEL_SCENE, SUBSCRIPTION_SCENE } = require('../constants/scenes');
 const { User } = require('../database/models');
 const { capitalizeFirstLetter } = require('../utils/capitalizeFirstLetter');
 const { userRoles } = require('../constants/userRoles');
@@ -20,7 +20,7 @@ userProfile.enter(async (ctx) => {
 			: `${capitalizeFirstLetter(user.tariff)} (истекает через ${formatDateDifference(user.subExpiresAt)})`;
 
 		const message = `
-		📌 Ваш id: ${userId} (Вы <b>${userRoles[role]}</b>)
+		📌 Ваш id: <code>${userId}</code> (Вы <b>${userRoles[role]}</b>)
 💰 Баланс: ${Number(user.balance).toLocaleString('en-US')}$
 👥 Количество рефералов: ${user.referrals.length}\n
 📱 Текущий тариф: ${currentTariff}
@@ -30,6 +30,7 @@ userProfile.enter(async (ctx) => {
 			reply_markup: {
 				inline_keyboard: [
 					[{ text: '💰 Пополнить баланс', callback_data: 'test' }],
+					[{ text: '💳 Приобрести подписку', callback_data: 'sub' }],
 					[{ text: '🔄 Реферальная ссылка', callback_data: 'myRef' }],
 					isUserAdmin ? [{ text: '🛠️ Админ панель', callback_data: 'admin_panel' }] : []
 				]
@@ -40,6 +41,8 @@ userProfile.enter(async (ctx) => {
 		console.log('Error:', error);
 	}
 });
+
+userProfile.action('sub', ctx => ctx.scene.enter(SUBSCRIPTION_SCENE));
 
 userProfile.action('admin_panel', async (ctx) => {
 	const tgUserId = ctx.from.id;
