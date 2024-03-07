@@ -97,10 +97,10 @@ chatDetailed.action('chat_library', checkForSub, ctx => {
 });
 
 chatDetailed.action('delete_chat', checkForStatus, checkForSub, async (ctx) => {
-	const id = ctx.scene.session.chatId;
+	const chatId = ctx.scene.state.chatId;
 
 	try {
-		deleteChat(id, ctx);
+		deleteChat(chatId, ctx);
 	} catch (error) {
 		console.error('Error while processing REMOVE_CHAT:', error);
 		ctx.reply('❌ Произошла ошибка при обработке запроса. Пожалуйста, попробуйте позже.');

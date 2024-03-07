@@ -1,3 +1,4 @@
+const { Chat } = require('../../../database/models');
 const { deleteMessageWithDelay } = require('../../../utils/deleteMessageWithDelay');
 
 const deleteChat = async (id, ctx) => {

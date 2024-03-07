@@ -10,7 +10,7 @@ const subscriptionStatusUpdater = async (ctx, next) => {
 	const user = await User.findByPk(userId);
 	const userChats = await Chat.findAll({ where: { userId } });
 
-	if (user.subExpiresAt !== null && new Date() >= user.subExpiresAt) {
+	if (user && user.subExpiresAt !== null && new Date() >= user.subExpiresAt) {
 		// Останавливаем все трансляции
 		userChats.forEach(chat => {
 			const chatStreamKey = chat.streamKey;
