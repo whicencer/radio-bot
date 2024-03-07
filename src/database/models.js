@@ -20,7 +20,7 @@ const Resource = sequelize.define('resource', {
 
 const Chat = sequelize.define('chat', {
 	id: {type: DataTypes.BIGINT, primaryKey: true, unique: true, autoIncrement: true},
-	name: {type: DataTypes.STRING, unique: true, allowNull: false},
+	name: {type: DataTypes.STRING, allowNull: false},
 	chatLink: {type: DataTypes.STRING, unique: true, allowNull: false},
 	streamKey: {type: DataTypes.STRING, unique: true, allowNull: false},
 	status: {type: DataTypes.STRING, defaultValue: 'off'}
