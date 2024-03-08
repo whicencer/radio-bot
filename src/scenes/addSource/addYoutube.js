@@ -1,5 +1,5 @@
 const { Scenes } = require('telegraf');
-const { ADD_YOUTUBE_SCENE, ADD_SOURCE_SCENE, LIBRARY_SCENE } = require('../../constants/scenes');
+const { ADD_YOUTUBE_SCENE, ADD_SOURCE_SCENE, LIBRARY_SCENE, ADD_SOURCE_TO_CHAT_SCENE } = require('../../constants/scenes');
 const { deleteLastMessage } = require('../../utils/deleteLastMessage');
 const { youtubeUrlValidate } = require('../../utils/validators/youtubeUrlValidate');
 const { Resource } = require('../../database/models');
@@ -37,14 +37,14 @@ addYoutube.on('message', async (ctx) => {
 	} else {
 		try {
 			const sourceTitle = await getSourceTitle(url);
-			await Resource.create({ userId, name: sourceTitle, url });
+			const createdSource = await Resource.create({ userId, name: sourceTitle, url });
 	
 			const msg = await ctx.reply('✅ Ресурс был успешно добавлен!');
 
+			ctx.scene.enter(ADD_SOURCE_TO_CHAT_SCENE, { createdSource });
 			deleteMessageWithDelay(ctx, msg.message_id, 3000);
 		} catch (err) {
 			ctx.reply('❌ Произошла ошибка при добавлении ресурса: Возможно вы ввели ссылку не верно');
-		} finally {
 			ctx.scene.enter(LIBRARY_SCENE);
 		}
 	}
