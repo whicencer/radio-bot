@@ -45,7 +45,7 @@ userProfile.enter(async (ctx) => {
 userProfile.action('sub', ctx => ctx.scene.enter(SUBSCRIPTION_SCENE));
 userProfile.action('balance', ctx => {
 	deleteLastMessage(ctx);
-	ctx.scene.enter(BALANCE_SCENE)
+	ctx.scene.enter(BALANCE_SCENE);
 });
 
 userProfile.action('admin_panel', async (ctx) => {
