@@ -1,5 +1,5 @@
 const { Scenes } = require('telegraf');
-const { USER_PROFILE_SCENE, ADMIN_PANEL_SCENE, SUBSCRIPTION_SCENE } = require('../constants/scenes');
+const { USER_PROFILE_SCENE, ADMIN_PANEL_SCENE, SUBSCRIPTION_SCENE, BALANCE_SCENE } = require('../constants/scenes');
 const { User } = require('../database/models');
 const { capitalizeFirstLetter } = require('../utils/capitalizeFirstLetter');
 const { userRoles } = require('../constants/userRoles');
@@ -29,7 +29,7 @@ userProfile.enter(async (ctx) => {
 		await ctx.reply(message, {
 			reply_markup: {
 				inline_keyboard: [
-					[{ text: '💰 Пополнить баланс', callback_data: 'test' }],
+					[{ text: '💰 Пополнить баланс', callback_data: 'balance' }],
 					[{ text: '💳 Приобрести подписку', callback_data: 'sub' }],
 					[{ text: '🔄 Реферальная ссылка', callback_data: 'myRef' }],
 					isUserAdmin ? [{ text: '🛠️ Админ панель', callback_data: 'admin_panel' }] : []
@@ -43,6 +43,10 @@ userProfile.enter(async (ctx) => {
 });
 
 userProfile.action('sub', ctx => ctx.scene.enter(SUBSCRIPTION_SCENE));
+userProfile.action('balance', ctx => {
+	deleteLastMessage(ctx);
+	ctx.scene.enter(BALANCE_SCENE)
+});
 
 userProfile.action('admin_panel', async (ctx) => {
 	const tgUserId = ctx.from.id;
