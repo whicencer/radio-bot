@@ -1,7 +1,7 @@
 require('dotenv').config();
 
 const { Telegraf, Scenes, session } = require('telegraf');
-const { MAIN_SCENE, BROADCAST_SCENE, INFORMATION_SCENE, USER_PROFILE_SCENE, SUBSCRIPTION_SCENE } = require('./src/constants/scenes');
+const { MAIN_SCENE, BROADCAST_SCENE, INFORMATION_SCENE, USER_PROFILE_SCENE } = require('./src/constants/scenes');
 const { onBotStart } = require('./src/commands/onBotStart');
 const { allChats } = require('./src/scenes/chat/allChats');
 const { chatDetailed } = require('./src/scenes/chat/chatDetailed');

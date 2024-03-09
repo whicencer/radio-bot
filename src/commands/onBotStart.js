@@ -13,7 +13,7 @@ async function onBotStart(ctx) {
 			const referrer = await User.findByPk(args[0]);
 			await referrer.update({ referrals: [...referrer.referrals, userId] });
 			
-			ctx.reply(`You were invited by <code>${args[0]}</code>`, {
+			ctx.reply(`Вас пригласил: <code>${args[0]}</code>`, {
 				parse_mode: 'HTML'
 			});
 		}
