@@ -16,7 +16,7 @@ userProfile.enter(async (ctx) => {
 	try {
 		const user = await User.findOne({ where: { id: userId } });
 		const currentTariff = user.tariff === 'none'
-			? 'Не подключено'
+			? 'Отсутствует'
 			: `${capitalizeFirstLetter(user.tariff)} (истекает через ${formatDateDifference(user.subExpiresAt)})`;
 
 		const message = `
