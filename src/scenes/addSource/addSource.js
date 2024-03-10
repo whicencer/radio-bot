@@ -24,7 +24,7 @@ addSource.enter(checkForSub, async (ctx) => {
     }
 	};
 
-	ctx.reply('Выберите источник добавления ресурса', {
+	ctx.reply('Виберіть джерело додавання ресурсу', {
 		reply_markup: {
 			inline_keyboard: getSourceButtonsByTariff(tariff)
 		}

@@ -12,11 +12,11 @@ addSourceToChat.enter(async (ctx) => {
 	const userChats = user.chats.sort((chat1, chat2) => chat1.createdAt - chat2.createdAt);
 	const chatsBtns = userChats.map(chat => ([{ text: chat.name, callback_data: 'to_chat' + chat.id }]));
 
-	ctx.reply('Выберите канал в который хотите добавить ресурс:', {
+	ctx.reply('Виберіть канал, в який хочете додати ресурс:', {
 		reply_markup: {
 			inline_keyboard: [
 				...chatsBtns,
-				[{ text: 'Вернуться в библиотеку', callback_data: 'cancel' }]
+				[{ text: 'Вернутися в бібліотеку', callback_data: 'cancel' }]
 			]
 		}
 	});
@@ -35,14 +35,14 @@ addSourceToChat.on('callback_query', async (ctx) => {
 		const chat = await Chat.findByPk(chatId);
 		chat.addResource(createdSource);
 
-		const msg = await ctx.reply('✅ Ресурс был успешно добавлен в канал!');
+		const msg = await ctx.reply('✅ Ресурс був успішно доданий в канал!');
 		deleteMessageWithDelay(ctx, msg.message_id, 3000);
 
 		ctx.scene.enter(CHAT_DETAILED_SCENE, { chatId });
 		deleteLastMessage(ctx);
 	} catch (error) {
 		console.log(error);
-		ctx.reply(`❌ Возникла ошибка при добавлении ресурса в канал: ${error?.message}`);
+		ctx.reply(`❌ Виникла помилка при додаванні ресурсу в канал: ${error?.message}`);
 	}
 });
 

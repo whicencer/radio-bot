@@ -10,7 +10,7 @@ const checkForSub = async (ctx, next) => {
 	const user = await User.findByPk(userId);
 
 	if (user.tariff === NONE) {
-		ctx.reply('Вы не оплатили подписку');
+		ctx.reply('Ви не оплатили підписку');
 		ctx.scene.enter(SUBSCRIPTION_SCENE);
 	} else {
 		next();

@@ -7,17 +7,17 @@ const handleSubcription = async (ctx, tariffName, tariffPrice) => {
 	const user = await User.findByPk(userId);
 
 	if (user.balance < tariffPrice) {
-		const msg = await ctx.reply('У вас недостаточно денег на балансе');
+		const msg = await ctx.reply('У вас недостатньо коштів на балансі');
 		deleteMessageWithDelay(ctx, msg.message_id, 3000);
 	} else if (user.tariff !== 'none') {
-		const msg = await ctx.reply('Вы уже подключены. Если хотите переподключиться, обратитесь в поддержку');
+		const msg = await ctx.reply('Ви вже підключені. Якщо хочете змінити тариф, зверніться до підтримки');
 		deleteMessageWithDelay(ctx, msg.message_id, 3000);
 	} else {
 		const date = new Date();
 		date.setMonth(date.getMonth() + 1);
 		user.update({ tariff: tariffName, subExpiresAt: date });
 		user.decrement('balance', { by: tariffPrice, where: { id: userId } });
-		await ctx.reply(`Вы подключили тариф ${tariffName} на месяц!`);
+		await ctx.reply(`Ви підключили тариф ${tariffName} на місяць!`);
 
 		ctx.scene.enter(USER_PROFILE_SCENE);
 	}

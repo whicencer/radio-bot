@@ -6,11 +6,11 @@ const main = new Scenes.BaseScene(MAIN_SCENE);
 main.enter(ctx => {
 	const username = ctx.from.first_name;
 
-	ctx.reply(`Приветствую тебя, ${username}!`, {
+	ctx.reply(`Ласкаво просимо, ${username}!`, {
 		reply_markup: {
 			keyboard: [
-				[{ text: '👤 Профиль' }, { text: '📖 Информация' }],
-				[{ text: '📡 Транслировать' }]
+				[{ text: '👤 ПрофПрофільиль' }, { text: '📖 Інформація' }],
+				[{ text: '📡 Транслювати' }]
 			],
 			resize_keyboard: true
 		}

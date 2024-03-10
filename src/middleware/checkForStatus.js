@@ -7,7 +7,7 @@ const checkForStatus = async (ctx, next) => {
 	const isStreamActive = processes.getProcessById(currentChat?.streamKey) || false;
 	
 	if (isStreamActive) {
-		await ctx.reply('Вы не можете сделать это действие потому что сейчас запущена трансляция!');
+		await ctx.reply('Ви не можете зробити цю дію, тому що зараз запущена трансляція!');
 	} else {
 		await next();
 	}

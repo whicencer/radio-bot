@@ -5,11 +5,11 @@ const { deleteLastMessage } = require('../utils/deleteLastMessage');
 const broadcastScene = new Scenes.BaseScene(BROADCAST_SCENE);
 
 broadcastScene.enter(async (ctx) => {
-	ctx.reply('Здесь вы сможете настроить свою трансляцию', {
+	ctx.reply('Тут ви зможете налаштувати свою трансляцію', {
 		reply_markup: {
 			inline_keyboard: [
-				[{ text: '💬 Каналы', callback_data: 'chats' }],
-				[{ text: '📀 Библиотека', callback_data: 'library' }]
+				[{ text: '💬 Канали', callback_data: 'chats' }],
+				[{ text: '📀 Бібліотека', callback_data: 'library' }]
 			]
 		}
 	});

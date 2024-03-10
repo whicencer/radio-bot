@@ -11,7 +11,7 @@ addChatLibrarySource.enter(async (ctx) => {
 	const resources = await Resource.findAll({ where: {userId} });
 	const resourceButtons = resources.map(resource => ([{text: `🎧 ${resource.name}`, callback_data: `add_source ${resource.id}`}]));
 
-	ctx.reply('Выберите ресурс, который хотите добавить', {
+	ctx.reply('Виберіть ресурс, який хочете додати', {
 		reply_markup: {
 			inline_keyboard: [
 				...resourceButtons,
@@ -40,11 +40,11 @@ addChatLibrarySource.on('callback_query', async (ctx) => {
 			const currentResource = await Resource.findOne({where: {id: resourceId}});
 			chat.addResource(currentResource);
 			
-			const msg = await ctx.reply('✅ Ресурс был успешно добавлен в канал!');
+			const msg = await ctx.reply('✅ Ресурс було успішно додано до каналу!');
 			deleteMessageWithDelay(ctx, msg.message_id, 3000);
 		} catch (error) {
 			console.log(error);
-			ctx.reply('❌ Возникла ошибка во время добавления ресурса');
+			ctx.reply('❌ Виникла помилка під час додавання ресурсу');
 		} finally {
 			deleteLastMessage(ctx);
 			ctx.scene.enter(CHAT_DETAILED_SCENE, { chatId });

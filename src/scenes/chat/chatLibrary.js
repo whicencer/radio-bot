@@ -12,11 +12,11 @@ chatLibrary.enter(async (ctx) => {
 	const chat = await Chat.findOne({ where: {id: chatId}, include: 'resources' });
 	const chatResources = chat.resources.map(resource => [{text: `🎧 ${resource.name}`, callback_data: `delete_source ${resource.id}`}]);
 
-	ctx.reply(`Библиотека канала: <b>${chat.name}</b>`, {
+	ctx.reply(`Бібліотека каналу: <b>${chat.name}</b>`, {
 		reply_markup: {
 			inline_keyboard: [
 				...chatResources,
-				[{ text: '➕ Добавить ресурс', callback_data: 'add_source' }],
+				[{ text: '➕ Додати ресурс', callback_data: 'add_source' }],
 				[{ text: '⬅️ Назад', callback_data: 'back' }]
 			]
 		},
@@ -49,11 +49,11 @@ chatLibrary.on('callback_query', checkForStatus, async (ctx) => {
 
 			currentChat.removeResource(chatResourceToDelete);
 
-			const msg = await ctx.reply('✅ Ресурс был успешно удалён из канала!');
+			const msg = await ctx.reply('✅ Ресурс було успішно видалено з каналу!');
 			deleteMessageWithDelay(ctx, msg.message_id, 3000);
 		} catch (error) {
 			console.log(error);
-			ctx.reply('❌ Возникла ошибка во время удаления ресурса');
+			ctx.reply('❌ Виникла помилка під час видалення ресурсу');
 		} finally {
 			deleteLastMessage(ctx);
 			ctx.scene.enter(CHAT_DETAILED_SCENE, { chatId });

@@ -9,11 +9,11 @@ const { deleteMessageWithDelay } = require('../../utils/deleteMessageWithDelay')
 const addRadio = new Scenes.BaseScene(ADD_RADIO_SCENE);
 
 addRadio.enter(ctx => {
-	ctx.reply('Выберите радио которое хотите добавить:', {
+	ctx.reply('Виберіть радіо, яке хочете додати:', {
 		reply_markup: {
 			inline_keyboard: [
 				...generateInlineKeyboard(radios, 2, 'add'),
-				[{ text: '🚫 Отменить', callback_data: 'cancel' }]
+				[{ text: '🚫 Скасувати', callback_data: 'cancel' }]
 			]
 		}
 	});
@@ -34,13 +34,13 @@ addRadio.on('callback_query', async (ctx) => {
 		try {
 			const createdSource = await Resource.create({ userId, name: radioName, url: `https://${radioUrl}` });
 
-			const msg = await ctx.reply('✅ Радио было успешно добавлено!');
+			const msg = await ctx.reply('✅ Радіо було успішно додано!');
 
 			ctx.scene.enter(ADD_SOURCE_TO_CHAT_SCENE, { createdSource });
 			deleteMessageWithDelay(ctx, msg.message_id, 3000);
 		} catch (error) {
 			console.log(error);
-			ctx.reply('❌ Произошла ошибка при добавлении радио');
+			ctx.reply('❌ Сталася помилка при додаванні радіо');
 			ctx.scene.enter(LIBRARY_SCENE);
 		} finally {
 			deleteLastMessage(ctx);

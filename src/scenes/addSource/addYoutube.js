@@ -7,8 +7,10 @@ const { getSourceTitle } = require('../../utils/youtube');
 const { deleteMessageWithDelay } = require('../../utils/deleteMessageWithDelay');
 
 const addYoutube = new Scenes.BaseScene(ADD_YOUTUBE_SCENE);
-const msg = `Отправьте ссылку на видео или трансляцию на YouTube (В точно таком же формате как указано в примере)\n
-Пример: https://www.youtube.com/watch?v=dQw4w9WgXcQ`;
+const msg = `Надішліть посилання на відео або трансляцію на YouTube (У точно такому ж форматі, як вказано в прикладі)\n
+Приклад: https://www.youtube.com/watch?v=dQw4w9WgXcQ
+З телефону: https://youtu.be/dQw4w9WgXcQ
+Пряма трансляція: https://youtube.com/live/jfKfPfyJRdk`;
 
 addYoutube.enter(ctx => {
 	ctx.reply(msg, {
@@ -17,7 +19,7 @@ addYoutube.enter(ctx => {
 		},
 		reply_markup: {
 			inline_keyboard: [
-				[{ text: '🚫 Отменить', callback_data: 'cancel' }]
+				[{ text: '🚫 Скасувати', callback_data: 'cancel' }]
 			]
 		}
 	});
@@ -33,18 +35,18 @@ addYoutube.on('message', async (ctx) => {
 	const userId = ctx.from.id;
 
 	if (!youtubeUrlValidate(url)) {
-		ctx.reply('Неверный формат ссылки');
+		ctx.reply('Невірний формат посилання');
 	} else {
 		try {
 			const sourceTitle = await getSourceTitle(url);
 			const createdSource = await Resource.create({ userId, name: sourceTitle, url });
 	
-			const msg = await ctx.reply('✅ Ресурс был успешно добавлен!');
+			const msg = await ctx.reply('✅ Ресурс був успішно доданий!');
 
 			ctx.scene.enter(ADD_SOURCE_TO_CHAT_SCENE, { createdSource });
 			deleteMessageWithDelay(ctx, msg.message_id, 3000);
 		} catch (err) {
-			ctx.reply('❌ Произошла ошибка при добавлении ресурса: Возможно вы ввели ссылку не верно');
+			ctx.reply('❌ Сталася помилка при додаванні ресурсу: Можливо ви ввели посилання не вірно');
 			ctx.scene.enter(LIBRARY_SCENE);
 		}
 	}

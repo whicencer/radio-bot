@@ -13,10 +13,10 @@ createChat.enter(checkForSub, checkForChatLimit, async (ctx) => {
 	ctx.scene.session.stage = 1;
 
 	try {
-		ctx.reply('Введите название канала (Например: <code>Radio 1</code>)', {
+		ctx.reply('Введіть назву каналу (Наприклад: <code>Радіо 1</code>)', {
 			reply_markup: {
 				inline_keyboard: [
-					[{ text: '🚫 Отменить', callback_data: 'cancel' }]
+					[{ text: '🚫 Скасувати', callback_data: 'cancel' }]
 				]
 			},
 			parse_mode: 'HTML'
@@ -40,7 +40,7 @@ createChat.on('message', async (ctx) => {
 	const keyboard = {
 		reply_markup: {
 			inline_keyboard: [
-				[{ text: '🚫 Отменить', callback_data: 'cancel' }]
+				[{ text: '🚫 Скасувати', callback_data: 'cancel' }]
 			]
 		},
 		parse_mode: 'HTML'
@@ -50,32 +50,32 @@ createChat.on('message', async (ctx) => {
 		ctx.scene.session.chatName = ctx.message.text;
 		const chat = await Chat.findOne({ where: { name: ctx.scene.session.chatName, userId } });
 		if (chat) {
-			ctx.reply('Канал с таким названием уже существует');
+			ctx.reply('Канал з такою назвою вже існує');
 			return;
 		}
 
 		ctx.scene.session.stage = 2;
-		ctx.reply('Отправьте ссылку на сервер трансляции (Например: <code>rtmps://your_server</code>)', keyboard);
+		ctx.reply('Надішліть посилання на сервер трансляції (Наприклад: <code>rtmps://your_server</code>)', keyboard);
 	} else if (stage === 2) {
 		if (!rtmpUrlValidate(ctx.message.text)) {
-			ctx.reply('Неверный формат ссылки на сервер трансляции');
+			ctx.reply('Невірний формат посилання на сервер трансляції');
 			return;
 		} else {
 			ctx.scene.session.streamUrl = ctx.message.text;
 			const chat = await Chat.findOne({ where: { name: ctx.scene.session.streamUrl } });
 			if (chat) {
-				ctx.reply('Канал с такой ссылкой трансляции уже существует');
+				ctx.reply('Канал з таким посиланням трансляції вже існує');
 				return;
 			}
 
 			ctx.scene.session.stage = 3;
-			ctx.reply('Отправьте ссылку на канал (Например: <code>https://t.me/your_channel</code>)', keyboard);
+			ctx.reply('Надішліть посилання на канал (Наприклад: <code>https://t.me/your_channel</code>)', keyboard);
 		}
 	} else if (stage === 3) {
 		ctx.scene.session.chatLink = ctx.message.text;
 		const chat = await Chat.findOne({ where: { name: ctx.scene.session.chatLink, userId } });
 		if (chat) {
-			ctx.reply('Канал с такой ссылкой уже существует');
+			ctx.reply('Канал з таким посиланням вже існує');
 			return;
 		}
 
@@ -86,15 +86,15 @@ createChat.on('message', async (ctx) => {
 		try {
 			await Chat.create({ userId, name: chatName, streamKey, chatLink});
 	
-			const msg = await ctx.reply('✅ Канал был успешно добавлен!');
+			const msg = await ctx.reply('✅ Канал було успішно додано!');
 			deleteMessageWithDelay(ctx, msg.message_id, 3000);
 		} catch (error) {
-			ctx.reply(`❌ Возникла ошибка при добавлении канала. ${error.message}`);
+			ctx.reply(`❌ Виникла помилка при додаванні каналу. ${error.message}`);
 		} finally {
 			ctx.scene.enter(ALL_CHATS_SCENE);
 		}
 	} else {
-		ctx.reply('Поля введены неверно!');
+		ctx.reply('Поля введено невірно!');
 	}
 });
 

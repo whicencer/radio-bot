@@ -13,7 +13,7 @@ class Processes {
 	}
 
 	getSourceTitle(id) {
-		return this.processes[id]?.sourceTitle || 'Пусто';
+		return this.processes[id]?.sourceTitle || 'Порожньо';
 	}
 
 	getProcessById(id) {

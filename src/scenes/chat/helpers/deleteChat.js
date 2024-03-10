@@ -5,7 +5,7 @@ const deleteChat = async (id, ctx) => {
 	const chatToDelete = await Chat.findOne({ where: { id } });
 	Chat.destroy({ where: { id } });
 
-	const msg = await ctx.reply(`✅ Канал ${chatToDelete.name} был успешно удалён!`);
+	const msg = await ctx.reply(`✅ Канал ${chatToDelete.name} був успішно видалений!`);
 	deleteMessageWithDelay(ctx, msg.message_id, 3000);
 };
 

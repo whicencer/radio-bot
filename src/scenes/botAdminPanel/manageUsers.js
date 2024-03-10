@@ -5,11 +5,11 @@ const { deleteLastMessage } = require('../../utils/deleteLastMessage');
 const manageUsers = new Scenes.BaseScene(ADMIN_MANAGE_USERS_SCENE);
 
 manageUsers.enter(ctx => {
-	ctx.reply('Панель управления пользователями', {
+	ctx.reply('Панель керування користувачами', {
 		reply_markup: {
 			inline_keyboard: [
-				[{ text: '💰 Пополнить баланс', callback_data: 'topUpBalance' }],
-				[{ text: '💳 Установить тариф', callback_data: 'setSubscription' }],
+				[{ text: '💰 Поповнити баланс', callback_data: 'topUpBalance' }],
+				[{ text: '💳 Встановити тариф', callback_data: 'setSubscription' }],
 				[{ text: '⬅️ Назад', callback_data: 'back' }]
 			]
 		}

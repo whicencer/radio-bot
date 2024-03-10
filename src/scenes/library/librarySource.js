@@ -14,17 +14,17 @@ librarySource.enter(async (ctx) => {
 		const source = await Resource.findOne({ where: { id: sourceId } });
 		ctx.scene.state.chatId = source.chatId;
 		
-		ctx.reply(`Источник: ${source.url}`, {
+		ctx.reply(`Джерело: ${source.url}`, {
 			reply_markup: {
 				inline_keyboard: [
-					[{ text: '❌ Удалить ресурс', callback_data: 'delete_source' }],
+					[{ text: '❌ Видалити ресурс', callback_data: 'delete_source' }],
 					[{ text: '⬅️ Назад', callback_data: 'back' }]
 				]
 			}
 		});
 	} catch (error) {
 		console.error('Error while processing REMOVE_CHAT:', error);
-		ctx.reply('❌ Произошла ошибка при обработке запроса. Пожалуйста, попробуйте позже.');
+		ctx.reply('❌ Виникла помилка при обробці запиту. Будь ласка, спробуйте пізніше.');
 	}
 });
 
@@ -36,11 +36,11 @@ librarySource.action('delete_source', checkForStatus, async (ctx) => {
 			where: { id: sourceId }
 		});
 
-		const msg = await ctx.reply('✅ Ресурс был успешно удалён!');
+		const msg = await ctx.reply('✅ Ресурс був успішно видалений!');
 		
 		deleteMessageWithDelay(ctx, msg.message_id, 3000);
 	} catch (error) {
-		ctx.reply('❌ Возникла ошибка при удалении ресурса');
+		ctx.reply('❌ Виникла помилка при видаленні ресурса');
 	} finally {
 		deleteLastMessage(ctx);
 		ctx.scene.enter(LIBRARY_SCENE);

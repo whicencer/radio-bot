@@ -19,7 +19,7 @@ chatDetailed.enter(async (ctx) => {
 	const chat = await Chat.findOne({ where: {id: chatId}, include: 'resources' });
 	ctx.scene.session.chat = chat;
 
-	const msg = await ctx.reply('Загрузка...');
+	const msg = await ctx.reply('Завантаження...');
 
 	const sourcesWithVideoUrl = await sourcesWithUrl(chat.resources);
 	ctx.scene.session.chatSources = sourcesWithVideoUrl;
@@ -27,12 +27,12 @@ chatDetailed.enter(async (ctx) => {
 	const currentSourceTitle = processes.getSourceTitle(chat.streamKey);
 	const actionButton = createActionButton(chat.status);
 	
-	ctx.reply(`<b>Канал: <code>${chat.name}</code></b>\n<b>Ссылка на канал: ${chat.chatLink}</b>\n<b>Сейчас играет</b>: ${currentSourceTitle}`, {
+	ctx.reply(`<b>Канал: <code>${chat.name}</code></b>\n<b>Посилання на канал: ${chat.chatLink}</b>\n<b>Зараз грає:</b> ${currentSourceTitle}`, {
 		reply_markup: {
 			inline_keyboard: [
 				[actionButton],
-				[{ text: '🎥 Библиотека эфира', callback_data: 'chat_library' }],
-				[{ text: '❌ Удалить канал', callback_data: 'delete_chat' }],
+				[{ text: '🎥 Бібліотека ефіру', callback_data: 'chat_library' }],
+				[{ text: '❌ Видалити канал', callback_data: 'delete_chat' }],
 				[{ text: '⬅️ Назад', callback_data: 'back' }]
 			]
 		},
@@ -47,19 +47,19 @@ chatDetailed.action('stop_stream', async (ctx) => {
 	
 	try {
 		processes.stopProcess(streamKey);
-		const msg = await ctx.reply('Трансляция была остановлена!');
+		const msg = await ctx.reply('Трансляцію було зупинено!');
 		deleteMessageWithDelay(ctx, msg.message_id, 3000);
 
 		ctx.editMessageReplyMarkup({
 			inline_keyboard: [
-				[{ text: '🔥 Запустить', callback_data: 'start_stream' }],
-				[{ text: '🎥 Библиотека эфира', callback_data: 'chat_library' }],
-				[{ text: '❌ Удалить канал', callback_data: 'delete_chat' }],
+				[{ text: '🔥 Запустити', callback_data: 'start_stream' }],
+				[{ text: '🎥 Бібліотека ефіру', callback_data: 'chat_library' }],
+				[{ text: '❌ Видалити канал', callback_data: 'delete_chat' }],
 				[{ text: '⬅️ Назад', callback_data: 'back' }]
 			]
 		});
 	} catch (error) {
-		ctx.reply('Ошибка при остановке трансляции');
+		ctx.reply('Помилка при зупинці трансляції');
 		console.log('Error on stream stop: ' + error);
 	}
 });
@@ -73,15 +73,15 @@ chatDetailed.action('start_stream', checkForStatus, checkForSources, checkForSub
 		if (isStreamStarted) {
 			ctx.editMessageReplyMarkup({
 				inline_keyboard: [
-					[{ text: '🚫 Остановить', callback_data: 'stop_stream' }],
-					[{ text: '🎥 Библиотека эфира', callback_data: 'chat_library' }],
-					[{ text: '❌ Удалить канал', callback_data: 'delete_chat' }],
+					[{ text: '🚫 Зупинити', callback_data: 'stop_stream' }],
+					[{ text: '🎥 Бібліотека ефіру', callback_data: 'chat_library' }],
+					[{ text: '❌ Видалити канал', callback_data: 'delete_chat' }],
 					[{ text: '⬅️ Назад', callback_data: 'back' }]
 				]
 			});
 		}
 	} catch (error) {
-		ctx.reply('Ошибка при запуске трансляции');
+		ctx.reply('Помилка при запуску трансляції');
 		console.log('Error on stream start: ' + error);
 	}
 });
@@ -104,7 +104,7 @@ chatDetailed.action('delete_chat', checkForStatus, checkForSub, async (ctx) => {
 		deleteChat(chatId, ctx);
 	} catch (error) {
 		console.error('Error while processing REMOVE_CHAT:', error);
-		ctx.reply('❌ Произошла ошибка при обработке запроса. Пожалуйста, попробуйте позже.');
+		ctx.reply('❌ Виникла помилка під час обробки запиту. Будь ласка, спробуйте пізніше.');
 	}
 });
 

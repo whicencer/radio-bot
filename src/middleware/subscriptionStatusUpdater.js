@@ -19,7 +19,7 @@ const subscriptionStatusUpdater = async (ctx, next) => {
 		
 		// Уведомляем о том что подписка истекла и меняем в БД tariff=none
 		user.update({ tariff: NONE, subExpiresAt: null });
-		ctx.reply('Ваша подписка истекла!');
+		ctx.reply('Ваша підписка закінчилася!');
 	}
 
 	next();

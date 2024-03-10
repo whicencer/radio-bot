@@ -18,18 +18,18 @@ adminPanel.enter(async (ctx) => {
 
 	if (isUserAdmin) {
     inline_keyboard = [
-			[{ text: '📋 Список админов', callback_data: 'admin_list' }],
-			[{ text: '🔧 Добавить админа', callback_data: 'add_admin' }],
-			[{ text: '⚙️ Добавить модератора', callback_data: 'add_moderator' }],
-			[{ text: '👥 Управление пользователями', callback_data: 'manage_users' }],
+			[{ text: '📋 Список адмінів', callback_data: 'admin_list' }],
+			[{ text: '🔧 Додати адміна', callback_data: 'add_admin' }],
+			[{ text: '⚙️ Додати модератора', callback_data: 'add_moderator' }],
+			[{ text: '👥 Управління користувачами', callback_data: 'manage_users' }],
     ];
 	} else {
 		inline_keyboard = [
-			[{ text: '👥 Управление пользователями', callback_data: 'manage_users' }],
+			[{ text: '👥 Управління користувачами', callback_data: 'manage_users' }],
 		];
 	}
 
-	ctx.reply(`Добро пожаловать в админ панель бота, <b>${userName}</b>!`, {
+	ctx.reply(`Ласкаво просимо до адмін панелі бота, <b>${userName}</b>!`, {
 		reply_markup: {
 			inline_keyboard: [
 				...inline_keyboard,
@@ -55,15 +55,15 @@ adminPanel.action('admin_list', async (ctx) => {
 	}});
 	const admins = allAdmins.map(admin => {
 		return admin.id == currentUserId
-			? `@${admin.username || admin.id} (${admin.id}) (Вы, <b>${userRoles[admin.role]}</b>)`
+			? `@${admin.username || admin.id} (${admin.id}) (Ви, <b>${userRoles[admin.role]}</b>)`
 			: `@${admin.username || admin.id} (${admin.id}) (<b>${userRoles[admin.role]}</b>)`;
 	});
 
-	ctx.reply(`Все администраторы бота:\n${admins.join('\n')}\n
-Для удаления администратора введите команду <code>/delete_admin {id_пользователя}</code>`, {
+	ctx.reply(`Всі адміністратори бота:\n${admins.join('\n')}\n
+Для видалення адміністратора введіть команду <code>/delete_admin {id_користувача}</code>`, {
 		reply_markup: {
 			inline_keyboard: [
-				[{ text: '⬇️ Скрыть сообщение', callback_data: 'hide' }]
+				[{ text: '⬇️ Сховати повідомлення', callback_data: 'hide' }]
 			]
 		},
 		parse_mode: 'HTML'

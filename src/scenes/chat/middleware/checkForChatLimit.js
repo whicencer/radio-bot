@@ -18,7 +18,7 @@ const checkForChatLimit = async (ctx, next) => {
 	const maxChannels = maxChannelsByTariff[tariff];
 
 	if (chatsLength === maxChannels) {
-		const msg = await ctx.reply(`😔 Лимит добавления каналов исчерпан! (макс. ${maxChannels})`);
+		const msg = await ctx.reply(`😔 Ліміт додавання каналів вичерпано! (макс. ${maxChannels})`);
 		ctx.scene.enter(ALL_CHATS_SCENE);
 
 		deleteMessageWithDelay(ctx, msg.message_id, 3000);

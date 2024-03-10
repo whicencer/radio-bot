@@ -19,8 +19,8 @@ function startStreaming(resources, rtmpKey, initIndex = 0) {
 				.output(rtmpKey)
 				.on('error', async (err) => {
 					if (err.message.includes('404 Not Found') || err.message.includes('Failed to open') || err.message.includes('HTTP error 404')) {
-						currentIndex++;
-						streamNext();
+						await Chat.update({ status: 'off' }, { where: { streamKey: rtmpKey } });
+						processes.stopProcess(rtmpKey);
 					} else if (err.message.indexOf('SIGKILL') === -1) {
 						console.error('Ошибка трансляции:', err);
 						currentIndex++;

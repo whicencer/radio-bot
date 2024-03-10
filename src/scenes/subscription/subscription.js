@@ -8,14 +8,14 @@ const subscription = new Scenes.BaseScene(SUBSCRIPTION_SCENE);
 
 subscription.enter(ctx => {
 	ctx.reply(`
-	<b>Подписка</b> — открывает доступ к трансляциям.
-\n<b>*Ознакомиться с тарифами можно во вкладке 📖 Информация</b>`, {
+	<b>Підписка</b> — відкриває доступ до трансляцій.
+\n<b>*Ознайомитися з тарифами можна в розділі 📖 Інформація</b>`, {
 		reply_markup: {
 			inline_keyboard: [
 				[{ text: 'Basic — $10/мес.', callback_data: BASIC.id }],
 				[{ text: 'Advanced — $40/мес.', callback_data: ADVANCED.id }],
 				[{ text: 'Premium — $70/мес.', callback_data: PREMIUM.id }],
-				[{ text: '👤 Вернуться к профилю', callback_data: 'back' }],
+				[{ text: '👤 Повернутися до профілю', callback_data: 'back' }],
 			]
 		},
 		parse_mode: 'HTML'

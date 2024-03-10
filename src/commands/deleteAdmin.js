@@ -1,4 +1,3 @@
-const { userRoles } = require('../constants/userRoles');
 const { User } = require('../database/models');
 const { deleteMessageWithDelay } = require('../utils/deleteMessageWithDelay');
 
@@ -12,8 +11,8 @@ async function deleteAdmin(ctx) {
 	if (userHasPermission) {
 		try {
 			if (idAdminToRemove == tgUserId) {
-				ctx.reply(`Вы не можете снять права администратора с самого себя в рамках безопасности!\n
-<b>P.S. Несмотря на сообщение об удалении, этого не произошло!!</b>`,
+				ctx.reply(`Ви не можете зняти права адміністратора з самого себе в рамках безпеки!!\n
+<b>P.S. Незважаючи на повідомлення про видалення, цього не сталося!!</b>`,
 				{
 					parse_mode: 'HTML'
 				});
@@ -21,14 +20,14 @@ async function deleteAdmin(ctx) {
 				await User.update({ role: 'user' }, { where: { id: idAdminToRemove } });
 			}
 
-			ctx.telegram.sendMessage(idAdminToRemove, 'С вас были сняты права Администратора/Модератора');
-			const msg = await ctx.reply('Администратор был успешно удален!');
+			ctx.telegram.sendMessage(idAdminToRemove, 'З вас були зняті права Адміністратора/Модератора.');
+			const msg = await ctx.reply('Адміністратор був успішно видалений!');
 			deleteMessageWithDelay(ctx, msg.message_id, 3000);
 		} catch (error) {
-			ctx.reply(error.message || 'Произошла ошибка при удалении администратора');
+			ctx.reply(error.message || 'Сталася помилка при видаленні адміністратора.');
 		}
 	} else {
-		ctx.reply('У вас нет доступа к этой команде!');
+		ctx.reply('У вас немає доступу до цієї команди!');
 	}
 };
 

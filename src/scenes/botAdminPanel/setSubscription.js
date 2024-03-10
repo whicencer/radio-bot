@@ -7,13 +7,13 @@ const { BASIC, ADVANCED, PREMIUM, NONE } = require('../../constants/subscription
 const setSubscription = new Scenes.BaseScene(ADMIN_SET_USER_SUBSCRIPTION);
 
 setSubscription.enter(ctx => {
-	ctx.reply('Выберите тариф который хотите выдать', {
+	ctx.reply('Виберіть тариф, який хочете видати', {
 		reply_markup: {
 			inline_keyboard: [
 				[{ text: 'Basic', callback_data: BASIC.id }],
 				[{ text: 'Advanced', callback_data: ADVANCED.id }],
 				[{ text: 'Premium', callback_data: PREMIUM.id }],
-				[{ text: 'Забрать подписку', callback_data: NONE }],
+				[{ text: 'Забрати підписку', callback_data: NONE }],
 				[{ text: '⬅️ Назад', callback_data: 'back' }]
 			]
 		}
@@ -32,7 +32,7 @@ setSubscription.on('callback_query', ctx => {
 		ctx.scene.session.stage = 2;
 		ctx.scene.session.tariff = callbackData;
 
-		ctx.reply('Введите ID пользователя которому хотите выдать подписку');
+		ctx.reply('Введіть ID користувача, якому хочете видати підписку');
 	}
 });
 
@@ -46,14 +46,14 @@ setSubscription.on('message', async (ctx) => {
 			const user = await User.findByPk(msgText);
 
 			if (!user) {
-				ctx.reply(`Пользователь с ID ${msgText} не был найден в базе данных бота`);
+				ctx.reply(`Користувача з ID ${msgText} не було знайдено в базі даних бота.`);
 			} else {
 				user.update({ tariff });
-				ctx.reply(`Тариф ${tariff} был успешно выдан пользователю с ID ${msgText}`);
+				ctx.reply(`Тариф ${tariff} було успішно видано користувачу з ID ${msgText}.`);
 			}
 
 		} catch (error) {
-			ctx.reply('Произошла ошибка при выдаче подписки');
+			ctx.reply('Сталася помилка при видачі підписки.');
 		} finally {
 			ctx.scene.enter(ADMIN_MANAGE_USERS_SCENE);
 		}

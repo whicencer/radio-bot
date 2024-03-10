@@ -70,13 +70,13 @@ bot.start(onBotStart);
 
 bot.command('delete_admin', deleteAdmin);
 
-bot.hears('👤 Профиль', ctx => {
+bot.hears('👤 Профіль', ctx => {
 	ctx.scene.enter(USER_PROFILE_SCENE);
 });
-bot.hears('📖 Информация', ctx => {
+bot.hears('📖 Інформація', ctx => {
 	ctx.scene.enter(INFORMATION_SCENE);
 });
-bot.hears('📡 Транслировать', ctx => {
+bot.hears('📡 Транслювати', ctx => {
 	ctx.scene.enter(BROADCAST_SCENE);
 });
 
@@ -85,6 +85,6 @@ bot.action('goMain', ctx => {
 });
 
 bot.launch(async () => {
-	console.log('Бот запущен');
+	console.log('Бот запущений');
 	await botConfigDb();
 });

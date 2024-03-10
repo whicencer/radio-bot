@@ -6,8 +6,8 @@ const { Resource } = require('../../database/models');
 const { deleteMessageWithDelay } = require('../../utils/deleteMessageWithDelay');
 
 const addTwitch = new Scenes.BaseScene(ADD_TWITCH_SCENE);
-const msg = `Отправьте ссылку на стрим Twitch (В точно таком же формате как указано в примере)\n
-Пример: https://www.twitch.tv/jesusavgn`;
+const msg = `Надішліть посилання на стрім Twitch (У точно такому ж форматі, як вказано в прикладі)\n
+Приклад: https://www.twitch.tv/jesusavgn`;
 
 addTwitch.enter(ctx => {
 	ctx.reply(msg, {
@@ -16,7 +16,7 @@ addTwitch.enter(ctx => {
 		},
 		reply_markup: {
 			inline_keyboard: [
-				[{ text: '🚫 Отменить', callback_data: 'cancel' }]
+				[{ text: '🚫 Скасувати', callback_data: 'cancel' }]
 			]
 		}
 	});
@@ -33,17 +33,17 @@ addTwitch.on('message', async (ctx) => {
 	const streamerName = url.replace('https://www.twitch.tv/', '');
 
 	if (!twitchUrlValidate(url)) {
-		ctx.reply('Неверный формат ссылки');
+		ctx.reply('Невірний формат посилання');
 	} else {
 		try {
 			const createdSource = await Resource.create({ userId, name: `${streamerName} (Twitch)`, url });
 	
-			const msg = await ctx.reply('✅ Ресурс был успешно добавлен!');
+			const msg = await ctx.reply('✅ Ресурс був успішно доданий!');
 
 			ctx.scene.enter(ADD_SOURCE_TO_CHAT_SCENE, { createdSource });
 			deleteMessageWithDelay(ctx, msg.message_id, 3000);
 		} catch (err) {
-			ctx.reply('❌ Произошла ошибка при добавлении ресурса: Возможно вы ввели ссылку не верно');
+			ctx.reply('❌ Сталася помилка при додаванні ресурсу: Можливо ви ввели посилання не вірно');
 			ctx.scene.enter(LIBRARY_SCENE);
 		}
 	}

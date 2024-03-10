@@ -13,7 +13,7 @@ const sourcesWithUrl = async (resources) => {
 		} else if (twitchUrlValidate(dataValues.url)) {
 			const data = await getSourceUrlTwitch(dataValues.url);
 			if (data) {
-				const videoSourceUrl = data.urls['720p60'];
+				const videoSourceUrl = data.urls['720p60'] || data.urls['720p'];
 				sourcesWithVideoUrl.push({ ...dataValues, url: videoSourceUrl });
 			}
 		} else {

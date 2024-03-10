@@ -11,11 +11,11 @@ library.enter(async (ctx) => {
 	const user = await User.findOne({ where: {id: userId}, include: 'resources' });
 	const resourcesBtns = user.resources.map(resource => ([{ text: `🎧 ${resource.name}`, callback_data: 'get_source' + resource.id }]));
 
-	ctx.reply('📀 Ваша библиотека', {
+	ctx.reply('📀 Ваша бібліотека', {
 		reply_markup: {
 			inline_keyboard: [
 				...resourcesBtns,
-				[{ text: '➕ Добавить ресурс', callback_data: 'add_source' }],
+				[{ text: '➕ Додати ресурс', callback_data: 'add_source' }],
 				[{ text: '⬅️ Назад', callback_data: 'back' }]
 			]
 		}

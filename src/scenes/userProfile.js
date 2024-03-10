@@ -16,23 +16,23 @@ userProfile.enter(async (ctx) => {
 	try {
 		const user = await User.findOne({ where: { id: userId } });
 		const currentTariff = user.tariff === 'none'
-			? 'Отсутствует'
-			: `${capitalizeFirstLetter(user.tariff)} (истекает через ${formatDateDifference(user.subExpiresAt)})`;
+			? 'Відсутній'
+			: `${capitalizeFirstLetter(user.tariff)} (закінчується через ${formatDateDifference(user.subExpiresAt)})`;
 
 		const message = `
-		📌 Ваш id: <code>${userId}</code> (Вы <b>${userRoles[role]}</b>)
+		📌 Ваш id: <code>${userId}</code> (Ви <b>${userRoles[role]}</b>)
 💰 Баланс: ${Number(user.balance).toLocaleString('en-US')}$
-👥 Количество рефералов: ${user.referrals.length}\n
-📱 Текущий тариф: ${currentTariff}
+👥 Кількість рефералів: ${user.referrals.length}\n
+📱 Поточний тариф: ${currentTariff}
 		`;
 
 		await ctx.reply(message, {
 			reply_markup: {
 				inline_keyboard: [
-					[{ text: '💰 Пополнить баланс', callback_data: 'balance' }],
-					[{ text: '💳 Приобрести подписку', callback_data: 'sub' }],
-					[{ text: '🔄 Реферальная ссылка', callback_data: 'myRef' }],
-					isUserAdmin ? [{ text: '🛠️ Админ панель', callback_data: 'admin_panel' }] : []
+					[{ text: '💰 Поповнити баланс', callback_data: 'balance' }],
+					[{ text: '💳 Придбати підписку', callback_data: 'sub' }],
+					[{ text: '🔄 Реферальне посилання', callback_data: 'myRef' }],
+					isUserAdmin ? [{ text: '🛠️ Адмін панель', callback_data: 'admin_panel' }] : []
 				]
 			},
 			parse_mode: 'HTML'
@@ -62,15 +62,15 @@ userProfile.action('admin_panel', async (ctx) => {
 		deleteLastMessage(ctx);
 		ctx.scene.enter(ADMIN_PANEL_SCENE);
 	} else {
-		ctx.reply('У вас нет доступа к этой вкладке!');
+		ctx.reply('У вас немає доступу до цієї вкладки!');
 	}
 });
 
 userProfile.action('myRef', ctx => {
 	const userId = ctx.from.id;
 
-	ctx.reply(`✉️ Приглашайте новых людей и получайте 50% с их депозита\n
-Ваша реферальная ссылка: <code>https://t.me/shop_test_hjvfs2_bot?start=${userId}</code>`, {
+	ctx.reply(`✉️ Запрошуйте нових людей і отримуйте 50% з їх депозиту\n
+Ваше реферальне посилання: <code>https://t.me/shop_test_hjvfs2_bot?start=${userId}</code>`, {
 		parse_mode: 'HTML'
 	});
 });
