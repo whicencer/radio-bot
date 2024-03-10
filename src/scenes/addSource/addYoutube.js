@@ -7,7 +7,7 @@ const { getSourceTitle } = require('../../utils/youtube');
 const { deleteMessageWithDelay } = require('../../utils/deleteMessageWithDelay');
 
 const addYoutube = new Scenes.BaseScene(ADD_YOUTUBE_SCENE);
-const msg = `Отправьте ссылку на видео на YouTube (В точно таком же формате как указано в примере)\n
+const msg = `Отправьте ссылку на видео или трансляцию на YouTube (В точно таком же формате как указано в примере)\n
 Пример: https://www.youtube.com/watch?v=dQw4w9WgXcQ`;
 
 addYoutube.enter(ctx => {
