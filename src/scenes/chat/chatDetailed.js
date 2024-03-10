@@ -8,7 +8,6 @@ const { deleteChat } = require('./helpers/deleteChat');
 const { sourcesWithUrl } = require('./helpers/sourcesWithUrl');
 const { startStream } = require('./helpers/startStream');
 const { createActionButton } = require('./helpers/createActionButton');
-const { debounce } = require('../../utils/debounce');
 const { checkForSources } = require('./middleware/checkForSources');
 const { checkForSub } = require('../../middleware/checkForSub');
 const { checkForStatus } = require('../../middleware/checkForStatus');
@@ -43,7 +42,7 @@ chatDetailed.enter(async (ctx) => {
 	ctx.deleteMessage(msg.message_id);
 });
 
-chatDetailed.action('stop_stream', debounce(async (ctx) => {
+chatDetailed.action('stop_stream', async (ctx) => {
 	const { streamKey } = ctx.scene.session.chat;
 	
 	try {
@@ -63,27 +62,29 @@ chatDetailed.action('stop_stream', debounce(async (ctx) => {
 		ctx.reply('Ошибка при остановке трансляции');
 		console.log('Error on stream stop: ' + error);
 	}
-}, 1000));
+});
 
-chatDetailed.action('start_stream', checkForStatus, checkForSources, checkForSub, debounce(async (ctx) => {
+chatDetailed.action('start_stream', checkForStatus, checkForSources, checkForSub, async (ctx) => {
 	const resources = ctx.scene.session.chatSources;
 	const { streamKey } = ctx.scene.session.chat;
 
 	try {
-		startStream(resources, streamKey, ctx);
-		ctx.editMessageReplyMarkup({
-			inline_keyboard: [
-				[{ text: '🚫 Остановить', callback_data: 'stop_stream' }],
-				[{ text: '🎥 Библиотека эфира', callback_data: 'chat_library' }],
-				[{ text: '❌ Удалить канал', callback_data: 'delete_chat' }],
-				[{ text: '⬅️ Назад', callback_data: 'back' }]
-			]
-		});
+		const isStreamStarted = await startStream(resources, streamKey, ctx);
+		if (isStreamStarted) {
+			ctx.editMessageReplyMarkup({
+				inline_keyboard: [
+					[{ text: '🚫 Остановить', callback_data: 'stop_stream' }],
+					[{ text: '🎥 Библиотека эфира', callback_data: 'chat_library' }],
+					[{ text: '❌ Удалить канал', callback_data: 'delete_chat' }],
+					[{ text: '⬅️ Назад', callback_data: 'back' }]
+				]
+			});
+		}
 	} catch (error) {
 		ctx.reply('Ошибка при запуске трансляции');
 		console.log('Error on stream start: ' + error);
 	}
-}, 1000));
+});
 
 chatDetailed.action('back', ctx => {
 	ctx.scene.state = {};
