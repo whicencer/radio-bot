@@ -18,7 +18,11 @@ function startStreaming(resources, rtmpKey, initIndex = 0) {
 				.format('flv')
 				.output(rtmpKey)
 				.on('error', async (err) => {
-					if (err.message.indexOf('SIGKILL') === -1) {
+					if (err.message.includes('404 Not Found') || err.message.includes('Failed to open') || err.message.includes('HTTP error 404')) {
+						console.log('Ресурс недоступен (404), пропускаем...');
+						currentIndex++;
+						streamNext();
+					} else if (err.message.indexOf('SIGKILL') === -1) {
 						console.error('Ошибка трансляции:', err);
 						currentIndex++;
 						streamNext();
@@ -41,7 +45,12 @@ function startStreaming(resources, rtmpKey, initIndex = 0) {
 		}
 	}
 
-	streamNext();
+	if (resources.length) {
+		streamNext();
+		return true;
+	} else {
+		return false;
+	}
 }
 
 module.exports = { startStreaming };
