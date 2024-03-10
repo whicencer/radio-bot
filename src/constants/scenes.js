@@ -21,6 +21,7 @@ const ADMIN_SET_USER_SUBSCRIPTION = 'adminSetUserSubscription';
 const ADMIN_MANAGE_USERS_SCENE = 'adminManageUsers';
 const ADD_SOURCE_TO_CHAT_SCENE = 'addSourceToChat';
 const BALANCE_SCENE = 'balance';
+const ADD_TWITCH_SCENE = 'addTwitch';
 
 module.exports = {
 	ALL_CHATS_SCENE,
@@ -45,5 +46,6 @@ module.exports = {
 	ADD_MODER_SCENE,
 	ADMIN_MANAGE_USERS_SCENE,
 	ADD_SOURCE_TO_CHAT_SCENE,
-	BALANCE_SCENE
+	BALANCE_SCENE,
+	ADD_TWITCH_SCENE
 };

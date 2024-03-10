@@ -24,6 +24,7 @@ const PREMIUM = {
 	max_chats: 15,
 	add_source_btns: [
 		[{ text: '🎦🎶 Youtube', callback_data: 'add_youtube' }],
+		[{ text: '🎦🎶 Twitch', callback_data: 'add_twitch' }],
 		[{ text: '🎶 Radio', callback_data: 'choose_radio' }],
 		[{ text: '🚫 Отменить', callback_data: 'cancel' }]
 	]
