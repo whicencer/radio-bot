@@ -4,24 +4,29 @@ const { twitchUrlValidate } = require('../../../utils/validators/twitchUrlValida
 const { getSourceUrlTwitch } = require('../../../utils/twitch');
 
 const sourcesWithUrl = async (resources) => {
-	const sourcesWithVideoUrl = [];
-	for (const source of resources) {
-		const dataValues = source.dataValues;
-		if (youtubeUrlValidate(dataValues.url)) {
-			const videoSourceUrl = await getSourceUrl(dataValues.url);
-			sourcesWithVideoUrl.push({ ...dataValues, url: videoSourceUrl });
-		} else if (twitchUrlValidate(dataValues.url)) {
-			const data = await getSourceUrlTwitch(dataValues.url);
-			if (data) {
-				const videoSourceUrl = data.urls['720p60'] || data.urls['720p'];
-				sourcesWithVideoUrl.push({ ...dataValues, url: videoSourceUrl });
-			}
-		} else {
-			sourcesWithVideoUrl.push({ ...dataValues, url: dataValues.url });
-		}
-	}
+  const sourcesWithVideoUrl = [];
+  
+  for (const source of resources) {
+    const { url, ...otherData } = source.dataValues;
 
-	return sourcesWithVideoUrl;
+    try {
+      let videoSourceUrl = url;
+
+      if (youtubeUrlValidate(url)) {
+        videoSourceUrl = await getSourceUrl(url);
+      } else if (twitchUrlValidate(url)) {
+        const twitchData = await getSourceUrlTwitch(url);
+        videoSourceUrl = twitchData ? twitchData.urls['720p60'] || twitchData.urls['720p'] : url;
+      }
+
+      sourcesWithVideoUrl.push({ ...otherData, url: videoSourceUrl });
+    } catch (error) {
+      console.error(`Error processing source with URL ${url}: ${error.message}`);
+      sourcesWithVideoUrl.push({ ...otherData, url });
+    }
+  }
+
+  return sourcesWithVideoUrl;
 };
 
 module.exports = { sourcesWithUrl };
