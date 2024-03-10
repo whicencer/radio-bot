@@ -19,7 +19,6 @@ function startStreaming(resources, rtmpKey, initIndex = 0) {
 				.output(rtmpKey)
 				.on('error', async (err) => {
 					if (err.message.includes('404 Not Found') || err.message.includes('Failed to open') || err.message.includes('HTTP error 404')) {
-						console.log('Ресурс недоступен (404), пропускаем...');
 						currentIndex++;
 						streamNext();
 					} else if (err.message.indexOf('SIGKILL') === -1) {
