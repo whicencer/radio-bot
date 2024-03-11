@@ -25,6 +25,11 @@ setSubscription.action('back', ctx => {
 	ctx.scene.enter(ADMIN_MANAGE_USERS_SCENE);
 });
 
+setSubscription.action('cancel', ctx => {
+	deleteLastMessage(ctx);
+	ctx.scene.enter(ADMIN_MANAGE_USERS_SCENE);
+});
+
 setSubscription.on('callback_query', ctx => {
 	const callbackData = ctx.callbackQuery.data;
 
@@ -32,7 +37,13 @@ setSubscription.on('callback_query', ctx => {
 		ctx.scene.session.stage = 2;
 		ctx.scene.session.tariff = callbackData;
 
-		ctx.reply('Введіть ID користувача, якому хочете видати підписку');
+		ctx.reply('Введіть ID користувача, якому хочете видати підписку', {
+			reply_markup: {
+				inline_keyboard: [
+					[{ text: '🚫 Скасувати', callback_data: 'cancel' }]
+				]
+			}
+		});
 	}
 });
 
@@ -40,22 +51,51 @@ setSubscription.on('message', async (ctx) => {
 	const msgText = ctx.message.text;
 
 	if (ctx.scene.session.stage === 2) {
-		const tariff = ctx.scene.session.tariff;
+		ctx.scene.session.userId = msgText;
 
 		try {
 			const user = await User.findByPk(msgText);
+			const tariff = ctx.scene.session.tariff;
 
-			if (!user) {
-				ctx.reply(`Користувача з ID ${msgText} не було знайдено в базі даних бота.`);
+			if (tariff === 'none') {
+				console.log('none');
+				await user.update({ tariff });
+				ctx.reply(`Ви забрали підписку у ID ${ctx.scene.session.userId}.`);
+				ctx.scene.enter(ADMIN_MANAGE_USERS_SCENE);
 			} else {
-				user.update({ tariff });
-				ctx.reply(`Тариф ${tariff} було успішно видано користувачу з ID ${msgText}.`);
+				if (!user) {
+					ctx.reply(`Користувача з ID ${msgText} не було знайдено в базі даних бота.`);
+				} else {
+					ctx.reply('Введіть строк, на який ви хочете надати підписку (у днях)', {
+						reply_markup: {
+							inline_keyboard: [
+								[{ text: '🚫 Скасувати', callback_data: 'cancel' }]
+							]
+						}
+					});
+					ctx.scene.session.stage = 3;
+				}
 			}
-
 		} catch (error) {
-			ctx.reply('Сталася помилка при видачі підписки.');
-		} finally {
-			ctx.scene.enter(ADMIN_MANAGE_USERS_SCENE);
+			ctx.reply(`При виконанні запиту виникла помилка.`);
+			console.log('Error while setting subscription: ', error);
+		}
+	} else if (ctx.scene.session.stage === 3) {
+		const tariff = ctx.scene.session.tariff;
+		const days = ctx.message.text;
+		const userId = ctx.scene.session.userId;
+
+		if (!isNaN(Number(days))) {
+			try {
+				await User.update({ tariff, subExpiresAt: new Date(Date.now() + days * 24 * 60 * 60 * 1000) }, { where: { id: userId } });
+				ctx.reply(`Тариф ${tariff} було успішно видано на ${days} днів користувачу з ID ${userId}.`);
+				ctx.scene.enter(ADMIN_MANAGE_USERS_SCENE);
+			} catch (error) {
+				ctx.reply('Помилка при підключенні тарифу.');
+				console.log('Error while setting subscription: ', error);
+			}
+		} else {
+			console.log(days);
 		}
 	}
 });
