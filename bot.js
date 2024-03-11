@@ -28,7 +28,7 @@ const { topupBalance } = require('./src/scenes/botAdminPanel/topupBalance');
 const { setSubscription } = require('./src/scenes/botAdminPanel/setSubscription');
 const { subscriptionStatusUpdater } = require('./src/middleware/subscriptionStatusUpdater');
 const { addSourceToChat } = require('./src/scenes/addSource/addSourceToChat');
-const { balance } = require('./src/scenes/balance');
+const { balance } = require('./src/scenes/balance/balance');
 const { addTwitch } = require('./src/scenes/addSource/addTwitch');
 
 const token = process.env.BOT_TOKEN;
