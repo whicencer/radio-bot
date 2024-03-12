@@ -15,8 +15,10 @@ const handleSubcription = async (ctx, tariffName, tariffPrice) => {
 	} else {
 		const date = new Date();
 		date.setMonth(date.getMonth() + 1);
+
 		user.update({ tariff: tariffName, subExpiresAt: date });
 		user.decrement('balance', { by: tariffPrice, where: { id: userId } });
+		
 		await ctx.reply(`Ви підключили тариф ${tariffName} на місяць!`);
 
 		ctx.scene.enter(USER_PROFILE_SCENE);
