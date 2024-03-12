@@ -21,7 +21,7 @@ async function onBotStart(ctx) {
 			parse_mode: 'HTML'
 		});
 	} catch (error) {
-		console.log('Error on user start: ', error);
+		ctx.reply('Користувача з таким ID не існує.');
 	}
 
 	// Create user
