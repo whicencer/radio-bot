@@ -46,7 +46,6 @@ chatLibrary.on('callback_query', checkForStatus, async (ctx) => {
 		try {
 			const currentChat = await Chat.findOne({where: {id: chatId}});
 			const chatResourceToDelete = await Resource.findOne({where: { id: resourceId }});
-
 			currentChat.removeResource(chatResourceToDelete);
 
 			const msg = await ctx.reply('✅ Ресурс було успішно видалено з каналу!');

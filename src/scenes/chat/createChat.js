@@ -60,17 +60,17 @@ createChat.on('message', async (ctx) => {
 		if (!rtmpUrlValidate(ctx.message.text)) {
 			ctx.reply('Невірний формат посилання на сервер трансляції');
 			return;
-		} else {
-			ctx.scene.session.streamUrl = ctx.message.text;
-			const chat = await Chat.findOne({ where: { name: ctx.scene.session.streamUrl } });
-			if (chat) {
-				ctx.reply('Канал з таким посиланням трансляції вже існує');
-				return;
-			}
-
-			ctx.scene.session.stage = 3;
-			ctx.reply('Надішліть посилання на канал (Наприклад: <code>https://t.me/your_channel</code>)', keyboard);
 		}
+
+		ctx.scene.session.streamUrl = ctx.message.text;
+		const chat = await Chat.findOne({ where: { name: ctx.scene.session.streamUrl } });
+		if (chat) {
+			ctx.reply('Канал з таким посиланням трансляції вже існує');
+			return;
+		}
+
+		ctx.scene.session.stage = 3;
+		ctx.reply('Надішліть посилання на канал (Наприклад: <code>https://t.me/your_channel</code>)', keyboard);
 	} else if (stage === 3) {
 		ctx.scene.session.chatLink = ctx.message.text;
 		const chat = await Chat.findOne({ where: { name: ctx.scene.session.chatLink, userId } });
@@ -93,8 +93,6 @@ createChat.on('message', async (ctx) => {
 		} finally {
 			ctx.scene.enter(ALL_CHATS_SCENE);
 		}
-	} else {
-		ctx.reply('Поля введено невірно!');
 	}
 });
 

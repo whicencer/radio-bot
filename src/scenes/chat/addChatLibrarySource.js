@@ -23,7 +23,6 @@ addChatLibrarySource.enter(async (ctx) => {
 
 addChatLibrarySource.action('back', ctx => {
 	const chatId = ctx.scene.state.chatId;
-
 	deleteLastMessage(ctx);
 	ctx.scene.enter(CHAT_LIBRARY_SCENE, { chatId });
 });

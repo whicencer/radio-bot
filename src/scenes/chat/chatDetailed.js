@@ -21,19 +21,21 @@ chatDetailed.enter(async (ctx) => {
 
 	const msg = await ctx.reply('Завантаження...');
 
-	const sourcesWithVideoUrl = await sourcesWithUrl(chat.resources);
-	ctx.scene.session.chatSources = sourcesWithVideoUrl;
+	ctx.scene.session.chatSources = await sourcesWithUrl(chat.resources);
 
 	const currentSourceTitle = processes.getSourceTitle(chat.streamKey);
 	const actionButton = createActionButton(chat.status);
+	const baseKeyboard = [
+		[{ text: '🎥 Бібліотека ефіру', callback_data: 'chat_library' }],
+		[{ text: '❌ Видалити канал', callback_data: 'delete_chat' }],
+		[{ text: '⬅️ Назад', callback_data: 'back' }]
+	];
 	
 	ctx.reply(`<b>Канал: <code>${chat.name}</code></b>\n<b>Посилання на канал: ${chat.chatLink}</b>\n<b>Зараз грає:</b> ${currentSourceTitle}`, {
 		reply_markup: {
 			inline_keyboard: [
 				[actionButton],
-				[{ text: '🎥 Бібліотека ефіру', callback_data: 'chat_library' }],
-				[{ text: '❌ Видалити канал', callback_data: 'delete_chat' }],
-				[{ text: '⬅️ Назад', callback_data: 'back' }]
+				...baseKeyboard
 			]
 		},
 		parse_mode: 'HTML'
@@ -53,9 +55,7 @@ chatDetailed.action('stop_stream', async (ctx) => {
 		ctx.editMessageReplyMarkup({
 			inline_keyboard: [
 				[{ text: '🔥 Запустити', callback_data: 'start_stream' }],
-				[{ text: '🎥 Бібліотека ефіру', callback_data: 'chat_library' }],
-				[{ text: '❌ Видалити канал', callback_data: 'delete_chat' }],
-				[{ text: '⬅️ Назад', callback_data: 'back' }]
+				...baseKeyboard
 			]
 		});
 	} catch (error) {
@@ -74,9 +74,7 @@ chatDetailed.action('start_stream', checkForStatus, checkForSources, checkForSub
 			ctx.editMessageReplyMarkup({
 				inline_keyboard: [
 					[{ text: '🚫 Зупинити', callback_data: 'stop_stream' }],
-					[{ text: '🎥 Бібліотека ефіру', callback_data: 'chat_library' }],
-					[{ text: '❌ Видалити канал', callback_data: 'delete_chat' }],
-					[{ text: '⬅️ Назад', callback_data: 'back' }]
+					...baseKeyboard
 				]
 			});
 		}
