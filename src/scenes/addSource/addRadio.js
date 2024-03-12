@@ -7,12 +7,13 @@ const { Resource } = require('../../database/models');
 const { deleteMessageWithDelay } = require('../../utils/deleteMessageWithDelay');
 
 const addRadio = new Scenes.BaseScene(ADD_RADIO_SCENE);
+const divider = '_pz_';
 
 addRadio.enter(ctx => {
 	ctx.reply('Виберіть радіо, яке хочете додати:', {
 		reply_markup: {
 			inline_keyboard: [
-				...generateInlineKeyboard(radios, 2, 'add'),
+				...generateInlineKeyboard(radios, 2, 'add', divider),
 				[{ text: '🚫 Скасувати', callback_data: 'cancel' }]
 			]
 		}
@@ -29,7 +30,7 @@ addRadio.on('callback_query', async (ctx) => {
 	const userId = ctx.from.id;
 
 	if (callbackData.startsWith('add')) {
-		const [radioName, radioUrl] = callbackData.replace('add', '').split('_pz_');
+		const [radioName, radioUrl] = callbackData.replace('add', '').split(divider);
 		
 		try {
 			const createdSource = await Resource.create({ userId, name: radioName, url: `https://${radioUrl}` });

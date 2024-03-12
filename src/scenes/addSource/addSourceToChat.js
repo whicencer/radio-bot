@@ -16,7 +16,7 @@ addSourceToChat.enter(async (ctx) => {
 		reply_markup: {
 			inline_keyboard: [
 				...chatsBtns,
-				[{ text: 'Вернутися в бібліотеку', callback_data: 'cancel' }]
+				[{ text: 'Повернутися до бібліотеки', callback_data: 'cancel' }]
 			]
 		}
 	});
