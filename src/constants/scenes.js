@@ -19,6 +19,7 @@ const ADD_MODER_SCENE = 'addModer';
 const ADMIN_TOPUP_USER_BALANCE_SCENE = 'adminTopupUserBalance';
 const ADMIN_SET_USER_SUBSCRIPTION = 'adminSetUserSubscription';
 const ADMIN_MANAGE_USERS_SCENE = 'adminManageUsers';
+const ADMIN_SET_REF_BONUS_SCENE = 'setRefBonus';
 const ADD_SOURCE_TO_CHAT_SCENE = 'addSourceToChat';
 const BALANCE_SCENE = 'balance';
 const ADD_TWITCH_SCENE = 'addTwitch';
@@ -47,5 +48,6 @@ module.exports = {
 	ADMIN_MANAGE_USERS_SCENE,
 	ADD_SOURCE_TO_CHAT_SCENE,
 	BALANCE_SCENE,
-	ADD_TWITCH_SCENE
+	ADD_TWITCH_SCENE,
+	ADMIN_SET_REF_BONUS_SCENE
 };

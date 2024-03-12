@@ -45,6 +45,7 @@ balance.on('message', async (ctx) => {
 		if (isNaN(sum)) {
 			ctx.reply('Невірна сума поповнення');
 		} else {
+			ctx.scene.session.stage = 2;
 			const { invoiceUrl, orderReference } = await createInvoice(sum, ctx.from.id);
 			ctx.scene.session.orderReference = orderReference;
 			ctx.scene.session.sum = sum;

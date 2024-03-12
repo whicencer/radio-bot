@@ -58,7 +58,6 @@ setSubscription.on('message', async (ctx) => {
 			const tariff = ctx.scene.session.tariff;
 
 			if (tariff === 'none') {
-				console.log('none');
 				await user.update({ tariff });
 				ctx.reply(`Ви забрали підписку у ID ${ctx.scene.session.userId}.`);
 				ctx.scene.enter(ADMIN_MANAGE_USERS_SCENE);

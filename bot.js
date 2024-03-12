@@ -30,6 +30,7 @@ const { subscriptionStatusUpdater } = require('./src/middleware/subscriptionStat
 const { addSourceToChat } = require('./src/scenes/addSource/addSourceToChat');
 const { balance } = require('./src/scenes/balance/balance');
 const { addTwitch } = require('./src/scenes/addSource/addTwitch');
+const { setRefBonus } = require('./src/scenes/botAdminPanel/setRefBonus');
 
 const token = process.env.BOT_TOKEN;
 
@@ -59,7 +60,8 @@ const stage = new Scenes.Stage([
 	setSubscription,
 	addSourceToChat,
 	balance,
-	addTwitch
+	addTwitch,
+	setRefBonus
 ]);
 
 bot.use(session());

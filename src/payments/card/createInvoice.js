@@ -41,7 +41,7 @@ async function createInvoice(amount, userId) {
 		productName: [productName],
 		productPrice: [amount],
 		productCount: [1],
-		paymentSystems: "card;privat24",
+		paymentSystems: "card;privat24;googlePay",
 	});
 
 	const res = await axios.post(process.env.WAYFORPAY_API_URL, invoice);
