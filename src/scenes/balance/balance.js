@@ -49,20 +49,17 @@ balance.on('message', async (ctx) => {
 			ctx.scene.session.orderReference = orderReference;
 			ctx.scene.session.sum = sum;
 
-			ctx.reply('Ваше посилання на оплату (дiйсне 10 хвилин):', {
+			ctx.reply('Ваше посилання на оплату (дiйсне 10 хвилин)👇', {
 				reply_markup: {
 					inline_keyboard: [
-						[{ text: 'Оплатити', url: invoiceUrl }],
-						[{ text: 'Перевiрити оплату', callback_data: 'check_payments' }]
+						[{ text: 'Оплатити', url: invoiceUrl }]
 					]
 				}
 			});
+			
+			await checkPayments(ctx, ctx.scene.session.sum, ctx.scene.session.orderReference);
 		}
 	}
-});
-
-balance.action('check_payments', async (ctx) => {
-	await checkPayments(ctx, ctx.scene.session.sum, ctx.scene.session.orderReference);
 });
 
 balance.action('cancel', ctx => {
