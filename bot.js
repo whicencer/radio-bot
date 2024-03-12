@@ -31,6 +31,7 @@ const { addSourceToChat } = require('./src/scenes/addSource/addSourceToChat');
 const { balance } = require('./src/scenes/balance/balance');
 const { addTwitch } = require('./src/scenes/addSource/addTwitch');
 const { setRefBonus } = require('./src/scenes/botAdminPanel/setRefBonus');
+const { hasAdminPermission } = require('./src/middleware/hasAdminPermission');
 
 const token = process.env.BOT_TOKEN;
 
@@ -70,7 +71,7 @@ bot.use(stage.middleware());
 
 bot.start(onBotStart);
 
-bot.command('delete_admin', deleteAdmin);
+bot.command('delete_admin', hasAdminPermission, deleteAdmin);
 
 bot.hears('👤 Профіль', ctx => {
 	ctx.scene.enter(USER_PROFILE_SCENE);
