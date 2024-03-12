@@ -28,10 +28,10 @@ async function createInvoice(amount, userId) {
 	const invoice = JSON.stringify({
 		transactionType: "CREATE_INVOICE",
 		merchantAccount: process.env.WAYFORPAY_MERCHANT_ACCOUNT,
-		merchantDomainName: "https://t.me/shop_test_hjvfs2_bot",
+		merchantDomainName: process.env.WAYFORPAY_MERCHANT_DOMAIN,
 		merchantSignature,
 		apiVersion: 1,
-		language: "ua",
+		language: process.env.WAYFORPAY_LANGUAGE || "ua",
 		serviceUrl: "https://api.wayforpay.com/api/wayforpay/payment-status",
 		orderReference,
 		orderDate,

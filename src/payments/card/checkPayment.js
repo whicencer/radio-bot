@@ -17,7 +17,7 @@ async function checkPayment(orderReference) {
 
 	const invoice = JSON.stringify({
 		transactionType: "CHECK_STATUS",
-		merchantAccount: merchantAccount,
+		merchantAccount,
 		orderReference,
 		merchantSignature,
 		apiVersion: 1
