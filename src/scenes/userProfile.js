@@ -1,10 +1,10 @@
 const { Scenes } = require('telegraf');
 const { USER_PROFILE_SCENE, ADMIN_PANEL_SCENE, SUBSCRIPTION_SCENE, BALANCE_SCENE } = require('../constants/scenes');
 const { User } = require('../database/models');
-const { capitalizeFirstLetter } = require('../utils/capitalizeFirstLetter');
 const { userRoles } = require('../constants/userRoles');
 const { deleteLastMessage } = require('../utils/deleteLastMessage');
-const { formatDateDifference } = require('../utils/formatDateDifference');
+const { getUserTariff } = require('../utils/getUserTariff');
+const { hasAdminPermission } = require('../middleware/hasAdminPermission');
 
 const userProfile = new Scenes.BaseScene(USER_PROFILE_SCENE);
 
@@ -15,9 +15,7 @@ userProfile.enter(async (ctx) => {
 	
 	try {
 		const user = await User.findOne({ where: { id: userId } });
-		const currentTariff = user.tariff === 'none'
-			? 'Відсутній'
-			: `${capitalizeFirstLetter(user.tariff)} (закінчується через ${formatDateDifference(user.subExpiresAt)})`;
+		const currentTariff = getUserTariff(user.tariff);
 
 		const message = `
 		📌 Ваш id: <code>${userId}</code> (Ви <b>${userRoles[role]}</b>)
@@ -52,18 +50,9 @@ userProfile.action('balance', ctx => {
 	ctx.scene.enter(BALANCE_SCENE);
 });
 
-userProfile.action('admin_panel', async (ctx) => {
-	const tgUserId = ctx.from.id;
-
-	const { role } = await User.findByPk(tgUserId);
-	const userHasPermission = role === 'admin' || role === 'moderator';
-
-	if (userHasPermission) {
-		deleteLastMessage(ctx);
-		ctx.scene.enter(ADMIN_PANEL_SCENE);
-	} else {
-		ctx.reply('У вас немає доступу до цієї вкладки!');
-	}
+userProfile.action('admin_panel', hasAdminPermission, ctx => {
+	deleteLastMessage(ctx);
+	ctx.scene.enter(ADMIN_PANEL_SCENE);
 });
 
 userProfile.action('myRef', ctx => {
