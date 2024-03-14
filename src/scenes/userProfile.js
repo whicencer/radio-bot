@@ -15,7 +15,7 @@ userProfile.enter(async (ctx) => {
 	
 	try {
 		const user = await User.findOne({ where: { id: userId } });
-		const currentTariff = getUserTariff(user.tariff);
+		const currentTariff = getUserTariff(user.tariff, user.subExpiresAt);
 
 		const message = `
 		📌 Ваш id: <code>${userId}</code> (Ви <b>${userRoles[role]}</b>)

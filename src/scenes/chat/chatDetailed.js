@@ -13,6 +13,11 @@ const { checkForSub } = require('../../middleware/checkForSub');
 const { checkForStatus } = require('../../middleware/checkForStatus');
 
 const chatDetailed = new Scenes.BaseScene(CHAT_DETAILED_SCENE);
+const baseKeyboard = [
+	[{ text: '🎥 Бібліотека ефіру', callback_data: 'chat_library' }],
+	[{ text: '❌ Видалити канал', callback_data: 'delete_chat' }],
+	[{ text: '⬅️ Назад', callback_data: 'back' }]
+];
 
 chatDetailed.enter(async (ctx) => {
 	const chatId = ctx.scene.state.chatId;
@@ -25,11 +30,6 @@ chatDetailed.enter(async (ctx) => {
 
 	const currentSourceTitle = processes.getSourceTitle(chat.streamKey);
 	const actionButton = createActionButton(chat.status);
-	const baseKeyboard = [
-		[{ text: '🎥 Бібліотека ефіру', callback_data: 'chat_library' }],
-		[{ text: '❌ Видалити канал', callback_data: 'delete_chat' }],
-		[{ text: '⬅️ Назад', callback_data: 'back' }]
-	];
 	
 	ctx.reply(`<b>Канал: <code>${chat.name}</code></b>\n<b>Посилання на канал: ${chat.chatLink}</b>\n<b>Зараз грає:</b> ${currentSourceTitle}`, {
 		reply_markup: {

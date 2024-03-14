@@ -11,10 +11,9 @@ const sourcesWithUrl = async (resources) => {
 			const videoSourceUrl = await getSourceUrl(dataValues.url);
 			sourcesWithVideoUrl.push({ ...dataValues, url: videoSourceUrl });
 		} else if (twitchUrlValidate(dataValues.url)) {
-			const data = await getSourceUrlTwitch(dataValues.url);
-			if (data) {
-				const videoSourceUrl = data.urls['720p60'] || data.urls['720p'];
-				sourcesWithVideoUrl.push({ ...dataValues, url: videoSourceUrl });
+			const streamUrl = await getSourceUrlTwitch(dataValues.url);
+			if (streamUrl) {
+				sourcesWithVideoUrl.push({ ...dataValues, url: streamUrl });
 			}
 		} else {
 			sourcesWithVideoUrl.push({ ...dataValues, url: dataValues.url });
