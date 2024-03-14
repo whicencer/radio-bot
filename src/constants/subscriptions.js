@@ -27,6 +27,7 @@ const PREMIUM = {
 		[{ text: '🎦🎶 Youtube', callback_data: 'add_youtube' }],
 		[{ text: '🎦🎶 Youtube LIVE', callback_data: 'add_youtube' }],
 		[{ text: '🎦🎶 Twitch', callback_data: 'add_twitch' }],
+		[{ text: '🎬 Filmix', callback_data: 'add_movie' }],
 		[{ text: '🎶 Radio', callback_data: 'choose_radio' }],
 		[{ text: '🚫 Скасувати', callback_data: 'cancel' }]
 	]

@@ -23,6 +23,7 @@ const ADMIN_SET_REF_BONUS_SCENE = 'setRefBonus';
 const ADD_SOURCE_TO_CHAT_SCENE = 'addSourceToChat';
 const BALANCE_SCENE = 'balance';
 const ADD_TWITCH_SCENE = 'addTwitch';
+const ADD_MOVIE_SCENE = 'addMovie';
 
 module.exports = {
 	ALL_CHATS_SCENE,
@@ -49,5 +50,6 @@ module.exports = {
 	ADD_SOURCE_TO_CHAT_SCENE,
 	BALANCE_SCENE,
 	ADD_TWITCH_SCENE,
-	ADMIN_SET_REF_BONUS_SCENE
+	ADMIN_SET_REF_BONUS_SCENE,
+	ADD_MOVIE_SCENE
 };

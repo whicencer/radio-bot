@@ -1,5 +1,5 @@
 const { Scenes } = require('telegraf');
-const { ADD_SOURCE_SCENE, LIBRARY_SCENE, ADD_YOUTUBE_SCENE, ADD_RADIO_SCENE, ADD_TWITCH_SCENE } = require('../../constants/scenes');
+const { ADD_SOURCE_SCENE, LIBRARY_SCENE, ADD_YOUTUBE_SCENE, ADD_RADIO_SCENE, ADD_TWITCH_SCENE, ADD_MOVIE_SCENE } = require('../../constants/scenes');
 const { deleteLastMessage } = require('../../utils/deleteLastMessage');
 const { User } = require('../../database/models');
 const { BASIC, ADVANCED, PREMIUM } = require('../../constants/subscriptions');
@@ -44,6 +44,11 @@ addSource.action('add_twitch', ctx => {
 addSource.action('choose_radio', ctx => {
 	deleteLastMessage(ctx);
 	ctx.scene.enter(ADD_RADIO_SCENE);
+});
+
+addSource.action('add_movie', ctx => {
+	deleteLastMessage(ctx);
+	ctx.scene.enter(ADD_MOVIE_SCENE);
 });
 
 addSource.action('cancel', ctx => {
