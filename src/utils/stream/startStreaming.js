@@ -4,6 +4,7 @@ const { Chat } = require('../../database/models');
 
 function startStreaming(resources, rtmpKey, initIndex = 0) {
 	let currentIndex = initIndex;
+	let errorAttempts = 0;
 
 	function streamNext() {
 		const resource = resources[currentIndex];
@@ -22,8 +23,13 @@ function startStreaming(resources, rtmpKey, initIndex = 0) {
 						await Chat.update({ status: 'off' }, { where: { streamKey: rtmpKey } });
 						processes.stopProcess(rtmpKey);
 					} else if (err.message.indexOf('SIGKILL') === -1) {
+						if (errorAttempts >= 7) {
+							await Chat.update({ status: 'off' }, { where: { streamKey: rtmpKey } });
+							processes.stopProcess(rtmpKey);
+						}
 						console.error('Ошибка трансляции:', err);
 						currentIndex++;
+						errorAttempts++;
 						streamNext();
 					} else {
 						await Chat.update({ status: 'off' }, { where: { streamKey: rtmpKey } });
