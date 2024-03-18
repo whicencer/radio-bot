@@ -14,7 +14,9 @@ const subscriptionStatusUpdater = async (ctx, next) => {
 		// Останавливаем все трансляции
 		userChats.forEach(chat => {
 			const chatStreamKey = chat.streamKey;
-			processes.stopProcess(chatStreamKey);
+			if (processes.getProcessById(chatStreamKey)) {
+				processes.stopProcess(chatStreamKey);
+			}
 		});
 		
 		// Уведомляем о том что подписка истекла и меняем в БД tariff=none
