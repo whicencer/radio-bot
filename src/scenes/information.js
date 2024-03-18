@@ -16,8 +16,7 @@ const navigationMsg = `<b>Загальні кнопки:</b>
 </code>`;
 
 information.enter(ctx => {
-	ctx.reply(`Навігація:\n
-${navigationMsg}`, {
+	ctx.reply(navigationMsg, {
 		reply_markup: {
 			inline_keyboard: [
 				[{ text: 'Зв\'язок з менеджером', url: 'google.com' }],
