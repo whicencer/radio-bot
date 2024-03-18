@@ -1,16 +1,21 @@
 const { USER_PROFILE_SCENE } = require('../../constants/scenes');
 const { User } = require('../../database/models');
 const { deleteMessageWithDelay } = require('../../utils/deleteMessageWithDelay');
+const { subPriority } = require('../../constants/subPriority');
 
 const handleSubcription = async (ctx, tariffName, tariffPrice) => {
 	const userId = ctx.from.id;
 	const user = await User.findByPk(userId);
+	const currentTariff = user.tariff;
+
+	if (subPriority[currentTariff] > subPriority[tariffName] || subPriority[currentTariff] === subPriority[tariffName]) {
+		const msg = await ctx.reply('Ви не можете підключитися до цього тарифу');
+		deleteMessageWithDelay(ctx, msg.message_id, 3000);
+		return;
+	}
 
 	if (user.balance < tariffPrice) {
 		const msg = await ctx.reply('У вас недостатньо коштів на балансі');
-		deleteMessageWithDelay(ctx, msg.message_id, 3000);
-	} else if (user.tariff !== 'none') {
-		const msg = await ctx.reply('Ви вже підключені. Якщо хочете змінити тариф, зверніться до підтримки');
 		deleteMessageWithDelay(ctx, msg.message_id, 3000);
 	} else {
 		const date = new Date();
