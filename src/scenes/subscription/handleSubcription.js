@@ -9,7 +9,7 @@ const handleSubcription = async (ctx, tariffName, tariffPrice) => {
 	const currentTariff = user.tariff;
 
 	if (subPriority[currentTariff] > subPriority[tariffName] || subPriority[currentTariff] === subPriority[tariffName]) {
-		const msg = await ctx.reply('Ви не можете підключитися до цього тарифу');
+		const msg = await ctx.reply('Ви не можете підключитися до тарифу дешевшого за ваш');
 		deleteMessageWithDelay(ctx, msg.message_id, 3000);
 		return;
 	}
