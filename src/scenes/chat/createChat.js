@@ -2,6 +2,7 @@ const { Scenes } = require('telegraf');
 const { ALL_CHATS_SCENE, CREATE_CHAT_SCENE, BROADCAST_SCENE } = require('../../constants/scenes');
 const { deleteLastMessage } = require('../../utils/deleteLastMessage');
 const { rtmpUrlValidate } = require('../../utils/validators/rtmpUrlValidate');
+const { streamKeyValidate } = require('../../utils/validators/streamKeyValidate');
 const { Chat } = require('../../database/models');
 const { deleteMessageWithDelay } = require('../../utils/deleteMessageWithDelay');
 const { checkForChatLimit } = require('./middleware/checkForChatLimit');
@@ -47,6 +48,7 @@ createChat.on('message', async (ctx) => {
 	};
 
 	if (stage === 1) {
+		// CHAT NAME
 		ctx.scene.session.chatName = ctx.message.text;
 		const chat = await Chat.findOne({ where: { name: ctx.scene.session.chatName, userId } });
 		if (chat) {
@@ -57,34 +59,49 @@ createChat.on('message', async (ctx) => {
 		ctx.scene.session.stage = 2;
 		ctx.reply('Надішліть посилання на сервер трансляції (Наприклад: <code>rtmps://your_server</code>)', keyboard);
 	} else if (stage === 2) {
+		// CHAT SERVER URL
 		if (!rtmpUrlValidate(ctx.message.text)) {
 			ctx.reply('Невірний формат посилання на сервер трансляції');
 			return;
 		}
 
-		ctx.scene.session.streamUrl = ctx.message.text;
-		const chat = await Chat.findOne({ where: { name: ctx.scene.session.streamUrl } });
-		if (chat) {
-			ctx.reply('Канал з таким посиланням трансляції вже існує');
+		ctx.scene.session.serverUrl = ctx.message.text;
+		ctx.scene.session.stage = 3;
+		ctx.reply('Надішліть ключ трансляції', keyboard);
+	} else if (stage === 3) {
+		// CHAT STREAM KEY
+		if (!streamKeyValidate(ctx.message.text)) {
+			ctx.reply('Невірний формат ключа трансляції');
 			return;
 		}
 
-		ctx.scene.session.stage = 3;
+		ctx.scene.session.streamKey = ctx.message.text;
+		ctx.scene.session.stage = 4;
 		ctx.reply('Надішліть посилання на канал (Наприклад: <code>https://t.me/your_channel</code>)', keyboard);
-	} else if (stage === 3) {
+	} else if (stage === 4) {
+		// CHAT LINK
 		ctx.scene.session.chatLink = ctx.message.text;
-		const chat = await Chat.findOne({ where: { name: ctx.scene.session.chatLink, userId } });
-		if (chat) {
+
+		const chatName = ctx.scene.session.chatName;
+		const streamUrl = ctx.scene.session.serverUrl + ctx.scene.session.streamKey;
+		const chatLink = ctx.scene.session.chatLink;
+
+		const chatByLink = await Chat.findOne({ where: { name: chatLink, userId } });
+		if (chatByLink) {
 			ctx.reply('Канал з таким посиланням вже існує');
 			return;
 		}
 
-		const chatName = ctx.scene.session.chatName;
-		const streamKey = ctx.scene.session.streamUrl;
-		const chatLink = ctx.scene.session.chatLink;
+		const chatByStreamUrl = await Chat.findOne({ where: { streamKey: streamUrl } });
+		if (chatByStreamUrl) {
+			ctx.reply('Виникла помилка при додаванні каналу. Канал з таким посиланням трансляції вже існує');
+			ctx.scene.enter(CREATE_CHAT_SCENE);
+			return;
+		}
 
+		// Create Chat
 		try {
-			await Chat.create({ userId, name: chatName, streamKey, chatLink});
+			await Chat.create({ userId, name: chatName, streamKey: streamUrl, chatLink});
 	
 			const msg = await ctx.reply('✅ Канал було успішно додано!');
 			deleteMessageWithDelay(ctx, msg.message_id, 3000);
