@@ -8,7 +8,11 @@ class Processes {
 	}
 
 	stopProcess(id) {
-		this.processes[id].process.kill();
+		try {
+			this.processes[id].process.kill();
+		} catch (error) {
+			console.log("Error while stopping process: ", error);
+		}
 		delete this.processes[id];
 	}
 
