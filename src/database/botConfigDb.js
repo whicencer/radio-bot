@@ -5,6 +5,7 @@ async function botConfigDb() {
 	try {
 		await sequelize.authenticate();
 		await sequelize.sync();
+		// await sequelize.sync({ force: true });
 
 		Chat.update({ status: 'off' }, { where: {} });
 

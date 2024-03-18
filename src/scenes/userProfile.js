@@ -18,7 +18,7 @@ userProfile.enter(async (ctx) => {
 		const currentTariff = getUserTariff(user.tariff, user.subExpiresAt);
 
 		const message = `
-		📌 Ваш id: <code>${userId}</code> (Ви <b>${userRoles[role]}</b>)
+		📌 Ваш id: <code>${userId}</code> (<b>${userRoles[role]}</b>)
 💰 Баланс: ${Number(user.balance).toLocaleString('en-US')}$
 👥 Кількість рефералів: ${user.referrals.length}\n
 📱 Поточний тариф: ${currentTariff}
