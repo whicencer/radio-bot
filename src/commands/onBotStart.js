@@ -22,7 +22,7 @@ async function onBotStart(ctx) {
 					const referrer = await User.findByPk(args[0]);
 					await referrer.update({ referrals: [...referrer.referrals, userId] });
 					
-					ctx.reply(`Вас пригласил: <code>${args[0]}</code>`, {
+					ctx.reply(`Вас запросив: <code>${args[0]}</code>`, {
 						parse_mode: 'HTML'
 					});
 				}
@@ -35,11 +35,11 @@ async function onBotStart(ctx) {
 	} catch (error) {
 		console.error('Ошибка при поиске или создании пользователя:', error);
 	} finally {
-		ctx.reply('Советую подписаться на канал, чтобы быть в курсе всех событий', {
+		ctx.reply('Рекомендую підписатися на канал, щоб бути в курсі всіх подій', {
 			reply_markup: {
 				inline_keyboard: [
-					[{ text: 'Подписаться на канал', url: 'https://t.me/aaaatestaaaa5' }],
-					[{ text: 'Продолжить', callback_data: 'goMain' }]
+					[{ text: 'Підписатися на канал', url: 'https://t.me/aaaatestaaaa5' }],
+					[{ text: 'Продовжити', callback_data: 'goMain' }]
 				]
 			}
 		});
