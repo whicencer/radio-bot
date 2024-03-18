@@ -2,15 +2,29 @@ const { Scenes } = require('telegraf');
 const { INFORMATION_SCENE } = require('../constants/scenes');
 
 const information = new Scenes.BaseScene(INFORMATION_SCENE);
+const navigationMsg = `<b>Загальні кнопки:</b>
+<code>
+👤 Профіль — Ваш профіль
+📖 Інформація — Інформація для користувачів
+📡 Транслювати — Меню трансляцій
+</code>
+
+<b>Меню трансляцій:</b>
+<code>
+💬 Канали — Ваші канали
+📀 Бібліотека — Загальна бібліотека
+</code>`;
 
 information.enter(ctx => {
-	ctx.reply('Інформація для користувачів:', {
+	ctx.reply(`Навігація:\n
+${navigationMsg}`, {
 		reply_markup: {
 			inline_keyboard: [
 				[{ text: 'Зв\'язок з менеджером', url: 'google.com' }],
 				[{ text: 'Тарифи та ціни', callback_data: 'price_list' }],
 			]
-		}
+		},
+		parse_mode: 'HTML'
 	});
 });
 
