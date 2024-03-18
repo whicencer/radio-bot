@@ -1,5 +1,5 @@
 const { Scenes } = require('telegraf');
-const { ADD_CHAT_LIBRARY_SOURCE_SCENE, CHAT_LIBRARY_SCENE, CHAT_DETAILED_SCENE } = require('../../constants/scenes');
+const { ADD_CHAT_LIBRARY_SOURCE_SCENE, CHAT_LIBRARY_SCENE, CHAT_DETAILED_SCENE, LIBRARY_SCENE } = require('../../constants/scenes');
 const { deleteLastMessage } = require('../../utils/deleteLastMessage');
 const { Resource, Chat } = require('../../database/models');
 const { deleteMessageWithDelay } = require('../../utils/deleteMessageWithDelay');
@@ -11,14 +11,21 @@ addChatLibrarySource.enter(async (ctx) => {
 	const resources = await Resource.findAll({ where: {userId} });
 	const resourceButtons = resources.map(resource => ([{text: `🎧 ${resource.name}`, callback_data: `add_source ${resource.id}`}]));
 
-	ctx.reply('Виберіть ресурс, який хочете додати', {
+	ctx.reply(`Виберіть ресурс, який хочете додати
+${resources.length < 1 ? 'У вас немає ресурсів' : ''}`, {
 		reply_markup: {
 			inline_keyboard: [
 				...resourceButtons,
+				[{ text: 'Перейти до загальної бібліотеки', callback_data: 'go_main_lib' }],
 				[{ text: '⬅️ Назад', callback_data: 'back' }]
 			]
 		}
 	});
+});
+
+addChatLibrarySource.action('go_main_lib', ctx => {
+	deleteLastMessage(ctx);
+	ctx.scene.enter(LIBRARY_SCENE);
 });
 
 addChatLibrarySource.action('back', ctx => {
