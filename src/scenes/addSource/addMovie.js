@@ -34,18 +34,21 @@ addMovie.on('message', async (ctx) => {
 	if (!movieIdValidate(code)) {
 		ctx.reply('Невірний формат!');
 	} else {
+		const loadMsg = await ctx.reply('Завантаження...');
 		try {
 			const { sourceUrl, title } = await getSourceFilmix(code);
 			const createdSource = await Resource.create({ userId, name: `${title} (Filmix)`, url: sourceUrl });
-	
+			
 			const msg = await ctx.reply('✅ Ресурс був успішно доданий!');
-
+			
 			ctx.scene.enter(ADD_SOURCE_TO_CHAT_SCENE, { createdSource });
 			deleteMessageWithDelay(ctx, msg.message_id, 3000);
 		} catch (error) {
 			ctx.reply('❌ Сталася помилка при додаванні ресурсу');
 			ctx.scene.enter(LIBRARY_SCENE);
 			console.log(error);
+		} finally {
+			deleteMessageWithDelay(ctx, loadMsg.message_id, 0);
 		}
 	}
 });
