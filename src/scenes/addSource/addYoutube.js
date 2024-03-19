@@ -1,5 +1,5 @@
 const { Scenes } = require('telegraf');
-const { ADD_YOUTUBE_SCENE, ADD_SOURCE_SCENE, LIBRARY_SCENE, ADD_SOURCE_TO_CHAT_SCENE } = require('../../constants/scenes');
+const { ADD_YOUTUBE_SCENE, ADD_LIBRARY_SOURCE_SCENE, LIBRARY_SCENE, ADD_SOURCE_TO_CHAT_SCENE } = require('../../constants/scenes');
 const { deleteLastMessage } = require('../../utils/deleteLastMessage');
 const { youtubeUrlValidate } = require('../../utils/validators/youtubeUrlValidate');
 const { Resource } = require('../../database/models');
@@ -27,7 +27,7 @@ addYoutube.enter(ctx => {
 
 addYoutube.action('cancel', ctx => {
 	deleteLastMessage(ctx);
-	ctx.scene.enter(ADD_SOURCE_SCENE);
+	ctx.scene.enter(ADD_LIBRARY_SOURCE_SCENE);
 });
 
 addYoutube.on('message', async (ctx) => {

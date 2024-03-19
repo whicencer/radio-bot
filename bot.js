@@ -33,6 +33,7 @@ const { addTwitch } = require('./src/scenes/addSource/addTwitch');
 const { setRefBonus } = require('./src/scenes/botAdminPanel/setRefBonus');
 const { hasAdminPermission } = require('./src/middleware/hasAdminPermission');
 const { addMovie } = require('./src/scenes/addSource/addMovie');
+const { chatLibrarySource } = require('./src/scenes/chat/chatLibrarySource');
 
 const token = process.env.BOT_TOKEN;
 
@@ -64,7 +65,8 @@ const stage = new Scenes.Stage([
 	balance,
 	addTwitch,
 	setRefBonus,
-	addMovie
+	addMovie,
+	chatLibrarySource
 ]);
 
 bot.use(session());

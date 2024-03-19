@@ -1,5 +1,5 @@
 const { Scenes } = require('telegraf');
-const { ADD_SOURCE_SCENE, LIBRARY_SCENE, ADD_SOURCE_TO_CHAT_SCENE, ADD_TWITCH_SCENE } = require('../../constants/scenes');
+const { ADD_LIBRARY_SOURCE_SCENE, LIBRARY_SCENE, ADD_SOURCE_TO_CHAT_SCENE, ADD_TWITCH_SCENE } = require('../../constants/scenes');
 const { deleteLastMessage } = require('../../utils/deleteLastMessage');
 const { twitchUrlValidate } = require('../../utils/validators/twitchUrlValidate');
 const { Resource } = require('../../database/models');
@@ -24,7 +24,7 @@ addTwitch.enter(ctx => {
 
 addTwitch.action('cancel', ctx => {
 	deleteLastMessage(ctx);
-	ctx.scene.enter(ADD_SOURCE_SCENE);
+	ctx.scene.enter(ADD_LIBRARY_SOURCE_SCENE);
 });
 
 addTwitch.on('message', async (ctx) => {

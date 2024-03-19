@@ -1,5 +1,5 @@
 const { Scenes } = require('telegraf');
-const { ADD_RADIO_SCENE, ADD_SOURCE_SCENE, LIBRARY_SCENE, ADD_SOURCE_TO_CHAT_SCENE } = require('../../constants/scenes');
+const { ADD_RADIO_SCENE, ADD_LIBRARY_SOURCE_SCENE, LIBRARY_SCENE, ADD_SOURCE_TO_CHAT_SCENE } = require('../../constants/scenes');
 const { deleteLastMessage } = require('../../utils/deleteLastMessage');
 const { generateInlineKeyboard } = require('../../utils/generateInlineKeyboard');
 const { radios } = require('../../constants/radios');
@@ -22,7 +22,7 @@ addRadio.enter(ctx => {
 
 addRadio.action('cancel', ctx => {
 	deleteLastMessage(ctx);
-	ctx.scene.enter(ADD_SOURCE_SCENE);
+	ctx.scene.enter(ADD_LIBRARY_SOURCE_SCENE);
 });
 
 addRadio.on('callback_query', async (ctx) => {

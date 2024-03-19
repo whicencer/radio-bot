@@ -3,9 +3,10 @@ const BROADCAST_SCENE = 'broadcastScene';
 const ALL_CHATS_SCENE = 'allChats';
 const CHAT_DETAILED_SCENE = 'chatDetailed';
 const CREATE_CHAT_SCENE = 'createChat';
+const CHAT_LIBRARY_SOURCE_SCENE = 'chatLibrarySource';
 const LIBRARY_SCENE = 'libraryScene';
 const LIBRARY_SOURCE_SCENE = 'librarySource';
-const ADD_SOURCE_SCENE = 'addSource';
+const ADD_LIBRARY_SOURCE_SCENE = 'addLibrarySource';
 const ADD_YOUTUBE_SCENE = 'addYoutube';
 const ADD_RADIO_SCENE = 'addRadio';
 const CHAT_LIBRARY_SCENE = 'chatLibrary';
@@ -33,7 +34,7 @@ module.exports = {
 	BROADCAST_SCENE,
 	LIBRARY_SCENE,
 	LIBRARY_SOURCE_SCENE,
-	ADD_SOURCE_SCENE,
+	ADD_LIBRARY_SOURCE_SCENE,
 	ADD_YOUTUBE_SCENE,
 	ADD_RADIO_SCENE,
 	CHAT_LIBRARY_SCENE,
@@ -51,5 +52,6 @@ module.exports = {
 	BALANCE_SCENE,
 	ADD_TWITCH_SCENE,
 	ADMIN_SET_REF_BONUS_SCENE,
-	ADD_MOVIE_SCENE
+	ADD_MOVIE_SCENE,
+	CHAT_LIBRARY_SOURCE_SCENE
 };

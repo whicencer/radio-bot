@@ -1,11 +1,11 @@
 const { Scenes } = require('telegraf');
-const { ADD_SOURCE_SCENE, LIBRARY_SCENE, ADD_YOUTUBE_SCENE, ADD_RADIO_SCENE, ADD_TWITCH_SCENE, ADD_MOVIE_SCENE } = require('../../constants/scenes');
+const { ADD_LIBRARY_SOURCE_SCENE, LIBRARY_SCENE, ADD_YOUTUBE_SCENE, ADD_RADIO_SCENE, ADD_TWITCH_SCENE, ADD_MOVIE_SCENE } = require('../../constants/scenes');
 const { deleteLastMessage } = require('../../utils/deleteLastMessage');
 const { User } = require('../../database/models');
 const { BASIC, ADVANCED, PREMIUM } = require('../../constants/subscriptions');
 const { checkForSub } = require('../../middleware/checkForSub');
 
-const addSource = new Scenes.BaseScene(ADD_SOURCE_SCENE);
+const addSource = new Scenes.BaseScene(ADD_LIBRARY_SOURCE_SCENE);
 
 addSource.enter(checkForSub, async (ctx) => {
 	const userId = ctx.from.id;

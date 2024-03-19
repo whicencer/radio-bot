@@ -1,5 +1,5 @@
 const { Scenes } = require('telegraf');
-const { LIBRARY_SCENE, BROADCAST_SCENE, LIBRARY_SOURCE_SCENE, ADD_SOURCE_SCENE } = require('../../constants/scenes');
+const { LIBRARY_SCENE, BROADCAST_SCENE, LIBRARY_SOURCE_SCENE, ADD_LIBRARY_SOURCE_SCENE } = require('../../constants/scenes');
 const { User } = require('../../database/models');
 const { deleteLastMessage } = require('../../utils/deleteLastMessage');
 
@@ -29,7 +29,7 @@ library.action('back', ctx => {
 
 library.action('add_source', ctx => {
 	deleteLastMessage(ctx);
-	ctx.scene.enter(ADD_SOURCE_SCENE);
+	ctx.scene.enter(ADD_LIBRARY_SOURCE_SCENE);
 });
 
 library.on('callback_query', async (ctx) => {
