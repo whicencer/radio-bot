@@ -2,8 +2,8 @@ const ffmpeg = require('fluent-ffmpeg');
 const { processes } = require('./processes');
 const { Chat } = require('../../database/models');
 
-function startStreaming(resources, rtmpKey, initIndex = 0) {
-	let currentIndex = initIndex;
+function startStreaming(resources, rtmpKey, ctx) {
+	let currentIndex = 0;
 	let errorAttempts = 0;
 
 	function streamNext() {
@@ -23,13 +23,17 @@ function startStreaming(resources, rtmpKey, initIndex = 0) {
 						await Chat.update({ status: 'off' }, { where: { streamKey: rtmpKey } });
 						processes.stopProcess(rtmpKey);
 					} else if (err.message.indexOf('SIGKILL') === -1) {
+						errorAttempts++;
+						console.log(errorAttempts);
 						if (errorAttempts >= 7) {
+							console.log('Достигнут лимит попыток, трансляция остановлена');
 							await Chat.update({ status: 'off' }, { where: { streamKey: rtmpKey } });
 							processes.stopProcess(rtmpKey);
+							ctx.reply('❌ Трансляцію було зупинено, один з ресурсів не відповідає');
+              return;
 						}
 						console.error('Ошибка трансляции:', err);
 						currentIndex++;
-						errorAttempts++;
 						streamNext();
 					} else {
 						await Chat.update({ status: 'off' }, { where: { streamKey: rtmpKey } });

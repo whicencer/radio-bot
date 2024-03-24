@@ -38,7 +38,7 @@ async function onBotStart(ctx) {
 		ctx.reply('Рекомендую підписатися на канал, щоб бути в курсі всіх подій', {
 			reply_markup: {
 				inline_keyboard: [
-					[{ text: 'Підписатися на канал', url: 'https://t.me/aaaatestaaaa5' }],
+					[{ text: 'Підписатися на канал', url: 'https://t.me/+lQ4S8Snj_YUwMDc0' }],
 					[{ text: 'Продовжити', callback_data: 'goMain' }]
 				]
 			}

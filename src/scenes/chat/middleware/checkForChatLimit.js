@@ -1,7 +1,6 @@
 const { ALL_CHATS_SCENE } = require('../../../constants/scenes');
 const { BASIC, ADVANCED, PREMIUM } = require('../../../constants/subscriptions');
 const { User } = require('../../../database/models');
-const { deleteMessageWithDelay } = require('../../../utils/deleteMessageWithDelay');
 
 const maxChannelsByTariff = {
 	['none']: 0,
@@ -17,11 +16,15 @@ const checkForChatLimit = async (ctx, next) => {
 	const chatsLength = chats.length;
 	const maxChannels = maxChannelsByTariff[tariff];
 
-	if (chatsLength === maxChannels) {
-		const msg = await ctx.reply(`😔 Ліміт додавання каналів вичерпано! (макс. ${maxChannels})`);
-		ctx.scene.enter(ALL_CHATS_SCENE);
+  const msgReply = `Ваш поточний тариф: ${tariff}\nВи можете створити ${maxChannels} каналів\n
+<b>Advanced</b> - ${ADVANCED.max_chats} каналів
+<b>Premium</b> - ${PREMIUM.max_chats} каналів\n`;
 
-		deleteMessageWithDelay(ctx, msg.message_id, 3000);
+	if (chatsLength >= maxChannels) {
+		await ctx.reply(msgReply, {
+			parse_mode: 'HTML'
+		});
+		ctx.scene.enter(ALL_CHATS_SCENE);
 	} else {
 		next();
 	}

@@ -11,6 +11,7 @@ const { createActionButton } = require('./helpers/createActionButton');
 const { checkForSources } = require('./middleware/checkForSources');
 const { checkForSub } = require('../../middleware/checkForSub');
 const { checkForStatus } = require('../../middleware/checkForStatus');
+const { checkForStatusStopped } = require('../../middleware/checkForStatusStopped');
 
 const chatDetailed = new Scenes.BaseScene(CHAT_DETAILED_SCENE);
 const baseKeyboard = [
@@ -44,7 +45,7 @@ chatDetailed.enter(async (ctx) => {
 	ctx.deleteMessage(msg.message_id);
 });
 
-chatDetailed.action('stop_stream', async (ctx) => {
+chatDetailed.action('stop_stream', checkForStatusStopped, async (ctx) => {
 	const { streamKey } = ctx.scene.session.chat;
 	
 	try {

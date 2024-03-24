@@ -26,7 +26,7 @@ chatLibrarySource.enter(async (ctx) => {
 	});
 });
 
-chatLibrarySource.action('stream_source', async (ctx) => {
+chatLibrarySource.action('stream_source', checkForStatus, async (ctx) => {
 	const sourceId = ctx.scene.state.sourceId;
 	const chatId = ctx.scene.state.chatId;
 	
@@ -45,12 +45,13 @@ chatLibrarySource.action('stream_source', async (ctx) => {
 	const isStreamStarted = await startStream(sourceToStream, chatStreamKey, ctx);
 	if (isStreamStarted) {
 		await Chat.update({ status: 'on' }, { where: { streamKey: chatStreamKey } });
-		ctx.editMessageReplyMarkup({
-			inline_keyboard: [
-				[{ text: '❌ Видалити ресурс з бібліотеки ефіру', callback_data: 'delete_source' }],
-				[{ text: '⬅️ Назад', callback_data: 'back' }]
-			]
-		});
+		await ctx.editMessageReplyMarkup({
+      inline_keyboard: [
+        [{ text: '❌ Видалити ресурс з бібліотеки ефіру', callback_data: 'delete_source' }],
+        [{ text: '⬅️ Назад', callback_data: 'back' }]
+      ]
+    });
+		return;
 	}
 });
 

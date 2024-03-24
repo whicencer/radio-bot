@@ -19,7 +19,7 @@ information.enter(ctx => {
 	ctx.reply(navigationMsg, {
 		reply_markup: {
 			inline_keyboard: [
-				[{ text: 'Зв\'язок з менеджером', url: 'google.com' }],
+				[{ text: 'Зв\'язок з менеджером', url: 'https://t.me/nastyaa_manag' }],
 				[{ text: 'Тарифи та ціни', callback_data: 'price_list' }],
 			]
 		},

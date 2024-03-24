@@ -2,7 +2,7 @@ const { deleteMessageWithDelay } = require('../../../utils/deleteMessageWithDela
 const { startStreaming } = require('../../../utils/stream/startStreaming');
 
 const startStream = async (resources, streamKey, ctx) => {
-	const result = startStreaming(resources, streamKey);
+	const result = startStreaming(resources, streamKey, ctx);
 	if (result === true) {
 		const msg = await ctx.reply('🚀 Трансляція була запущена!');
 		deleteMessageWithDelay(ctx, msg.message_id, 3000);
