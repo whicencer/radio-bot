@@ -3,6 +3,7 @@ const { ADMIN_SET_USER_SUBSCRIPTION, ADMIN_MANAGE_USERS_SCENE } = require('../..
 const { deleteLastMessage } = require('../../utils/deleteLastMessage');
 const { User } = require('../../database/models');
 const { BASIC, ADVANCED, PREMIUM, NONE } = require('../../constants/subscriptions');
+const { daysToMilliseconds } = require('../../utils/daysToMilliseconds');
 
 const setSubscription = new Scenes.BaseScene(ADMIN_SET_USER_SUBSCRIPTION);
 
@@ -86,15 +87,13 @@ setSubscription.on('message', async (ctx) => {
 
 		if (!isNaN(Number(days))) {
 			try {
-				await User.update({ tariff, subExpiresAt: new Date(Date.now() + days * 24 * 60 * 60 * 1000) }, { where: { id: userId } });
+				await User.update({ tariff, subExpiresAt: new Date(Date.now() + daysToMilliseconds(days)) }, { where: { id: userId } });
 				ctx.reply(`Тариф ${tariff} було успішно видано на ${days} днів користувачу з ID ${userId}.`);
 				ctx.scene.enter(ADMIN_MANAGE_USERS_SCENE);
 			} catch (error) {
 				ctx.reply('Помилка при підключенні тарифу.');
 				console.log('Error while setting subscription: ', error);
 			}
-		} else {
-			console.log(days);
 		}
 	}
 });
