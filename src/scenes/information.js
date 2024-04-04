@@ -28,9 +28,9 @@ information.enter(ctx => {
 });
 
 information.action('price_list', ctx => {
-	const firstTariff = `1. Тариф <b>Basic</b>: <u>$10/міс</u>\nТільки радіо. Можливість додати 2 канали\n\n`;
-	const secondTariff = `2. Тариф <b>Advanced</b>: <u>$40/міс</u>\nТариф Basic + Youtube. Можливість додати 5 каналів\n\n`;
-	const thirdTariff = `3. Тариф <b>Premium</b>: <u>$70/міс</u>\nВсі функції. Можливість додати 15 каналів\n`;
+	const firstTariff = `1. Тариф Basic: $10/міс\nТільки радіо. Можливість одночасного транслювання у 1 каналі.\n\n`;
+	const secondTariff = `2. Тариф Advanced: $40/міс\nТариф Basic + Youtube. Можливість одночасного транслювання у 2-х каналах.\n\n`;
+	const thirdTariff = `3. Тариф Premium: $70/міс\nВсі функції. Можливість одночасного транслювання у 4-х каналах.\n`;
 	const msg = firstTariff+secondTariff+thirdTariff;
 
 	ctx.reply(msg, {
