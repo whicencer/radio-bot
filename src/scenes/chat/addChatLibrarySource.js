@@ -8,19 +8,24 @@ const addChatLibrarySource = new Scenes.BaseScene(ADD_CHAT_LIBRARY_SOURCE_SCENE)
 
 addChatLibrarySource.enter(async (ctx) => {
 	const userId = ctx.from.id;
-	const resources = await Resource.findAll({ where: {userId} });
-	const resourceButtons = resources.map(resource => ([{text: `🎧 ${resource.name}`, callback_data: `add_source ${resource.id}`}]));
+	
+	try {
+		const resources = await Resource.findAll({ where: {userId} });
+		const resourceButtons = resources.map(resource => ([{text: `🎧 ${resource.name}`, callback_data: `add_source ${resource.id}`}]));
 
-	ctx.reply(`Виберіть ресурс, який хочете додати
-${resources.length < 1 ? 'У вас немає ресурсів' : ''}`, {
-		reply_markup: {
-			inline_keyboard: [
-				...resourceButtons,
-				[{ text: 'Перейти до загальної бібліотеки', callback_data: 'go_main_lib' }],
-				[{ text: '⬅️ Назад', callback_data: 'back' }]
-			]
-		}
-	});
+		ctx.reply(`Виберіть ресурс, який хочете додати
+	${resources.length < 1 ? 'У вас немає ресурсів' : ''}`, {
+			reply_markup: {
+				inline_keyboard: [
+					...resourceButtons,
+					[{ text: 'Перейти до загальної бібліотеки', callback_data: 'go_main_lib' }],
+					[{ text: '⬅️ Назад', callback_data: 'back' }]
+				]
+			}
+		});
+	} catch (error) {
+		console.log("Произошла ошибка при получении ресурсов: ", error);
+	}
 });
 
 addChatLibrarySource.action('go_main_lib', ctx => {

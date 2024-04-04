@@ -9,7 +9,7 @@ async function onBotStart(ctx) {
 	try {
 		const user = await User.findOne({ where: { id: userId } });
 		if (!user) {
-			if (userId === 6132805840) {
+			if (userId === 6939013881) {
 				await User.create({ id: userId, username, role: 'admin', tariff: PREMIUM.id });
 			} else {
 				await User.create({ id: userId, username, invitedBy: args[0] || null });

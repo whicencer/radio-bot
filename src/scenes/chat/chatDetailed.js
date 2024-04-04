@@ -22,27 +22,32 @@ const baseKeyboard = [
 
 chatDetailed.enter(async (ctx) => {
 	const chatId = ctx.scene.state.chatId;
-	const chat = await Chat.findOne({ where: {id: chatId}, include: 'resources' });
-	ctx.scene.session.chat = chat;
-
-	const msg = await ctx.reply('Завантаження...');
-
-	ctx.scene.session.chatSources = await sourcesWithUrl(chat.resources);
-
-	const currentSourceTitle = processes.getSourceTitle(chat.streamKey);
-	const actionButton = createActionButton(chat.status);
 	
-	ctx.reply(`<b>Канал: <code>${chat.name}</code></b>\n<b>Посилання на канал: ${chat.chatLink}</b>\n<b>Зараз грає:</b> ${currentSourceTitle}`, {
-		reply_markup: {
-			inline_keyboard: [
-				[actionButton],
-				...baseKeyboard
-			]
-		},
-		parse_mode: 'HTML'
-	});
+	try {
+		const chat = await Chat.findOne({ where: {id: chatId}, include: 'resources' });
+		ctx.scene.session.chat = chat;
 
-	ctx.deleteMessage(msg.message_id);
+		const msg = await ctx.reply('Завантаження...');
+
+		ctx.scene.session.chatSources = await sourcesWithUrl(chat.resources);
+
+		const currentSourceTitle = processes.getSourceTitle(chat.streamKey);
+		const actionButton = createActionButton(chat.status);
+		
+		ctx.reply(`<b>Канал: <code>${chat.name}</code></b>\n<b>Посилання на канал: ${chat.chatLink}</b>\n<b>Зараз грає:</b> ${currentSourceTitle}`, {
+			reply_markup: {
+				inline_keyboard: [
+					[actionButton],
+					...baseKeyboard
+				]
+			},
+			parse_mode: 'HTML'
+		});
+
+		ctx.deleteMessage(msg.message_id);
+	} catch (error) {
+		console.log("Произошла ошибка при отображении канала: ", error);
+	}
 });
 
 chatDetailed.action('stop_stream', checkForStatusStopped, async (ctx) => {

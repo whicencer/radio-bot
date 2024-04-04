@@ -12,21 +12,25 @@ const maxChannelsByTariff = {
 const checkForChatLimit = async (ctx, next) => {
 	const userId = ctx.from.id;
 	
-	const { tariff, chats } = await User.findByPk(userId, { include: 'chats' });
-	const chatsLength = chats.length;
-	const maxChannels = maxChannelsByTariff[tariff];
+	try {
+		const { tariff, chats } = await User.findByPk(userId, { include: 'chats' });
+		const chatsLength = chats.length;
+		const maxChannels = maxChannelsByTariff[tariff];
 
-  const msgReply = `Ваш поточний тариф: ${tariff}\nВи можете створити ${maxChannels} каналів\n
-<b>Advanced</b> - ${ADVANCED.max_chats} каналів
-<b>Premium</b> - ${PREMIUM.max_chats} каналів\n`;
+			const msgReply = `Ваш поточний тариф: ${tariff}\nВи можете створити ${maxChannels} каналів\n
+	<b>Advanced</b> - ${ADVANCED.max_chats} каналів
+	<b>Premium</b> - ${PREMIUM.max_chats} каналів\n`;
 
-	if (chatsLength >= maxChannels) {
-		await ctx.reply(msgReply, {
-			parse_mode: 'HTML'
-		});
-		ctx.scene.enter(ALL_CHATS_SCENE);
-	} else {
-		next();
+		if (chatsLength >= maxChannels) {
+			await ctx.reply(msgReply, {
+				parse_mode: 'HTML'
+			});
+			ctx.scene.enter(ALL_CHATS_SCENE);
+		} else {
+			next();
+		}
+	} catch (error) {
+		console.log("Произошла ошибка при проверке лимита: ", error);
 	}
 };
 

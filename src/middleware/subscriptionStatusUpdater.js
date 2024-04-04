@@ -7,24 +7,29 @@ const { processes } = require('../utils/stream/processes');
 
 const subscriptionStatusUpdater = async (ctx, next) => {
 	const userId = ctx.from.id;
-	const user = await User.findByPk(userId);
-	const userChats = await Chat.findAll({ where: { userId } });
+	
+	try {
+		const user = await User.findByPk(userId);
+		const userChats = await Chat.findAll({ where: { userId } });
 
-	if (user && user.subExpiresAt !== null && new Date() >= user.subExpiresAt) {
-		// Останавливаем все трансляции
-		userChats.forEach(chat => {
-			const chatStreamKey = chat.streamKey;
-			if (processes.getProcessById(chatStreamKey)) {
-				processes.stopProcess(chatStreamKey);
-			}
-		});
-		
-		// Уведомляем о том что подписка истекла и меняем в БД tariff=none
-		user.update({ tariff: NONE, subExpiresAt: null });
-		ctx.reply('Ваша підписка закінчилася!');
+		if (user && user.subExpiresAt !== null && new Date() >= user.subExpiresAt) {
+			// Останавливаем все трансляции
+			userChats.forEach(chat => {
+				const chatStreamKey = chat.streamKey;
+				if (processes.getProcessById(chatStreamKey)) {
+					processes.stopProcess(chatStreamKey);
+				}
+			});
+			
+			// Уведомляем о том что подписка истекла и меняем в БД tariff=none
+			user.update({ tariff: NONE, subExpiresAt: null });
+			ctx.reply('Ваша підписка закінчилася!');
+		}
+
+		next();
+	} catch (error) {
+		console.log("Произошла ошибка при проверке подписки: ", error);
 	}
-
-	next();
 };
 
 module.exports = { subscriptionStatusUpdater };

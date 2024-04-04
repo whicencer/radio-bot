@@ -7,19 +7,24 @@ const chatLibrary = new Scenes.BaseScene(CHAT_LIBRARY_SCENE);
 
 chatLibrary.enter(async (ctx) => {
 	const chatId = ctx.scene.state.chatId;
-	const chat = await Chat.findOne({ where: {id: chatId}, include: 'resources' });
-	const chatResources = chat.resources.map(resource => [{text: `🎧 ${resource.name}`, callback_data: `source ${resource.id}`}]);
+	
+	try {
+		const chat = await Chat.findOne({ where: {id: chatId}, include: 'resources' });
+		const chatResources = chat.resources.map(resource => [{text: `🎧 ${resource.name}`, callback_data: `source ${resource.id}`}]);
 
-	ctx.reply(`Бібліотека каналу: <b>${chat.name}</b>`, {
-		reply_markup: {
-			inline_keyboard: [
-				...chatResources,
-				[{ text: '➕ Додати ресурс', callback_data: 'add_source' }],
-				[{ text: '⬅️ Назад', callback_data: 'back' }]
-			]
-		},
-		parse_mode: 'HTML'
-	});
+		ctx.reply(`Бібліотека каналу: <b>${chat.name}</b>`, {
+			reply_markup: {
+				inline_keyboard: [
+					...chatResources,
+					[{ text: '➕ Додати ресурс', callback_data: 'add_source' }],
+					[{ text: '⬅️ Назад', callback_data: 'back' }]
+				]
+			},
+			parse_mode: 'HTML'
+		});
+	} catch (error) {
+		console.log("Произошла ошибка при отображении бібліотеки: ", error);
+	}
 });
 
 chatLibrary.action('back', ctx => {
@@ -40,14 +45,9 @@ chatLibrary.on('callback_query', async (ctx) => {
 
 	if (callbackData.startsWith('source')) {
 		const sourceId = callbackData.replace('source', '');
-
-		try {
-			deleteLastMessage(ctx);
-			ctx.scene.enter(CHAT_LIBRARY_SOURCE_SCENE, { chatId, sourceId });
-		} catch (error) {
-			console.log(error);
-			ctx.reply('❌ Виникла помилка під час видалення ресурсу');
-		}
+		
+		deleteLastMessage(ctx);
+		ctx.scene.enter(CHAT_LIBRARY_SOURCE_SCENE, { chatId, sourceId });
 	}
 });
 

@@ -46,7 +46,7 @@ addMovie.on('message', async (ctx) => {
 		} catch (error) {
 			ctx.reply('❌ Сталася помилка при додаванні ресурсу');
 			ctx.scene.enter(LIBRARY_SCENE);
-			console.log(error);
+			console.log("Ошибка при добавлении ресурса: ", error);
 		} finally {
 			deleteMessageWithDelay(ctx, loadMsg.message_id, 0);
 		}

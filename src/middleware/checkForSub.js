@@ -7,13 +7,18 @@ const { User } = require('../database/models');
 
 const checkForSub = async (ctx, next) => {
 	const userId = ctx.from.id;
-	const user = await User.findByPk(userId);
+	
+	try {
+		const user = await User.findByPk(userId);
 
-	if (user.tariff === NONE) {
-		ctx.reply('Ви не оплатили підписку');
-		ctx.scene.enter(SUBSCRIPTION_SCENE);
-	} else {
-		next();
+		if (user.tariff === NONE) {
+			ctx.reply('Ви не оплатили підписку');
+			ctx.scene.enter(SUBSCRIPTION_SCENE);
+		} else {
+			next();
+		}
+	} catch (error) {
+		console.log("Произошла ошибка при проверке подписки: ", error);
 	}
 };
 

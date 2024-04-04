@@ -59,7 +59,7 @@ userProfile.action('myRef', ctx => {
 	const userId = ctx.from.id;
 
 	ctx.reply(`✉️ Запрошуйте нових людей і отримуйте 50% з їх депозиту\n
-Ваше реферальне посилання: <code>https://t.me/shop_test_hjvfs2_bot?start=${userId}</code>`, {
+Ваше реферальне посилання: <code>${process.env.BOT_URL}${userId}</code>`, {
 		parse_mode: 'HTML'
 	});
 });
