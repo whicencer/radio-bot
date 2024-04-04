@@ -12,6 +12,10 @@ adminPanel.enter(async (ctx) => {
 	const userName = ctx.from.first_name;
 
 	const { role } = await User.findByPk(userId);
+	const usersCount = await User.count();
+	const basicUsersCount = await User.count({ where: { role: 'user', tariff: 'basic' } });
+	const advancedUsersCount = await User.count({ where: { role: 'user', tariff: 'advanced' } });
+	const premiumUsersCount = await User.count({ where: { role: 'user', tariff: 'premium' } });
 	const isUserAdmin = role === 'admin';
 
 	let inline_keyboard;
@@ -29,7 +33,9 @@ adminPanel.enter(async (ctx) => {
 		];
 	}
 
-	ctx.reply(`Ласкаво просимо до адмін панелі бота, <b>${userName}</b>!`, {
+	ctx.reply(`Ласкаво просимо до адмін панелі бота, <b>${userName}</b>!\n
+Усього користувачів бота: ${usersCount}
+Basic: ${basicUsersCount}\nAdvanced: ${advancedUsersCount}\nPremium: ${premiumUsersCount}`, {
 		reply_markup: {
 			inline_keyboard: [
 				...inline_keyboard,
