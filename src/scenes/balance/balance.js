@@ -11,7 +11,7 @@ balance.enter(ctx => {
 		reply_markup: {
 			inline_keyboard: [
 				[{ text: '💳 Карта', callback_data: 'card' }],
-				[{ text: '💰 Криптовалюти (у розробці)', callback_data: 'crypto' }],
+				[{ text: '💰 Криптовалюти', callback_data: 'crypto' }],
 				[{ text: '🔙 Назад', callback_data: 'cancel' }]
 			],
 			resize_keyboard: true
@@ -20,20 +20,21 @@ balance.enter(ctx => {
 });
 
 balance.action('crypto', ctx => {
-	ctx.reply('Ця функція ще у розробці');
+	ctx.reply('Для оплати пишіть менеджеру: @nastyaa_manag');
 	deleteLastMessage(ctx);
 	ctx.scene.enter(USER_PROFILE_SCENE);
 });
 
 balance.action('card', ctx => {
-	ctx.reply('Введіть суму поповнення у доларах', {
-		reply_markup: {
-			inline_keyboard: [
-				[{ text: '🚫 Скасувати', callback_data: 'cancel' }]
-			]
-		}
-	});
-	ctx.scene.session.stage = 1;
+	ctx.reply('Для оплати пишіть менеджеру: @nastyaa_manag');
+	// ctx.reply('Введіть суму поповнення у доларах', {
+	// 	reply_markup: {
+	// 		inline_keyboard: [
+	// 			[{ text: '🚫 Скасувати', callback_data: 'cancel' }]
+	// 		]
+	// 	}
+	// });
+	// ctx.scene.session.stage = 1;
 });
 
 balance.on('message', async (ctx) => {
