@@ -1,15 +1,16 @@
 const { Scenes } = require('telegraf');
 const { BROADCAST_SCENE, ALL_CHATS_SCENE, LIBRARY_SCENE } = require('../constants/scenes');
 const { deleteLastMessage } = require('../utils/deleteLastMessage');
+const { getLanguage } = require('../utils/getLanguage');
 
 const broadcastScene = new Scenes.BaseScene(BROADCAST_SCENE);
 
 broadcastScene.enter(async (ctx) => {
-	ctx.reply('Тут ви зможете налаштувати свою трансляцію', {
+	ctx.reply(getLanguage(ctx.session.lang, "Тут вы сможете настроить свою трансляцию"), {
 		reply_markup: {
 			inline_keyboard: [
-				[{ text: '💬 Канали', callback_data: 'chats' }],
-				[{ text: '📀 Бібліотека', callback_data: 'library' }]
+				[{ text: `💬 ${getLanguage(ctx.session.lang, "Каналы")}`, callback_data: 'chats' }],
+				[{ text: `📀 ${getLanguage(ctx.session.lang, "Библиотека")}`, callback_data: 'library' }]
 			]
 		}
 	});

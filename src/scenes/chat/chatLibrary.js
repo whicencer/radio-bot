@@ -2,6 +2,7 @@ const { Scenes } = require('telegraf');
 const { CHAT_LIBRARY_SCENE, CHAT_DETAILED_SCENE, ADD_CHAT_LIBRARY_SOURCE_SCENE, CHAT_LIBRARY_SOURCE_SCENE } = require('../../constants/scenes');
 const { Chat } = require('../../database/models');
 const { deleteLastMessage } = require('../../utils/deleteLastMessage');
+const { getLanguage } = require('../../utils/getLanguage');
 
 const chatLibrary = new Scenes.BaseScene(CHAT_LIBRARY_SCENE);
 
@@ -12,12 +13,12 @@ chatLibrary.enter(async (ctx) => {
 		const chat = await Chat.findOne({ where: {id: chatId}, include: 'resources' });
 		const chatResources = chat.resources.map(resource => [{text: `🎧 ${resource.name}`, callback_data: `source ${resource.id}`}]);
 
-		ctx.reply(`Бібліотека каналу: <b>${chat.name}</b>`, {
+		ctx.reply(`${getLanguage(ctx.session.lang, "Библиотека канала:")} <b>${chat.name}</b>`, {
 			reply_markup: {
 				inline_keyboard: [
 					...chatResources,
-					[{ text: '➕ Додати ресурс', callback_data: 'add_source' }],
-					[{ text: '⬅️ Назад', callback_data: 'back' }]
+					[{ text: `➕ ${getLanguage(ctx.session.lang, "Добавить ресурс")}`, callback_data: 'add_source' }],
+					[{ text: `⬅️ ${getLanguage(ctx.session.lang, "Назад")}`, callback_data: 'back' }]
 				]
 			},
 			parse_mode: 'HTML'

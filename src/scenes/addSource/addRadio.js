@@ -5,16 +5,17 @@ const { generateInlineKeyboard } = require('../../utils/generateInlineKeyboard')
 const { radios } = require('../../constants/radios');
 const { Resource } = require('../../database/models');
 const { deleteMessageWithDelay } = require('../../utils/deleteMessageWithDelay');
+const { getLanguage } = require('../../utils/getLanguage');
 
 const addRadio = new Scenes.BaseScene(ADD_RADIO_SCENE);
 const divider = '_pz_';
 
 addRadio.enter(ctx => {
-	ctx.reply('Виберіть радіо, яке хочете додати:', {
+	ctx.reply(getLanguage(ctx.session.lang, "Выберите радио, которое хотите добавить:"), {
 		reply_markup: {
 			inline_keyboard: [
 				...generateInlineKeyboard(radios, 2, 'add', divider),
-				[{ text: '🚫 Скасувати', callback_data: 'cancel' }]
+				[{ text: '🚫 Cancel', callback_data: 'cancel' }]
 			]
 		}
 	});
@@ -35,13 +36,13 @@ addRadio.on('callback_query', async (ctx) => {
 		try {
 			const createdSource = await Resource.create({ userId, name: radioName, url: `https://${radioUrl}` });
 
-			const msg = await ctx.reply('✅ Радіо було успішно додано!');
+			const msg = await ctx.reply('✅ Success!');
 
 			ctx.scene.enter(ADD_SOURCE_TO_CHAT_SCENE, { createdSource });
 			deleteMessageWithDelay(ctx, msg.message_id, 3000);
 		} catch (error) {
 			console.log(error);
-			ctx.reply('❌ Сталася помилка при додаванні радіо');
+			ctx.reply('❌ Error while adding source. Please try again later.');
 			ctx.scene.enter(LIBRARY_SCENE);
 		} finally {
 			deleteLastMessage(ctx);

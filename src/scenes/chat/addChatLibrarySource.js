@@ -3,6 +3,7 @@ const { ADD_CHAT_LIBRARY_SOURCE_SCENE, CHAT_LIBRARY_SCENE, CHAT_DETAILED_SCENE, 
 const { deleteLastMessage } = require('../../utils/deleteLastMessage');
 const { Resource, Chat } = require('../../database/models');
 const { deleteMessageWithDelay } = require('../../utils/deleteMessageWithDelay');
+const { getLanguage } = require('../../utils/getLanguage');
 
 const addChatLibrarySource = new Scenes.BaseScene(ADD_CHAT_LIBRARY_SOURCE_SCENE);
 
@@ -13,13 +14,13 @@ addChatLibrarySource.enter(async (ctx) => {
 		const resources = await Resource.findAll({ where: {userId} });
 		const resourceButtons = resources.map(resource => ([{text: `🎧 ${resource.name}`, callback_data: `add_source ${resource.id}`}]));
 
-		ctx.reply(`Виберіть ресурс, який хочете додати
-	${resources.length < 1 ? 'У вас немає ресурсів' : ''}`, {
+		ctx.reply(`${getLanguage(ctx.session.lang, "Выберите ресурс, который хотите добавить")}
+	${resources.length < 1 ? getLanguage(ctx.session.lang, "У вас нет ресурсов") : ''}`, {
 			reply_markup: {
 				inline_keyboard: [
 					...resourceButtons,
-					[{ text: 'Перейти до загальної бібліотеки', callback_data: 'go_main_lib' }],
-					[{ text: '⬅️ Назад', callback_data: 'back' }]
+					[{ text: getLanguage(ctx.session.lang, "Перейти к общей библиотеке"), callback_data: 'go_main_lib' }],
+					[{ text: `⬅️ ${getLanguage(ctx.session.lang, "Назад")}`, callback_data: 'back' }]
 				]
 			}
 		});
@@ -51,11 +52,11 @@ addChatLibrarySource.on('callback_query', async (ctx) => {
 			const currentResource = await Resource.findOne({where: {id: resourceId}});
 			chat.addResource(currentResource);
 			
-			const msg = await ctx.reply('✅ Ресурс було успішно додано до каналу!');
+			const msg = await ctx.reply('✅ Success!');
 			deleteMessageWithDelay(ctx, msg.message_id, 3000);
 		} catch (error) {
 			console.log(error);
-			ctx.reply('❌ Виникла помилка під час додавання ресурсу');
+			ctx.reply('❌ Error while adding source. Please try again later.');
 		} finally {
 			deleteLastMessage(ctx);
 			ctx.scene.enter(CHAT_DETAILED_SCENE, { chatId });

@@ -7,6 +7,7 @@ const { Chat } = require('../../database/models');
 const { deleteMessageWithDelay } = require('../../utils/deleteMessageWithDelay');
 const { checkForChatLimit } = require('./middleware/checkForChatLimit');
 const { checkForSub } = require('../../middleware/checkForSub');
+const { getLanguage } = require('../../utils/getLanguage');
 
 const createChat = new Scenes.BaseScene(CREATE_CHAT_SCENE);
 
@@ -14,10 +15,10 @@ createChat.enter(checkForSub, checkForChatLimit, async (ctx) => {
 	ctx.scene.session.stage = 1;
 
 	try {
-		ctx.reply('Введіть назву каналу (Наприклад: <code>Радіо 1</code>)', {
+		ctx.reply(getLanguage(ctx.session.lang, "Введите название канала (Например: <code>Radio 1</code>)"), {
 			reply_markup: {
 				inline_keyboard: [
-					[{ text: '🚫 Скасувати', callback_data: 'cancel' }]
+					[{ text: '🚫 Cancel', callback_data: 'cancel' }]
 				]
 			},
 			parse_mode: 'HTML'
@@ -41,7 +42,7 @@ createChat.on('message', async (ctx) => {
 	const keyboard = {
 		reply_markup: {
 			inline_keyboard: [
-				[{ text: '🚫 Скасувати', callback_data: 'cancel' }]
+				[{ text: '🚫 Cancel', callback_data: 'cancel' }]
 			]
 		},
 		parse_mode: 'HTML'
@@ -52,32 +53,32 @@ createChat.on('message', async (ctx) => {
 		ctx.scene.session.chatName = ctx.message.text;
 		const chat = await Chat.findOne({ where: { name: ctx.scene.session.chatName, userId } });
 		if (chat) {
-			ctx.reply('Канал з такою назвою вже існує');
+			ctx.reply(getLanguage(ctx.session.lang, "Канал с таким названием уже существует"));
 			return;
 		}
 
 		ctx.scene.session.stage = 2;
-		ctx.reply('Надішліть посилання на сервер трансляції (Наприклад: <code>rtmps://your_server</code>)', keyboard);
+		ctx.reply(getLanguage(ctx.session.lang, "Отправьте ссылку на сервер трансляции (Например: <code>rtmps://your_server</code>)"), keyboard);
 	} else if (stage === 2) {
 		// CHAT SERVER URL
 		if (!rtmpUrlValidate(ctx.message.text)) {
-			ctx.reply('Невірний формат посилання на сервер трансляції');
+			ctx.reply(getLanguage(ctx.session.lang, "Неверный формат ссылки на сервер трансляции"));
 			return;
 		}
 
 		ctx.scene.session.serverUrl = ctx.message.text;
 		ctx.scene.session.stage = 3;
-		ctx.reply('Надішліть ключ трансляції', keyboard);
+		ctx.reply(getLanguage(ctx.session.lang, "Отправьте ключ трансляции"), keyboard);
 	} else if (stage === 3) {
 		// CHAT STREAM KEY
 		if (!streamKeyValidate(ctx.message.text)) {
-			ctx.reply('Невірний формат ключа трансляції');
+			ctx.reply(getLanguage(ctx.session.lang, "Неверный формат ключа трансляции"));
 			return;
 		}
 
 		ctx.scene.session.streamKey = ctx.message.text;
 		ctx.scene.session.stage = 4;
-		ctx.reply('Надішліть посилання на канал (Наприклад: <code>https://t.me/your_channel</code>)', keyboard);
+		ctx.reply(getLanguage(ctx.session.lang, "Отправьте ссылку на канал (Например: <code>https://t.me/your_channel</code>)"), keyboard);
 	} else if (stage === 4) {
 		// CHAT LINK
 		ctx.scene.session.chatLink = ctx.message.text;
@@ -88,13 +89,13 @@ createChat.on('message', async (ctx) => {
 
 		const chatByLink = await Chat.findOne({ where: { name: chatLink, userId } });
 		if (chatByLink) {
-			ctx.reply('Канал з таким посиланням вже існує');
+			ctx.reply(getLanguage(ctx.session.lang, "Канал с таким названием уже существует"));
 			return;
 		}
 
 		const chatByStreamUrl = await Chat.findOne({ where: { streamKey: streamUrl } });
 		if (chatByStreamUrl) {
-			ctx.reply('Виникла помилка при додаванні каналу. Канал з таким посиланням трансляції вже існує');
+			ctx.reply(getLanguage(ctx.session.lang, "Канал с такой ссылкой трансляции уже существует"));
 			ctx.scene.enter(CREATE_CHAT_SCENE);
 			return;
 		}
@@ -103,10 +104,10 @@ createChat.on('message', async (ctx) => {
 		try {
 			await Chat.create({ userId, name: chatName, streamKey: streamUrl, chatLink});
 	
-			const msg = await ctx.reply('✅ Канал було успішно додано!');
+			const msg = await ctx.reply('✅ Success!');
 			deleteMessageWithDelay(ctx, msg.message_id, 3000);
 		} catch (error) {
-			ctx.reply(`❌ Виникла помилка при додаванні каналу. ${error.message}`);
+			ctx.reply(`❌ Error while creating chat. ${error.message}`);
 		} finally {
 			ctx.scene.enter(ALL_CHATS_SCENE);
 		}

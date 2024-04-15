@@ -4,6 +4,7 @@ const { deleteLastMessage } = require('../../utils/deleteLastMessage');
 const { User } = require('../../database/models');
 const { Op } = require('sequelize');
 const { userRoles } = require('../../constants/userRoles');
+const { getLanguage } = require('../../utils/getLanguage');
 
 const adminPanel = new Scenes.BaseScene(ADMIN_PANEL_SCENE);
 
@@ -22,24 +23,24 @@ adminPanel.enter(async (ctx) => {
 
 	if (isUserAdmin) {
     inline_keyboard = [
-			[{ text: '📋 Список адмінів', callback_data: 'admin_list' }],
-			[{ text: '🔧 Додати адміна', callback_data: 'add_admin' }],
-			[{ text: '⚙️ Додати модератора', callback_data: 'add_moderator' }],
-			[{ text: '👥 Управління користувачами', callback_data: 'manage_users' }],
+			[{ text: `📋 ${getLanguage(ctx.session.lang, "Список админов")}`, callback_data: 'admin_list' }],
+			[{ text: `🔧 ${getLanguage(ctx.session.lang, "Добавить админа")}`, callback_data: 'add_admin' }],
+			[{ text: `⚙️ ${getLanguage(ctx.session.lang, "Добавить модератора")}`, callback_data: 'add_moderator' }],
+			[{ text: `👥 ${getLanguage(ctx.session.lang, "Управление пользователями")}`, callback_data: 'manage_users' }],
     ];
 	} else {
 		inline_keyboard = [
-			[{ text: '👥 Управління користувачами', callback_data: 'manage_users' }],
+			[{ text: `👥 ${getLanguage(ctx.session.lang, "Управление пользователями")}`, callback_data: 'manage_users' }],
 		];
 	}
 
-	ctx.reply(`Ласкаво просимо до адмін панелі бота, <b>${userName}</b>!\n
-Усього користувачів бота: ${usersCount}
+	ctx.reply(`${getLanguage(ctx.session.lang, "Добро пожаловать в админ панель бота")}, <b>${userName}</b>!\n
+${getLanguage(ctx.session.lang, "Всего пользователей бота")}: ${usersCount}
 Basic: ${basicUsersCount}\nAdvanced: ${advancedUsersCount}\nPremium: ${premiumUsersCount}`, {
 		reply_markup: {
 			inline_keyboard: [
 				...inline_keyboard,
-				[{ text: '⬅️ Назад', callback_data: 'back' }]
+				[{ text: `⬅️ ${getLanguage(ctx.session.lang, "Назад")}`, callback_data: 'back' }]
 			]
 		},
 		parse_mode: 'HTML'
@@ -61,15 +62,15 @@ adminPanel.action('admin_list', async (ctx) => {
 	}});
 	const admins = allAdmins.map(admin => {
 		return admin.id == currentUserId
-			? `@${admin.username || admin.id} (${admin.id}) (Ви, <b>${userRoles[admin.role]}</b>)`
+			? `@${admin.username || admin.id} (${admin.id}) (You, <b>${userRoles[admin.role]}</b>)`
 			: `@${admin.username || admin.id} (${admin.id}) (<b>${userRoles[admin.role]}</b>)`;
 	});
 
-	ctx.reply(`Всі адміністратори бота:\n${admins.join('\n')}\n
-Для видалення адміністратора введіть команду <code>/delete_admin {id_користувача}</code>`, {
+	ctx.reply(`${getLanguage(ctx.session.lang, "Все администраторы бота:")}\n${admins.join('\n')}\n
+${getLanguage(ctx.session.lang, "Для удаления администратора введите команду")} <code>/delete_admin {user_id}</code>`, {
 		reply_markup: {
 			inline_keyboard: [
-				[{ text: '⬇️ Сховати повідомлення', callback_data: 'hide' }]
+				[{ text: `⬇️ ${getLanguage(ctx.session.lang, "Скрыть сообщение")}`, callback_data: 'hide' }]
 			]
 		},
 		parse_mode: 'HTML'

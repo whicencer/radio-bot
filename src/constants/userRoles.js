@@ -1,7 +1,7 @@
 const userRoles = {
-	'admin': 'Адміністратор',
-	'moderator': 'Модератор',
-	'user': 'Користувач'
+	'admin': 'Admin',
+	'moderator': 'Moderator',
+	'user': 'User'
 };
 
 module.exports = { userRoles };

@@ -1,4 +1,5 @@
 const { User } = require('../database/models');
+const { getLanguage } = require('../utils/getLanguage');
 
 const hasAdminPermission = async (ctx, next) => {
 	const userId = ctx.from.id;
@@ -11,7 +12,7 @@ const hasAdminPermission = async (ctx, next) => {
 		if (userHasPermission) {
 			next();
 		} else {
-			ctx.reply('У вас немає доступу до цієї команди!');
+			ctx.reply(getLanguage(ctx.session.lang, "У вас нет доступа к этой команде!"));
 		}
 	} catch (error) {
 		console.log("Произошла ошибка при проверке прав: ", error);

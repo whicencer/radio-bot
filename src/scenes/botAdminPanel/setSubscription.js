@@ -4,18 +4,19 @@ const { deleteLastMessage } = require('../../utils/deleteLastMessage');
 const { User } = require('../../database/models');
 const { BASIC, ADVANCED, PREMIUM, NONE } = require('../../constants/subscriptions');
 const { daysToMilliseconds } = require('../../utils/daysToMilliseconds');
+const { getLanguage } = require('../../utils/getLanguage');
 
 const setSubscription = new Scenes.BaseScene(ADMIN_SET_USER_SUBSCRIPTION);
 
 setSubscription.enter(ctx => {
-	ctx.reply('Виберіть тариф, який хочете видати', {
+	ctx.reply(getLanguage(ctx.session.lang, "Выберите тариф который хотите выдать"), {
 		reply_markup: {
 			inline_keyboard: [
 				[{ text: 'Basic', callback_data: BASIC.id }],
 				[{ text: 'Advanced', callback_data: ADVANCED.id }],
 				[{ text: 'Premium', callback_data: PREMIUM.id }],
-				[{ text: 'Забрати підписку', callback_data: NONE }],
-				[{ text: '⬅️ Назад', callback_data: 'back' }]
+				[{ text: getLanguage(ctx.session.lang, "Забрать подписку"), callback_data: NONE }],
+				[{ text: `⬅️ ${getLanguage(ctx.session.lang, "Назад")}`, callback_data: 'back' }]
 			]
 		}
 	});
@@ -38,10 +39,10 @@ setSubscription.on('callback_query', ctx => {
 		ctx.scene.session.stage = 2;
 		ctx.scene.session.tariff = callbackData;
 
-		ctx.reply('Введіть ID користувача, якому хочете видати підписку', {
+		ctx.reply(getLanguage(ctx.session.lang, "Введите ID пользователя которому хотите выдать подписку"), {
 			reply_markup: {
 				inline_keyboard: [
-					[{ text: '🚫 Скасувати', callback_data: 'cancel' }]
+					[{ text: '🚫 Cancel', callback_data: 'cancel' }]
 				]
 			}
 		});
@@ -64,12 +65,12 @@ setSubscription.on('message', async (ctx) => {
 				ctx.scene.enter(ADMIN_MANAGE_USERS_SCENE);
 			} else {
 				if (!user) {
-					ctx.reply(`Користувача з ID ${msgText} не було знайдено в базі даних бота.`);
+					ctx.reply(`Not found ${msgText}`);
 				} else {
-					ctx.reply('Введіть строк, на який ви хочете надати підписку (у днях)', {
+					ctx.reply(getLanguage(ctx.session.lang, "Введите срок на который хотите выдать подписку (в днях)"), {
 						reply_markup: {
 							inline_keyboard: [
-								[{ text: '🚫 Скасувати', callback_data: 'cancel' }]
+								[{ text: '🚫 Cancel', callback_data: 'cancel' }]
 							]
 						}
 					});
@@ -77,7 +78,7 @@ setSubscription.on('message', async (ctx) => {
 				}
 			}
 		} catch (error) {
-			ctx.reply(`При виконанні запиту виникла помилка.`);
+			ctx.reply(`Error while setting subscription.`);
 			console.log('Error while setting subscription: ', error);
 		}
 	} else if (ctx.scene.session.stage === 3) {
@@ -88,10 +89,10 @@ setSubscription.on('message', async (ctx) => {
 		if (!isNaN(Number(days))) {
 			try {
 				await User.update({ tariff, subExpiresAt: new Date(Date.now() + daysToMilliseconds(days)) }, { where: { id: userId } });
-				ctx.reply(`Тариф ${tariff} було успішно видано на ${days} днів користувачу з ID ${userId}.`);
+				ctx.reply(`Success!`);
 				ctx.scene.enter(ADMIN_MANAGE_USERS_SCENE);
 			} catch (error) {
-				ctx.reply('Помилка при підключенні тарифу.');
+				ctx.reply('Error while setting subscription.');
 				console.log('Error while setting subscription: ', error);
 			}
 		}

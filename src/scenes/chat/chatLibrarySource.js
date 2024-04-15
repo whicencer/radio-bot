@@ -6,6 +6,7 @@ const { processes } = require('../../utils/stream/processes');
 const { startStream } = require('./helpers/startStream');
 const { sourcesWithUrl } = require('./helpers/sourcesWithUrl');
 const { checkForStatus } = require('../../middleware/checkForStatus');
+const { getLanguage } = require('../../utils/getLanguage');
 
 const chatLibrarySource = new Scenes.BaseScene(CHAT_LIBRARY_SOURCE_SCENE);
 
@@ -14,12 +15,12 @@ chatLibrarySource.enter(async (ctx) => {
 
 	const source = await Resource.findByPk(sourceId);
 
-	ctx.reply(`<b>Назва ресурсу: ${source.name}</b>\n<b>Посилання на ресурс: ${source.url}</b>`, {
+	ctx.reply(`<b>${getLanguage(ctx.session.lang, "Название ресурса")}: ${source.name}</b>\n<b>${getLanguage(ctx.session.lang, "Ссылка на ресурс")}: ${source.url}</b>`, {
 		reply_markup: {
 			inline_keyboard: [
-				[{ text: '🔥 Запустити трансляцію ресурсу', callback_data: 'stream_source' }],
-				[{ text: '❌ Видалити ресурс з бібліотеки ефіру', callback_data: 'delete_source' }],
-				[{ text: '⬅️ Назад', callback_data: 'back' }],
+				[{ text: `🔥 ${getLanguage(ctx.session.lang, "Запустить трансляцию ресурса")}`, callback_data: 'stream_source' }],
+				[{ text: `❌ ${getLanguage(ctx.session.lang, "Удалить ресурс из библиотеки эфира")}`, callback_data: 'delete_source' }],
+				[{ text: `⬅️ ${getLanguage(ctx.session.lang, "Назад")}`, callback_data: 'back' }],
 			]
 		},
 		parse_mode: 'HTML'
@@ -47,8 +48,8 @@ chatLibrarySource.action('stream_source', checkForStatus, async (ctx) => {
 		await Chat.update({ status: 'on' }, { where: { streamKey: chatStreamKey } });
 		await ctx.editMessageReplyMarkup({
       inline_keyboard: [
-        [{ text: '❌ Видалити ресурс з бібліотеки ефіру', callback_data: 'delete_source' }],
-        [{ text: '⬅️ Назад', callback_data: 'back' }]
+        [{ text: `❌ ${getLanguage(ctx.session.lang, "Удалить ресурс из библиотеки эфира")}`, callback_data: 'delete_source' }],
+        [{ text: `⬅️ ${getLanguage(ctx.session.lang, "Назад")}`, callback_data: 'back' }]
       ]
     });
 		return;
@@ -64,10 +65,10 @@ chatLibrarySource.action('delete_source', checkForStatus, async (ctx) => {
 		const chat = await Chat.findByPk(chatId);
 	
 		chat.removeResource(sourceToDelete);
-		ctx.reply('✅ Ресурс було успішно видалено з бібліотеки ефіру');
+		ctx.reply('✅ Success!');
 	} catch (error) {
 		console.log(error);
-		ctx.reply('❌ Виникла помилка під час видалення ресурсу');
+		ctx.reply('❌ Error while deleting source. Please try again later.');
 	}
 });
 

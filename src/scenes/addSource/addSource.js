@@ -4,6 +4,7 @@ const { deleteLastMessage } = require('../../utils/deleteLastMessage');
 const { User } = require('../../database/models');
 const { BASIC, ADVANCED, PREMIUM } = require('../../constants/subscriptions');
 const { checkForSub } = require('../../middleware/checkForSub');
+const { getLanguage } = require('../../utils/getLanguage');
 
 const addSource = new Scenes.BaseScene(ADD_LIBRARY_SOURCE_SCENE);
 
@@ -24,7 +25,7 @@ addSource.enter(checkForSub, async (ctx) => {
     }
 	};
 
-	ctx.reply('Виберіть джерело додавання ресурсу', {
+	ctx.reply(getLanguage(ctx.session.lang, "Выберите источник добавления ресурса"), {
 		reply_markup: {
 			inline_keyboard: getSourceButtonsByTariff(tariff)
 		}

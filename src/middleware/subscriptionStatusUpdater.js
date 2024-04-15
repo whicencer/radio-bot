@@ -4,6 +4,7 @@
 const { NONE } = require('../constants/subscriptions');
 const { User, Chat } = require('../database/models');
 const { processes } = require('../utils/stream/processes');
+const { getLanguage } = require('../utils/getLanguage');
 
 const subscriptionStatusUpdater = async (ctx, next) => {
 	const userId = ctx.from.id;
@@ -23,7 +24,7 @@ const subscriptionStatusUpdater = async (ctx, next) => {
 			
 			// Уведомляем о том что подписка истекла и меняем в БД tariff=none
 			user.update({ tariff: NONE, subExpiresAt: null });
-			ctx.reply('Ваша підписка закінчилася!');
+			ctx.reply(getLanguage(ctx.session.lang, "Ваша подписка истекла!"));
 		}
 
 		next();

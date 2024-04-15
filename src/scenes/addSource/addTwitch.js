@@ -4,19 +4,19 @@ const { deleteLastMessage } = require('../../utils/deleteLastMessage');
 const { twitchUrlValidate } = require('../../utils/validators/twitchUrlValidate');
 const { Resource } = require('../../database/models');
 const { deleteMessageWithDelay } = require('../../utils/deleteMessageWithDelay');
+const { getLanguage } = require('../../utils/getLanguage');
 
 const addTwitch = new Scenes.BaseScene(ADD_TWITCH_SCENE);
-const msg = `Надішліть посилання на стрім Twitch (У точно такому ж форматі, як вказано в прикладі)\n
-Приклад: https://www.twitch.tv/jesusavgn`;
 
 addTwitch.enter(ctx => {
+	const msg = getLanguage(ctx.session.lang, "Отправьте ссылку на стрим Twitch (В точно таком же формате, как указано в примере)\nПример: https://www.twitch.tv/twitch");
 	ctx.reply(msg, {
 		link_preview_options: {
 			is_disabled: true
 		},
 		reply_markup: {
 			inline_keyboard: [
-				[{ text: '🚫 Скасувати', callback_data: 'cancel' }]
+				[{ text: '🚫 Cancel', callback_data: 'cancel' }]
 			]
 		}
 	});
@@ -33,17 +33,17 @@ addTwitch.on('message', async (ctx) => {
 	const streamerName = url.replace('https://www.twitch.tv/', '');
 
 	if (!twitchUrlValidate(url)) {
-		ctx.reply('Невірний формат посилання');
+		ctx.reply(getLanguage(ctx.session.lang, "Неверный формат ссылки"));
 	} else {
 		try {
 			const createdSource = await Resource.create({ userId, name: `${streamerName} (Twitch)`, url });
 	
-			const msg = await ctx.reply('✅ Ресурс був успішно доданий!');
+			const msg = await ctx.reply('✅ Success!');
 
 			ctx.scene.enter(ADD_SOURCE_TO_CHAT_SCENE, { createdSource });
 			deleteMessageWithDelay(ctx, msg.message_id, 3000);
 		} catch (err) {
-			ctx.reply('❌ Сталася помилка при додаванні ресурсу: Можливо ви ввели посилання не вірно');
+			ctx.reply('❌ Error while adding source. Please try again later.');
 			ctx.scene.enter(LIBRARY_SCENE);
 		}
 	}

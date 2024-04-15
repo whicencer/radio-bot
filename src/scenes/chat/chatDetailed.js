@@ -12,29 +12,31 @@ const { checkForSources } = require('./middleware/checkForSources');
 const { checkForSub } = require('../../middleware/checkForSub');
 const { checkForStatus } = require('../../middleware/checkForStatus');
 const { checkForStatusStopped } = require('../../middleware/checkForStatusStopped');
+const { getLanguage } = require('../../utils/getLanguage');
 
 const chatDetailed = new Scenes.BaseScene(CHAT_DETAILED_SCENE);
-const baseKeyboard = [
-	[{ text: '🎥 Бібліотека ефіру', callback_data: 'chat_library' }],
-	[{ text: '❌ Видалити канал', callback_data: 'delete_chat' }],
-	[{ text: '⬅️ Назад', callback_data: 'back' }]
-];
 
 chatDetailed.enter(async (ctx) => {
+	const baseKeyboard = [
+		[{ text: `🎥 ${getLanguage(ctx.session.lang, "Библиотека эфира")}`, callback_data: 'chat_library' }],
+		[{ text: `❌ ${getLanguage(ctx.session.lang, "Удалить канал")}`, callback_data: 'delete_chat' }],
+		[{ text: `⬅️ ${getLanguage(ctx.session.lang, "Назад")}`, callback_data: 'back' }]
+	];
+
 	const chatId = ctx.scene.state.chatId;
 	
 	try {
 		const chat = await Chat.findOne({ where: {id: chatId}, include: 'resources' });
 		ctx.scene.session.chat = chat;
 
-		const msg = await ctx.reply('Завантаження...');
+		const msg = await ctx.reply('Loading...');
 
 		ctx.scene.session.chatSources = await sourcesWithUrl(chat.resources);
 
 		const currentSourceTitle = processes.getSourceTitle(chat.streamKey);
 		const actionButton = createActionButton(chat.status);
 		
-		ctx.reply(`<b>Канал: <code>${chat.name}</code></b>\n<b>Посилання на канал: ${chat.chatLink}</b>\n<b>Зараз грає:</b> ${currentSourceTitle}`, {
+		ctx.reply(`<b>${getLanguage(ctx.session.lang, "Канал:")} <code>${chat.name}</code></b>\n<b>${getLanguage(ctx.session.lang, "Ссылка на канал:")} ${chat.chatLink}</b>\n<b>${getLanguage(ctx.session.lang, "Сейчас играет:")}</b> ${currentSourceTitle}`, {
 			reply_markup: {
 				inline_keyboard: [
 					[actionButton],
@@ -52,20 +54,25 @@ chatDetailed.enter(async (ctx) => {
 
 chatDetailed.action('stop_stream', checkForStatusStopped, async (ctx) => {
 	const { streamKey } = ctx.scene.session.chat;
+	const baseKeyboard = [
+		[{ text: `🎥 ${getLanguage(ctx.session.lang, "Библиотека эфира")}`, callback_data: 'chat_library' }],
+		[{ text: `❌ ${getLanguage(ctx.session.lang, "Удалить канал")}`, callback_data: 'delete_chat' }],
+		[{ text: `⬅️ ${getLanguage(ctx.session.lang, "Назад")}`, callback_data: 'back' }]
+	];
 	
 	try {
 		processes.stopProcess(streamKey);
-		const msg = await ctx.reply('Трансляцію було зупинено!');
+		const msg = await ctx.reply(getLanguage(ctx.session.lang, "Трансляция была остановлена!"));
 		deleteMessageWithDelay(ctx, msg.message_id, 3000);
 
 		ctx.editMessageReplyMarkup({
 			inline_keyboard: [
-				[{ text: '🔥 Запустити', callback_data: 'start_stream' }],
+				[{ text: `🔥 ${getLanguage(ctx.session.lang, "Запустить")}`, callback_data: 'start_stream' }],
 				...baseKeyboard
 			]
 		});
 	} catch (error) {
-		ctx.reply('Помилка при зупинці трансляції');
+		ctx.reply('Error while stopping stream');
 		console.log('Error on stream stop: ' + error);
 	}
 });
@@ -73,19 +80,24 @@ chatDetailed.action('stop_stream', checkForStatusStopped, async (ctx) => {
 chatDetailed.action('start_stream', checkForStatus, checkForSources, checkForSub, async (ctx) => {
 	const resources = ctx.scene.session.chatSources;
 	const { streamKey } = ctx.scene.session.chat;
+	const baseKeyboard = [
+		[{ text: `🎥 ${getLanguage(ctx.session.lang, "Библиотека эфира")}`, callback_data: 'chat_library' }],
+		[{ text: `❌ ${getLanguage(ctx.session.lang, "Удалить канал")}`, callback_data: 'delete_chat' }],
+		[{ text: `⬅️ ${getLanguage(ctx.session.lang, "Назад")}`, callback_data: 'back' }]
+	];
 
 	try {
 		const isStreamStarted = await startStream(resources, streamKey, ctx);
 		if (isStreamStarted) {
 			ctx.editMessageReplyMarkup({
 				inline_keyboard: [
-					[{ text: '🚫 Зупинити', callback_data: 'stop_stream' }],
+					[{ text: '🚫 Stop', callback_data: 'stop_stream' }],
 					...baseKeyboard
 				]
 			});
 		}
 	} catch (error) {
-		ctx.reply('Помилка при запуску трансляції');
+		ctx.reply('Error while starting stream');
 		console.log('Error on stream start: ' + error);
 	}
 });
@@ -108,7 +120,7 @@ chatDetailed.action('delete_chat', checkForStatus, checkForSub, async (ctx) => {
 		deleteChat(chatId, ctx);
 	} catch (error) {
 		console.error('Error while processing REMOVE_CHAT:', error);
-		ctx.reply('❌ Виникла помилка під час обробки запиту. Будь ласка, спробуйте пізніше.');
+		ctx.reply('❌ Error while deleting chat. Please try again later.');
 	}
 });
 

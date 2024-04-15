@@ -12,7 +12,7 @@ async function topUpReferral(userId, sum) {
 			// top up referral
 			await User.increment('balance', { by: refBonus, where: { id: referralId } });
 
-			return [referralId, `Ви отримали $${refBonus} від реферала!`];
+			return [referralId, `$${refBonus} Referral bonus!`];
 		}
 	} catch (error) {
 		console.log('Error while topUpReferral: ', error);

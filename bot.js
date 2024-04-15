@@ -1,7 +1,7 @@
 require('dotenv').config();
 
 const { Telegraf, Scenes, session } = require('telegraf');
-const { MAIN_SCENE, BROADCAST_SCENE, INFORMATION_SCENE, USER_PROFILE_SCENE } = require('./src/constants/scenes');
+const { BROADCAST_SCENE, INFORMATION_SCENE, USER_PROFILE_SCENE, CHOOSE_LANGUAGE } = require('./src/constants/scenes');
 const { onBotStart } = require('./src/commands/onBotStart');
 const { allChats } = require('./src/scenes/chat/allChats');
 const { chatDetailed } = require('./src/scenes/chat/chatDetailed');
@@ -34,6 +34,8 @@ const { setRefBonus } = require('./src/scenes/botAdminPanel/setRefBonus');
 const { hasAdminPermission } = require('./src/middleware/hasAdminPermission');
 const { addMovie } = require('./src/scenes/addSource/addMovie');
 const { chatLibrarySource } = require('./src/scenes/chat/chatLibrarySource');
+const { chooseLanguage } = require('./src/scenes/chooseLanguage');
+const { broadcastKeys, informationKeys, profileKeys } = require('./src/constants/keyboardButtons');
 
 const token = process.env.BOT_TOKEN;
 
@@ -66,7 +68,8 @@ const stage = new Scenes.Stage([
 	addTwitch,
 	setRefBonus,
 	addMovie,
-	chatLibrarySource
+	chatLibrarySource,
+	chooseLanguage
 ]);
 
 bot.use(session());
@@ -77,18 +80,24 @@ bot.start(onBotStart);
 
 bot.command('delete_admin', hasAdminPermission, deleteAdmin);
 
-bot.hears('👤 Профіль', ctx => {
-	ctx.scene.enter(USER_PROFILE_SCENE);
+profileKeys.forEach(key => {
+	bot.hears(key, ctx => {
+		ctx.scene.enter(USER_PROFILE_SCENE);
+	});
 });
-bot.hears('📖 Інформація', ctx => {
-	ctx.scene.enter(INFORMATION_SCENE);
+informationKeys.forEach(key => {
+	bot.hears(key, ctx => {
+		ctx.scene.enter(INFORMATION_SCENE);
+	});
 });
-bot.hears('📡 Транслювати', ctx => {
-	ctx.scene.enter(BROADCAST_SCENE);
+broadcastKeys.forEach(key => {
+	bot.hears(key, ctx => {
+		ctx.scene.enter(BROADCAST_SCENE);
+	});
 });
 
-bot.action('goMain', ctx => {
-	ctx.scene.enter(MAIN_SCENE);
+bot.action('next', ctx => {
+	ctx.scene.enter(CHOOSE_LANGUAGE);
 });
 
 bot.launch(async () => {

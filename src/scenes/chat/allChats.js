@@ -1,7 +1,8 @@
 const { Scenes } = require('telegraf');
-const { User, Chat } = require('../../database/models');
+const { User } = require('../../database/models');
 const { CHAT_DETAILED_SCENE, CREATE_CHAT_SCENE, ALL_CHATS_SCENE, BROADCAST_SCENE } = require('../../constants/scenes');
 const { deleteLastMessage } = require('../../utils/deleteLastMessage');
+const { getLanguage } = require('../../utils/getLanguage');
 
 const allChats = new Scenes.BaseScene(ALL_CHATS_SCENE);
 
@@ -13,12 +14,12 @@ allChats.enter(async (ctx) => {
 		const userChats = user.chats.sort((chat1, chat2) => chat1.createdAt - chat2.createdAt);
 		const chatsBtns = userChats.map(chat => ([{ text: chat.name, callback_data: 'get_chat' + chat.id }]));
 
-		await ctx.reply('💬 Ваші канали', {
+		await ctx.reply(`💬 ${getLanguage(ctx.session.lang, "Ваши каналы")}`, {
 			reply_markup: {
 				inline_keyboard: [
 					...chatsBtns,
-					[{ text: '➕ Додати канал', callback_data: 'add_chat' }],
-					[{ text: '⬅️ Назад', callback_data: 'back' }]
+					[{ text: `➕ ${getLanguage(ctx.session.lang, "Добавить канал")}`, callback_data: 'add_chat' }],
+					[{ text: `⬅️ ${getLanguage(ctx.session.lang, "Назад")}`, callback_data: 'back' }]
 				]
 			}
 		});

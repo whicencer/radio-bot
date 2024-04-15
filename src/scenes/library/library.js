@@ -2,6 +2,7 @@ const { Scenes } = require('telegraf');
 const { LIBRARY_SCENE, BROADCAST_SCENE, LIBRARY_SOURCE_SCENE, ADD_LIBRARY_SOURCE_SCENE } = require('../../constants/scenes');
 const { User } = require('../../database/models');
 const { deleteLastMessage } = require('../../utils/deleteLastMessage');
+const { getLanguage } = require('../../utils/getLanguage');
 
 const library = new Scenes.BaseScene(LIBRARY_SCENE);
 
@@ -11,12 +12,12 @@ library.enter(async (ctx) => {
 	const user = await User.findOne({ where: {id: userId}, include: 'resources' });
 	const resourcesBtns = user.resources.map(resource => ([{ text: `🎧 ${resource.name}`, callback_data: 'get_source' + resource.id }]));
 
-	ctx.reply('📀 Ваша бібліотека', {
+	ctx.reply(`📀 ${getLanguage(ctx.session.lang, "Ваша библиотека")}`, {
 		reply_markup: {
 			inline_keyboard: [
 				...resourcesBtns,
-				[{ text: '➕ Додати ресурс', callback_data: 'add_source' }],
-				[{ text: '⬅️ Назад', callback_data: 'back' }]
+				[{ text: `➕ ${getLanguage(ctx.session.lang, "Добавить ресурс")}`, callback_data: 'add_source' }],
+				[{ text: `⬅️ ${getLanguage(ctx.session.lang, "Назад")}`, callback_data: 'back' }]
 			]
 		}
 	});

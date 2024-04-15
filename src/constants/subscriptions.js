@@ -5,7 +5,7 @@ const BASIC = {
 	max_chats: 1,
 	add_source_btns: [
 		[{ text: '🎶 Radio', callback_data: 'choose_radio' }],
-		[{ text: '🚫 Скасувати', callback_data: 'cancel' }]
+		[{ text: `🚫 Cancel`, callback_data: 'cancel' }]
 	]
 };
 const ADVANCED = {
@@ -16,7 +16,7 @@ const ADVANCED = {
 		[{ text: '🎦🎶 Youtube', callback_data: 'add_youtube' }],
 		[{ text: '🎦🎶 Youtube LIVE', callback_data: 'add_youtube' }],
 		[{ text: '🎶 Radio', callback_data: 'choose_radio' }],
-		[{ text: '🚫 Скасувати', callback_data: 'cancel' }]
+		[{ text: '🚫 Cancel', callback_data: 'cancel' }]
 	]
 };
 const PREMIUM = {
@@ -29,7 +29,7 @@ const PREMIUM = {
 		[{ text: '🎦🎶 Twitch', callback_data: 'add_twitch' }],
 		[{ text: '🎬 Filmix', callback_data: 'add_movie' }],
 		[{ text: '🎶 Radio', callback_data: 'choose_radio' }],
-		[{ text: '🚫 Скасувати', callback_data: 'cancel' }]
+		[{ text: '🚫 Cancel', callback_data: 'cancel' }]
 	]
 };
 

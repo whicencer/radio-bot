@@ -2,15 +2,16 @@ const { Scenes } = require('telegraf');
 const { ADMIN_SET_REF_BONUS_SCENE, ADMIN_MANAGE_USERS_SCENE } = require('../../constants/scenes');
 const { deleteLastMessage } = require('../../utils/deleteLastMessage');
 const { User } = require('../../database/models');
+const { getLanguage } = require('../../utils/getLanguage');
 
 const setRefBonus = new Scenes.BaseScene(ADMIN_SET_REF_BONUS_SCENE);
 
 setRefBonus.enter(ctx => {
 	ctx.scene.session.stage = 1;
-	ctx.reply('Введіть ID користувача якому хочете налаштувати реферальний бонус', {
+	ctx.reply(getLanguage(ctx.session.lang, "Введите ID пользователя которому хотите выдать реферальный бонус"), {
 		reply_markup: {
 			inline_keyboard: [
-				[{ text: '🚫 Скасувати', callback_data: 'cancel' }]
+				[{ text: '🚫 Cancel', callback_data: 'cancel' }]
 			]
 		}
 	});
@@ -27,24 +28,24 @@ setRefBonus.on('message', async (ctx) => {
 			ctx.scene.session.stage = 2;
 			ctx.scene.session.user = user;
 
-			ctx.reply('Введіть процент, який користувач отримає за поповнення реферала (ціле число)', {
+			ctx.reply(getLanguage(ctx.session.lang, "Введите процент, который вы хотите получить за пополнение реферала (целое число)"), {
 				reply_markup: {
 					inline_keyboard: [
-						[{ text: '🚫 Скасувати', callback_data: 'cancel' }]
+						[{ text: '🚫 Cancel', callback_data: 'cancel' }]
 					]
 				}
 			});
 		} catch (error) {
-			ctx.reply('Користувача з таким ID не було знайдено в базі даних бота.');
+			ctx.reply('Not found');
 		}
 	} else if (ctx.scene.session.stage === 2) {
 		const percent = ctx.message.text;
 		const user = ctx.scene.session.user;
 		if (percent%1 !== 0) {
-			ctx.reply('Це повинно бути ціле число!');
+			ctx.reply(getLanguage(ctx.session.lang, "Это должно быть целое число!"));
 		} else {
 			await user.update({ refPercent: percent });
-			ctx.reply(`Реферальний бонус було успішно налаштовано! Тепер користувач з ID ${user.id} отримає ${percent}% з кожного поповнення реферала.`);
+			ctx.reply(`Success!`);
 			ctx.scene.enter(ADMIN_MANAGE_USERS_SCENE);
 		}
 	}

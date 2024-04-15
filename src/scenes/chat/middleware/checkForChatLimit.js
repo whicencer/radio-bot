@@ -1,6 +1,7 @@
 const { ALL_CHATS_SCENE } = require('../../../constants/scenes');
 const { BASIC, ADVANCED, PREMIUM } = require('../../../constants/subscriptions');
 const { User } = require('../../../database/models');
+const { getLanguage } = require('../../../utils/getLanguage');
 
 const maxChannelsByTariff = {
 	['none']: 0,
@@ -17,9 +18,9 @@ const checkForChatLimit = async (ctx, next) => {
 		const chatsLength = chats.length;
 		const maxChannels = maxChannelsByTariff[tariff];
 
-			const msgReply = `Ваш поточний тариф: ${tariff}\nВи можете створити ${maxChannels} каналів\n
-	<b>Advanced</b> - ${ADVANCED.max_chats} каналів
-	<b>Premium</b> - ${PREMIUM.max_chats} каналів\n`;
+			const msgReply = `${getLanguage(ctx.session.lang, "Ваш текущий тариф")}: ${tariff}\nMax channels: ${maxChannels}\n
+	<b>Advanced</b> - ${ADVANCED.max_chats} ${getLanguage(ctx.session.lang, "каналов")}
+	<b>Premium</b> - ${PREMIUM.max_chats} ${getLanguage(ctx.session.lang, "каналов")}\n`;
 
 		if (chatsLength >= maxChannels) {
 			await ctx.reply(msgReply, {

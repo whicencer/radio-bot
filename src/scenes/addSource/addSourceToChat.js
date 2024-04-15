@@ -3,6 +3,7 @@ const { ADD_SOURCE_TO_CHAT_SCENE, CHAT_DETAILED_SCENE, LIBRARY_SCENE } = require
 const { User, Chat } = require('../../database/models');
 const { deleteLastMessage } = require('../../utils/deleteLastMessage');
 const { deleteMessageWithDelay } = require('../../utils/deleteMessageWithDelay');
+const { getLanguage } = require('../../utils/getLanguage');
 
 const addSourceToChat = new Scenes.BaseScene(ADD_SOURCE_TO_CHAT_SCENE);
 
@@ -12,11 +13,11 @@ addSourceToChat.enter(async (ctx) => {
 	const userChats = user.chats.sort((chat1, chat2) => chat1.createdAt - chat2.createdAt);
 	const chatsBtns = userChats.map(chat => ([{ text: chat.name, callback_data: 'to_chat' + chat.id }]));
 
-	ctx.reply('Виберіть канал, в який хочете додати ресурс:', {
+	ctx.reply(getLanguage(ctx.session.lang, "Выберите канал, в который хотите добавить ресурс:"), {
 		reply_markup: {
 			inline_keyboard: [
 				...chatsBtns,
-				[{ text: 'Повернутися до бібліотеки', callback_data: 'cancel' }]
+				[{ text: getLanguage(ctx.session.lang, "Назад"), callback_data: 'cancel' }]
 			]
 		}
 	});
@@ -35,14 +36,14 @@ addSourceToChat.on('callback_query', async (ctx) => {
 		const chat = await Chat.findByPk(chatId);
 		chat.addResource(createdSource);
 
-		const msg = await ctx.reply('✅ Ресурс був успішно доданий в канал!');
+		const msg = await ctx.reply('✅ Success!');
 		deleteMessageWithDelay(ctx, msg.message_id, 3000);
 
 		ctx.scene.enter(CHAT_DETAILED_SCENE, { chatId });
 		deleteLastMessage(ctx);
 	} catch (error) {
 		console.log(error);
-		ctx.reply(`❌ Виникла помилка при додаванні ресурсу в канал: ${error?.message}`);
+		ctx.reply(`❌ Error while adding source: ${error?.message}`);
 	}
 });
 

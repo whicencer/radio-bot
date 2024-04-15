@@ -3,14 +3,15 @@ const { ADMIN_TOPUP_USER_BALANCE_SCENE, ADMIN_MANAGE_USERS_SCENE } = require('..
 const { deleteLastMessage } = require('../../utils/deleteLastMessage');
 const { User } = require('../../database/models');
 const { deleteMessageWithDelay } = require('../../utils/deleteMessageWithDelay');
+const { getLanguage } = require('../../utils/getLanguage');
 
 const topupBalance = new Scenes.BaseScene(ADMIN_TOPUP_USER_BALANCE_SCENE);
 
 topupBalance.enter(ctx => {
-	ctx.reply('Введіть ID користувача та суму поповнення (в доларах) через кому\nПриклад: <code>6132805840, 100</code>', {
+	ctx.reply(`${getLanguage(ctx.session.lang, "Введите ID пользователя и суму пополнения (в долларах) через запятую")}\nExample: <code>6132805840, 100</code>`, {
 		reply_markup: {
 			inline_keyboard: [
-				[{ text: '⬅️ Назад', callback_data: 'back' }]
+				[{ text: `⬅️ ${getLanguage(ctx.session.lang, "Назад")}`, callback_data: 'back' }]
 			],
 		},
 		parse_mode: 'HTML'
@@ -28,11 +29,11 @@ topupBalance.on('message', async (ctx) => {
 	try {
 		await User.increment('balance', { by: sum, where: { id: userIdTopup } });
 
-		const msg = await ctx.reply(`Рахунок користувача ${userIdTopup} було успішно поповнено на ${sum.trim()} доларів!`);
-		ctx.telegram.sendMessage(userIdTopup, `Ваш рахунок було поповнено на ${sum.trim()} доларів!`);
+		const msg = await ctx.reply(`Success!`);
+		ctx.telegram.sendMessage(userIdTopup, `+${sum.trim()} USD!`);
 		deleteMessageWithDelay(ctx, msg.message_id, 3000);
 	} catch (error) {
-		ctx.reply('Сталася помилка при поповненні!');
+		ctx.reply('Error while topup balance!');
 		console.log(error);
 	} finally {
 		ctx.scene.enter(ADMIN_MANAGE_USERS_SCENE);

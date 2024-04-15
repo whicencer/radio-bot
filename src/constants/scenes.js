@@ -25,6 +25,7 @@ const ADD_SOURCE_TO_CHAT_SCENE = 'addSourceToChat';
 const BALANCE_SCENE = 'balance';
 const ADD_TWITCH_SCENE = 'addTwitch';
 const ADD_MOVIE_SCENE = 'addMovie';
+const CHOOSE_LANGUAGE = 'chooseLanguage';
 
 module.exports = {
 	ALL_CHATS_SCENE,
@@ -53,5 +54,6 @@ module.exports = {
 	ADD_TWITCH_SCENE,
 	ADMIN_SET_REF_BONUS_SCENE,
 	ADD_MOVIE_SCENE,
-	CHAT_LIBRARY_SOURCE_SCENE
+	CHAT_LIBRARY_SOURCE_SCENE,
+	CHOOSE_LANGUAGE
 };

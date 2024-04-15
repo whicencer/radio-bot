@@ -4,16 +4,14 @@ const { deleteMessageWithDelay } = require('../../../utils/deleteMessageWithDela
 
 const deleteChat = async (id, ctx) => {
 	try {
-		const chatToDelete = await Chat.findOne({ where: { id } });
-
 		await ctx.scene.enter(ALL_CHATS_SCENE);
 
 		Chat.destroy({ where: { id } });
 
-		const msg = await ctx.reply(`✅ Канал ${chatToDelete.name} був успішно видалений!`);
+		const msg = await ctx.reply(`✅ Successfully deleted!`);
 		deleteMessageWithDelay(ctx, msg.message_id, 3000);
 	} catch (error) {
-		ctx.reply('❌ Виникла помилка при видаленні каналу');
+		ctx.reply('❌ Error while deleting chat. Please try again later.');
 		console.log('Error while deleting chat: ', error);
 	}
 };

@@ -4,6 +4,7 @@
 const { SUBSCRIPTION_SCENE } = require('../constants/scenes');
 const { NONE } = require('../constants/subscriptions');
 const { User } = require('../database/models');
+const { getLanguage } = require('../utils/getLanguage');
 
 const checkForSub = async (ctx, next) => {
 	const userId = ctx.from.id;
@@ -12,7 +13,7 @@ const checkForSub = async (ctx, next) => {
 		const user = await User.findByPk(userId);
 
 		if (user.tariff === NONE) {
-			ctx.reply('Ви не оплатили підписку');
+			ctx.reply(getLanguage(ctx.session.lang, "Вы не оплатили подписку"));
 			ctx.scene.enter(SUBSCRIPTION_SCENE);
 		} else {
 			next();

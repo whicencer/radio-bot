@@ -5,15 +5,16 @@ const { deleteMessageWithDelay } = require('../../utils/deleteMessageWithDelay')
 const { movieIdValidate } = require('../../utils/validators/movieIdValidate');
 const { getSourceFilmix } = require('../../utils/filmix');
 const { Resource } = require('../../database/models');
+const { getLanguage } = require('../../utils/getLanguage');
 
 const addMovie = new Scenes.BaseScene(ADD_MOVIE_SCENE);
 
 addMovie.enter(ctx => {
-	ctx.reply(`Введіть ID фільму з сайту https://www.filmix.biz\n
-Інструкція з отримання ID: https://t.me/aaaatestaaaa5/106`, {
+	ctx.reply(`${getLanguage(ctx.session.lang, "Введите ID фильма с сайта")} https://www.filmix.biz\n
+${getLanguage(ctx.session.lang, "Инструкция для получения ID")}: https://t.me/aaaatestaaaa5/106`, {
 		reply_markup: {
 			inline_keyboard: [
-				[{ text: '🚫 Скасувати', callback_data: 'cancel' }]
+				[{ text: '🚫 Cancel', callback_data: 'cancel' }]
 			]
 		},
 		link_preview_options: {
@@ -32,19 +33,19 @@ addMovie.on('message', async (ctx) => {
 	const userId = ctx.from.id;
 
 	if (!movieIdValidate(code)) {
-		ctx.reply('Невірний формат!');
+		ctx.reply(getLanguage(ctx.session.lang, "Неверный формат!"));
 	} else {
-		const loadMsg = await ctx.reply('Завантаження...');
+		const loadMsg = await ctx.reply('Loading...');
 		try {
 			const { sourceUrl, title } = await getSourceFilmix(code);
 			const createdSource = await Resource.create({ userId, name: `${title} (Filmix)`, url: sourceUrl });
 			
-			const msg = await ctx.reply('✅ Ресурс був успішно доданий!');
+			const msg = await ctx.reply('✅ Success!');
 			
 			ctx.scene.enter(ADD_SOURCE_TO_CHAT_SCENE, { createdSource });
 			deleteMessageWithDelay(ctx, msg.message_id, 3000);
 		} catch (error) {
-			ctx.reply('❌ Сталася помилка при додаванні ресурсу');
+			ctx.reply('❌ Error while adding source. Please try again later.');
 			ctx.scene.enter(LIBRARY_SCENE);
 			console.log("Ошибка при добавлении ресурса: ", error);
 		} finally {

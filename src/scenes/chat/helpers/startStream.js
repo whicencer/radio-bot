@@ -4,11 +4,11 @@ const { startStreaming } = require('../../../utils/stream/startStreaming');
 const startStream = async (resources, streamKey, ctx) => {
 	const result = startStreaming(resources, streamKey, ctx);
 	if (result === true) {
-		const msg = await ctx.reply('🚀 Трансляція була запущена!');
+		const msg = await ctx.reply('🚀 Started!');
 		deleteMessageWithDelay(ctx, msg.message_id, 3000);
 		return true;
 	} else {
-		ctx.reply('Трансльований ресурс не знайдено! Можливо стрімер оффлайн або ресурс було видалено');
+		ctx.reply(`Not found! ${getLanguage(ctx.session.lang, "Возможно стример оффлайн или ресурс был удалён")}`);
 		return false;
 	}
 };

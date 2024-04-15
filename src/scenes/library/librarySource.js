@@ -4,6 +4,7 @@ const { Resource } = require('../../database/models');
 const { deleteLastMessage } = require('../../utils/deleteLastMessage');
 const { deleteMessageWithDelay } = require('../../utils/deleteMessageWithDelay');
 const { checkForStatus } = require('../../middleware/checkForStatus');
+const { getLanguage } = require('../../utils/getLanguage');
 
 const librarySource = new Scenes.BaseScene(LIBRARY_SOURCE_SCENE);
 
@@ -14,17 +15,17 @@ librarySource.enter(async (ctx) => {
 		const source = await Resource.findOne({ where: { id: sourceId } });
 		ctx.scene.state.chatId = source.chatId;
 		
-		ctx.reply(`Джерело: ${source.url}`, {
+		ctx.reply(`${getLanguage(ctx.session.lang, "Источник")}: ${source.url}`, {
 			reply_markup: {
 				inline_keyboard: [
-					[{ text: '❌ Видалити ресурс', callback_data: 'delete_source' }],
-					[{ text: '⬅️ Назад', callback_data: 'back' }]
+					[{ text: `❌ ${getLanguage(ctx.session.lang, "Удалить ресурс")}`, callback_data: 'delete_source' }],
+					[{ text: `⬅️ ${getLanguage(ctx.session.lang, "Назад")}`, callback_data: 'back' }]
 				]
 			}
 		});
 	} catch (error) {
-		console.error('Error while processing REMOVE_CHAT:', error);
-		ctx.reply('❌ Виникла помилка при обробці запиту. Будь ласка, спробуйте пізніше.');
+		console.error('Error while getting source:', error);
+		ctx.reply('❌ Error while getting source. Please try again later.');
 	}
 });
 
@@ -36,11 +37,11 @@ librarySource.action('delete_source', checkForStatus, async (ctx) => {
 			where: { id: sourceId }
 		});
 
-		const msg = await ctx.reply('✅ Ресурс був успішно видалений!');
+		const msg = await ctx.reply('✅ Success!');
 		
 		deleteMessageWithDelay(ctx, msg.message_id, 3000);
 	} catch (error) {
-		ctx.reply('❌ Виникла помилка при видаленні ресурса');
+		ctx.reply('❌ Error while removing source. Please try again later.');
 	} finally {
 		deleteLastMessage(ctx);
 		ctx.scene.enter(LIBRARY_SCENE);

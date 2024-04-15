@@ -1,5 +1,6 @@
 const { Chat } = require('../database/models');
 const { processes } = require('../utils/stream/processes');
+const { getLanguage } = require('../utils/getLanguage');
 
 const checkForStatus = async (ctx, next) => {
 	const chatId = ctx.scene.state.chatId;
@@ -9,7 +10,7 @@ const checkForStatus = async (ctx, next) => {
 		const isStreamActive = processes.getProcessById(currentChat?.streamKey) || false;
 		
 		if (isStreamActive) {
-			await ctx.reply('Ви не можете зробити цю дію, тому що зараз запущена трансляція!');
+			await ctx.reply(getLanguage(ctx.session.lang, "Вы не можете сделать это действие потому что сейчас запущена трансляция!"));
 		} else {
 			await next();
 		}
